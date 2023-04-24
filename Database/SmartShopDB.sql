@@ -1,114 +1,112 @@
---Tao Bang
-CREATE TABLE Category (
+﻿CREATE DATABASE SmartShop
+GO
+USE SmartShop
+GO
+-- Product
+CREATE TABLE Categories (
     ID VARCHAR(20) PRIMARY KEY,
     CategoryName NVARCHAR(50) NOT NULL
 );
-
-CREATE TABLE Product (
-    ProductID VARCHAR(20) PRIMARY KEY,
-    ProductName NVARCHAR(50) NOT NULL,
+GO
+CREATE TABLE Discounts (
+    ID VARCHAR(20) PRIMARY KEY,
+    DiscountName NVARCHAR(50),
+    Active BIT DEFAULT 0,
+    DiscountPercent int
+);
+GO
+CREATE TABLE Products (
+    ID VARCHAR(20) PRIMARY KEY,
     CategoryID VARCHAR(20) NOT NULL,
+    DiscountID VARCHAR(20) NOT NULL,
+    ImageUrl VARCHAR(256) NOT NULL,
+    ProductName NVARCHAR(50) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     Quantity INT NOT NULL,
     ProductDescription NVARCHAR(256),
-    CONSTRAINT fk_category FOREIGN KEY (CategoryID) REFERENCES Category(ID)
+    CONSTRAINT fk_products_category_id FOREIGN KEY (CategoryID) REFERENCES Categories(ID),
+    CONSTRAINT fk_products_discount_id FOREIGN KEY (DiscountID) REFERENCES Discounts(ID)
 );
+GO
 
-CREATE TABLE Customer (
-    UserID VARCHAR(50) PRIMARY KEY,
+-- User
+CREATE TABLE UserRole (
+    ID VARCHAR(20) PRIMARY KEY,
+    RoleName NVARCHAR(20),
+);
+GO
+CREATE TABLE Users (
+    ID VARCHAR(20) PRIMARY KEY,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
     Username VARCHAR(50) NOT NULL,
-    UserPassword VARCHAR(50) NOT NULL,
+    PasswordHash VARCHAR(50) NOT NULL,
     Email VARCHAR(100) NOT NULL,
-    Phone VARCHAR(20),
-    UserAddress NVARCHAR(50),
+    Phone VARCHAR(10),
+    WalletBalance DECIMAL(10, 2) NOT NULL,
+    RoleID VARCHAR(20),
     CONSTRAINT unique_username UNIQUE (Username),
-    CONSTRAINT unique_email UNIQUE (Email)
+    CONSTRAINT unique_email UNIQUE (Email),
+    CONSTRAINT unique_phone UNIQUE (Phone),
+    CONSTRAINT fk_users_role_id FOREIGN KEY (RoleID) REFERENCES UserRole(ID)
+);
+GO
+
+-- wallet
+CREATE TABLE Balances (
+    ID VARCHAR(20) PRIMARY KEY,
+    UserID VARCHAR(20),
+    Balance DECIMAL(18, 2) NOT NULL,
+    UpdatedAt SMALLDATETIME,
+    CONSTRAINT fk_balances_user_id FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+GO
+
+CREATE TABLE UserAddress (
+    ID VARCHAR(20) PRIMARY KEY,
+    UserID VARCHAR(20),
+    AddressDetails NVARCHAR(256),
+);
+GO
+
+-- store current cart of user
+CREATE TABLE Carts (
+    ID VARCHAR(20) PRIMARY KEY,
+    UserID VARCHAR(20) NOT NULL,
+    TotalPrice DECIMAL(10, 2) NOT NULL,
+    CreatedAt SMALLDATETIME,
+    UpdateAt SMALLDATETIME,
+    CONSTRAINT fk_carts_user_id FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+GO
+
+CREATE TABLE CartItems (
+    ID VARCHAR(20) PRIMARY KEY,
+    CartID VARCHAR(20) NOT NULL,
+    ProductID VARCHAR(20) NOT NULL,
+    Quantity int,
+    CONSTRAINT fk_cart_items_cart_id FOREIGN KEY (CartID) REFERENCES Carts(ID),
+    CONSTRAINT fk_cart_items_product_id FOREIGN KEY (ProductID) REFERENCES Products(ID)
 );
 
-CREATE TABLE Payment (
-    PaymentID VARCHAR(50) PRIMARY KEY,
-    PaymentType VARCHAR(50) NOT NULL,
-    PaymentDescription TEXT
-);
-
-CREATE TABLE Order_ (
-    OrderID VARCHAR(50) PRIMARY KEY,
-    UserID VARCHAR(50) NOT NULL,
+-- Order
+CREATE TABLE Orders (
+    ID VARCHAR(20) PRIMARY KEY,
+    UserID VARCHAR(20) NOT NULL,
     OrderDate DATETIME NOT NULL,
     TotalPrice DECIMAL(18, 2) NOT NULL,
-    PaymentID VARCHAR(50) NOT NULL,
-    ProductID VARCHAR(50) NOT NULL,
-    CONSTRAINT fk_user FOREIGN KEY (UserID) REFERENCES User_(UserID),
-    CONSTRAINT fk_payment FOREIGN KEY (PaymentID) REFERENCES Payment(PaymentID)
+    ProductID VARCHAR(20) NOT NULL,
+    CONSTRAINT fk_orders_user_id FOREIGN KEY (UserID) REFERENCES Users(ID),
 );
+GO
 
-CREATE TABLE Order_Item (
-    OrderItemID VARCHAR(50) PRIMARY KEY,
-    OrderID VARCHAR(50) NOT NULL,
-    ProductID VARCHAR(50) NOT NULL,
+CREATE TABLE OrderItems (
+    ID VARCHAR(20) PRIMARY KEY,
+    OrderID VARCHAR(20) NOT NULL,
+    ProductID VARCHAR(20) NOT NULL,
     Quantity INT NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
-    CONSTRAINT fk_order FOREIGN KEY (OrderID) REFERENCES Order_(OrderID),
-    CONSTRAINT fk_product FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+    CONSTRAINT fk_order_items_order_id FOREIGN KEY (OrderID) REFERENCES Orders(ID),
+    CONSTRAINT fk_order_items_product_id FOREIGN KEY (ProductID) REFERENCES Products(ID)
 );
-
---Them User
-INSERT INTO User_ (UserID, Username, Password, Email,Phone,Address)
-VALUES ('01', 'dieu', 123, 'dieu@gmail.com','0111111111','Dak Nong');
-
-INSERT INTO User_ (UserID, Username, Password, Email,Phone,Address)
-VALUES ('02', 'An', 123, 'an@gmail.com','0222222222','Dong Nai');
-
-INSERT INTO User_ (UserID, Username, Password, Email,Phone,Address)
-VALUES ('03', 'tan', 123, 'tan@gmail.com','0333333333','Tra Vinh');
-
-INSERT INTO User_ (UserID, Username, Password, Email,Phone,Address)
-VALUES ('04', 'hung', 123, 'hung@gmail.com','0444444444','Nghe An');
-
---select * from User_
---DELETE FROM User_ WHERE UserID=2;
-
---Them Category
-
-INSERT INTO Category(ID,CategoryName)
-VALUES ('01', 'Ghe');
-
-INSERT INTO Category(ID,CategoryName)
-VALUES ('02', 'Ban');
-
-INSERT INTO Category(ID,CategoryName)
-VALUES ('03', 'Dien Thoai');
-
---select * from Category
-
---Them Product
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('01', 'Ghe Sofa', '01', 500000, 10 ,'De phong khach');
-
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('02', 'Ghe nhua', '01', 20000, 50 ,'Ngoi chao co');
-
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('03', 'Ban lam viec', '02', 100000, 5 ,'De van phong');
- 
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('04', 'Ban an', '02', 700000, 4 ,'De an com');
-
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('05', 'Ban phong khach', '02', 1500000, 6 ,'Tiep khach...');
-
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('07', 'Iphone 14 ProMax', '03', 20000000, 13 ,'Nghe,goi,nhan tin,internet,..');
-
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('08', 'Iphone 11 ProMax', '03', 7000000, 7 ,'Nghe,goi,nhan tin,internet,..');
-
-INSERT INTO Product (ProductID, ProductName, CategoryID, Price,Quantity,ProductDescription)
-VALUES ('09', 'Samsung S23 Ultra', '03', 25000000, 3 ,'Nghe,goi,nhan tin,internet,..');
-
---select * from Product
---DELETE FROM Product WHERE ProductID=1 ;
-
---
-
-
+GO
