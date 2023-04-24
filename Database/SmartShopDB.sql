@@ -23,7 +23,7 @@ GO
 -- User
 CREATE TABLE UserRole (
     ID VARCHAR(20) PRIMARY KEY,
-    RoleName NVARCHAR(20),
+    RoleName NVARCHAR(20) NOT NULL,
 );
 GO
 CREATE TABLE Users (
@@ -33,40 +33,30 @@ CREATE TABLE Users (
     Username VARCHAR(50) NOT NULL,
     PasswordHash VARCHAR(50) NOT NULL,
     Email VARCHAR(100) NOT NULL,
-    Phone VARCHAR(10),
+    Phone VARCHAR(10) NOT NULL,
     WalletBalance DECIMAL(10, 2) NOT NULL,
-    RoleID VARCHAR(20),
+    RoleID VARCHAR(20) NOT NULL,
     CONSTRAINT unique_username UNIQUE (Username),
     CONSTRAINT unique_email UNIQUE (Email),
     CONSTRAINT unique_phone UNIQUE (Phone),
     CONSTRAINT fk_users_role_id FOREIGN KEY (RoleID) REFERENCES UserRole(ID)
 );
 GO
-
--- wallet
-CREATE TABLE Balances (
-    ID VARCHAR(20) PRIMARY KEY,
-    UserID VARCHAR(20),
-    Balance DECIMAL(18, 2) NOT NULL,
-    UpdatedAt SMALLDATETIME,
-    CONSTRAINT fk_balances_user_id FOREIGN KEY (UserID) REFERENCES Users(ID)
-);
-GO
-
 CREATE TABLE UserAddress (
     ID VARCHAR(20) PRIMARY KEY,
-    UserID VARCHAR(20),
-    AddressDetails NVARCHAR(256),
+    UserID VARCHAR(20) NOT NULl,
+    AddressDetails NVARCHAR(256) NOT NULL,
+    CONSTRAINT fk_address_user_id FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
 GO
 
 -- store current cart of user
+-- set with trigger at User
 CREATE TABLE Carts (
     ID VARCHAR(20) PRIMARY KEY,
     UserID VARCHAR(20) NOT NULL,
     TotalPrice DECIMAL(10, 2) NOT NULL,
-    CreatedAt SMALLDATETIME,
-    UpdateAt SMALLDATETIME,
+    UpdateAt SMALLDATETIME NOT NULL,
     CONSTRAINT fk_carts_user_id FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
 GO
@@ -75,19 +65,27 @@ CREATE TABLE CartItems (
     ID VARCHAR(20) PRIMARY KEY,
     CartID VARCHAR(20) NOT NULL,
     ProductID VARCHAR(20) NOT NULL,
-    Quantity int,
+    Quantity int NOT NULL,
     CONSTRAINT fk_cart_items_cart_id FOREIGN KEY (CartID) REFERENCES Carts(ID),
     CONSTRAINT fk_cart_items_product_id FOREIGN KEY (ProductID) REFERENCES Products(ID)
 );
 
 -- Order
+CREATE TABLE OrderStatus (
+    ID VARCHAR(20) PRIMARY KEY,
+    StatusName NVARCHAR(50) NOT NULL
+)
+GO
+
 CREATE TABLE Orders (
     ID VARCHAR(20) PRIMARY KEY,
     UserID VARCHAR(20) NOT NULL,
+    ProductID VARCHAR(20) NOT NULL,
+    OrderStatusID VARCHAR(20) NOT NULL,
     OrderDate DATETIME NOT NULL,
     TotalPrice DECIMAL(18, 2) NOT NULL,
-    ProductID VARCHAR(20) NOT NULL,
     CONSTRAINT fk_orders_user_id FOREIGN KEY (UserID) REFERENCES Users(ID),
+    CONSTRAINT fk_orders_status_id FOREIGN KEY (OrderStatusID) REFERENCES OrderStatus(ID)
 );
 GO
 
