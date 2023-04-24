@@ -8,24 +8,15 @@ CREATE TABLE Categories (
     CategoryName NVARCHAR(50) NOT NULL
 );
 GO
-CREATE TABLE Discounts (
-    ID VARCHAR(20) PRIMARY KEY,
-    DiscountName NVARCHAR(50),
-    Active BIT DEFAULT 0,
-    DiscountPercent int
-);
-GO
 CREATE TABLE Products (
     ID VARCHAR(20) PRIMARY KEY,
     CategoryID VARCHAR(20) NOT NULL,
-    DiscountID VARCHAR(20) NOT NULL,
     ImageUrl VARCHAR(256) NOT NULL,
     ProductName NVARCHAR(50) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     Quantity INT NOT NULL,
     ProductDescription NVARCHAR(256),
-    CONSTRAINT fk_products_category_id FOREIGN KEY (CategoryID) REFERENCES Categories(ID),
-    CONSTRAINT fk_products_discount_id FOREIGN KEY (DiscountID) REFERENCES Discounts(ID)
+    CONSTRAINT fk_products_category_id FOREIGN KEY (CategoryID) REFERENCES Categories(ID)
 );
 GO
 
