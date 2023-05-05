@@ -3,19 +3,106 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SmartShop.View"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="BuyerWindow" Height="450" Width="800">
-    <Grid>
+        Name="buyerWindow"
+        WindowStartupLocation="CenterScreen"
+        Title="BuyerWindow" Height="700" Width="1200">
+    <materialDesign:DrawerHost>
+        <materialDesign:DrawerHost.LeftDrawerContent>
+            <Border CornerRadius="30" BorderThickness="1">
+                <StackPanel Width="200">
+                    <RadioButton
+                        Height="50"
+                        Margin="4"
+                        Command="{Binding ShowBuyHistoryCommand}"
+                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                        Style="{StaticResource MaterialDesignTabRadioButtonRight}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountCircle" />
+                            <TextBlock Text="Tôi" Margin="47 0" />
+                        </StackPanel>
+                    </RadioButton>
+                    
+                    <RadioButton
+                        Height="50"
+                        Margin="4"
+                        Command="{Binding ShowMyAccountCommand}"
+                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                        Style="{StaticResource MaterialDesignTabRadioButtonRight}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Briefcase" />
+                            <TextBlock Text="Dự án" Margin="38 0" />
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+            </Border>
+        </materialDesign:DrawerHost.LeftDrawerContent>
+        
+        <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TabControl >
-            <TabItem Header=" Sản phẩm "></TabItem>
-            <TabItem Header=" Giỏ hàng "></TabItem>
-        </TabControl>
-        <ContentControl Content="{Binding CurrentChildView}">
-        </ContentControl>
+        <Border Background="#006064">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        Height="60"
+                        Width="60"
+                        ToolTip=" Nhà"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding ShowProductsCommand}">
+                        <materialDesign:PackIcon Kind="FormatListBulleted" Foreground="White" />
+                    </Button>
+                    <Button
+                        Height="60"
+                        Width="60"
+                        ToolTip=" Nhà"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToProductsViewCommand}">
+                        <materialDesign:PackIcon Kind="HomeOutline" Foreground="White" />
+                    </Button>
+                </StackPanel>
+
+                <Grid Grid.Column="1" Height="50" Margin="100 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Ellipse >
+                    </Ellipse>
+                    <Button
+                            Style="{StaticResource MaterialDesignIconButton}">
+                        <materialDesign:PackIcon Kind="Magnify" />
+                    </Button>
+                    <TextBox Grid.Column="1"
+                             FontSize="12"
+                             Background="White"
+                             Foreground="Black"
+                             materialDesign:HintAssist.Hint="Tên sản phẩm cần tìm"
+                             Text="{Binding ElementName=projectInputUC, Path=DataContext.TextToSearch, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                </Grid>
+                <Button
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    Height="60"
+                    Width="60"
+                    ToolTip="Giỏ hàng"
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToCartViewCommand}"
+                    BorderThickness="0">
+                    <materialDesign:PackIcon Kind="CartOutline" Foreground="White" />
+                </Button>
+            </Grid>
+        </Border>
+        <ContentControl Grid.Row="1" Content="{Binding ElementName=buyerWindow, Path=DataContext.CurrentChildView}" />
     </Grid>
+    </materialDesign:DrawerHost>
 </Window>

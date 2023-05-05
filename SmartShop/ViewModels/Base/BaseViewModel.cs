@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace SmartShop.ViewModel.Base
+namespace SmartShop.ViewModels.Base
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
