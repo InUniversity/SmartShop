@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using SmartShop.View;
+using SmartShop.ViewModels;
 
 namespace SmartShop
 {
@@ -13,5 +15,12 @@ namespace SmartShop
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var viewModel = new BuyerViewModel();
+            var window = new BuyerWindow {DataContext = viewModel};
+            window.Show();
+            base.OnStartup(e);
+        }
     }
 }

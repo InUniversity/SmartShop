@@ -90,14 +90,15 @@
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
-    <Compile Include="ViewsModel\Base\BaseViewModel.cs" />
-    <Compile Include="ViewsModel\BuyerViewModel.cs" />
-    <Compile Include="ViewsModel\UserControls\CartViewModel.cs" />
-    <Compile Include="ViewsModel\UserControls\PaymentViewModel.cs" />
-    <Compile Include="ViewsModel\UserControls\ProductsViewModel.cs" />
+    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BuyerViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\CartViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\PaymentViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ProductsViewModel.cs" />
     <Compile Include="Views\BuyerWindow.xaml.cs">
       <DependentUpon>BuyerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\INavigateView.cs" />
     <Compile Include="Views\UserControls\CartUC.xaml.cs">
       <DependentUpon>CartUC.xaml</DependentUpon>
     </Compile>
@@ -169,6 +170,9 @@
     <Content Include="Image\Shirt.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.8.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.8.0\build\MaterialDesignThemes.targets')" />
