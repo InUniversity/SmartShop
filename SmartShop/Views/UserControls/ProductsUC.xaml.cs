@@ -1,6 +1,9 @@
-﻿using System;
+﻿using SmartShop.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +26,20 @@ namespace SmartShop.Views.UserControls
         public ProductsUC()
         {
             InitializeComponent();
+            var products = GetProducts();
+            if (products.Count > 0)
+                ListViewProducts.ItemsSource = products;
+        }
+        private List<Product> GetProducts()
+        {
+            return new List<Product>()
+            {
+                new Product("Product 1",205,"1.jpg"),
+                new Product("tât chân tất tay may mặc",206,"E:/Lập trình window/WpfApp1/WpfApp1/2.jpg"),
+                new Product("Product 3",207,"E:/Lập trình window/WpfApp1/WpfApp1/3.jpg"),
+                new Product("Product 4",208,"E:/Lập trình window/WpfApp1/WpfApp1/4.jpg")
+
+            };
         }
     }
 }
