@@ -14,42 +14,42 @@ namespace SmartShop.Repositories
 
         public bool Add(Product prod)
         {
-            string spCmd = $"sp_Add_Product";
+            string spCmd = $"sp_AddProduct";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter("@id", prod.ID),
-                new SqlParameter("@ctgID", prod.CategoryID),
-                new SqlParameter("@imgUrl", prod.ImgUrl),
-                new SqlParameter("@name", prod.Name),
-                new SqlParameter("@price", prod.Price),
-                new SqlParameter("@qty", prod.Quantity),
-                new SqlParameter("@description", prod.Description)
+                new SqlParameter("@ProductID", prod.ID),
+                new SqlParameter("@CategoryID", prod.CategoryID),
+                new SqlParameter("@ImageUrl", prod.ImgUrl),
+                new SqlParameter("@ProductName", prod.Name),
+                new SqlParameter("@Price", prod.Price),
+                new SqlParameter("@Quantity", prod.Quantity),
+                new SqlParameter("@ProductDescription", prod.Description)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
 
         public bool Delete(string id)
         {
-            string spCmd = $"sp_Delete_Product";
+            string spCmd = $"sp_DeleteProduct";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter("@id", id),
+                new SqlParameter("@ProductID", id),
             };
             return dbConn.ExecuteNonQuery(spCmd, paras); 
         }
 
         public bool Update(Product prod)
         {
-            string spCmd = $"sp_Update_Product";
+            string spCmd = $"sp_UpdateProduct";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter("@id", prod.ID),
-                new SqlParameter("@ctgID", prod.CategoryID),
-                new SqlParameter("@imgUrl", prod.ImgUrl),
-                new SqlParameter("@name", prod.Name),
-                new SqlParameter("@price", prod.Price),
-                new SqlParameter("@qty", prod.Quantity),
-                new SqlParameter("@description", prod.Description)
+                new SqlParameter("@ProductID", prod.ID),
+                new SqlParameter("@NewCategoryID", prod.CategoryID),
+                new SqlParameter("@NewImageUrl", prod.ImgUrl),
+                new SqlParameter("@NewProductName", prod.Name),
+                new SqlParameter("@NewPrice", prod.Price),
+                new SqlParameter("@NewQuantity", prod.Quantity),
+                new SqlParameter("@NewProductDescription", prod.Description)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras); 
         }
