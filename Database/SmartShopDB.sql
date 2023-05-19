@@ -1,4 +1,4 @@
-﻿CREATE DATABASE SmartShop
+CREATE DATABASE SmartShop
 GO
 USE SmartShop
 GO
@@ -178,7 +178,7 @@ VALUES
 
 ----------------------------------
 --Trigger Order
-
+GO
 CREATE TRIGGER tr_OrderCreated
 ON Orders
 AFTER INSERT
@@ -211,6 +211,7 @@ BEGIN
   END
 END
 --Trigger cancel
+GO
 CREATE TRIGGER tr_Order_Cancel
 ON Orders
 AFTER UPDATE
@@ -238,7 +239,7 @@ END
 
 ------------------------------------------------------
 --Stored Proceduce: get order date
-
+GO
 CREATE PROCEDURE sp_GetOrdersByDateRange
     @startDate DATETIME,
     @endDate DATETIME
@@ -256,7 +257,7 @@ END
 
 -----------------------------
 --Stored Proceduce: Add Catagory
-
+GO
 CREATE PROCEDURE sp_AddCategory
     @CategoryID VARCHAR(20),
     @CategoryName NVARCHAR(50)
@@ -267,7 +268,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update Catagory
-
+GO
 CREATE PROCEDURE sp_UpdateCategory
     @CategoryID VARCHAR(20),
     @NewCategoryName NVARCHAR(50)
@@ -279,7 +280,7 @@ BEGIN
 END
 
 --Stored Proceduce: Delete Catagory
-
+GO
 CREATE PROCEDURE sp_DeleteCategory
     @CategoryID VARCHAR(20)
 AS
@@ -289,7 +290,7 @@ BEGIN
 END
 ---------------------------------------------------------
 --Stored Proceduce: Add Product
-
+GO
 CREATE PROCEDURE sp_AddProduct
     @ProductID VARCHAR(20),
     @CategoryID VARCHAR(20),
@@ -305,7 +306,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update Product
-
+GO
 CREATE PROCEDURE sp_UpdateProduct
     @ProductID VARCHAR(20),
     @NewCategoryID VARCHAR(20),
@@ -327,7 +328,7 @@ BEGIN
 END
 
 --Stored Proceduce: Delete Product
-
+GO
 CREATE PROCEDURE sp_DeleteProduct
     @ProductID VARCHAR(20)
 AS
@@ -338,7 +339,7 @@ END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add UserRole
-
+GO
 CREATE PROCEDURE sp_AddUserRole
     @RoleID VARCHAR(20),
     @RoleName NVARCHAR(20)
@@ -349,7 +350,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update UserRole
-
+GO
 CREATE PROCEDURE sp_UpdateUserRole
     @RoleID VARCHAR(20),
     @NewRoleName NVARCHAR(20)
@@ -361,7 +362,7 @@ BEGIN
 END
 
 --Stored Proceduce: Delete UserRole
-
+GO
 CREATE PROCEDURE sp_DeleteUserRole
     @RoleID VARCHAR(20)
 AS
@@ -372,7 +373,7 @@ END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add User
-
+GO
 CREATE PROCEDURE sp_AddUser
     @UserID VARCHAR(20),
     @FirstName NVARCHAR(50),
@@ -391,7 +392,7 @@ END
 
 
 --Stored Proceduce: Update User
-
+GO
 CREATE PROCEDURE sp_UpdateUser
     @UserID VARCHAR(20),
     @NewFirstName NVARCHAR(50),
@@ -418,18 +419,20 @@ END
 
 
 --Stored Proceduce: Delete User
-
+GO
 CREATE PROCEDURE sp_DeleteUser
     @UserID VARCHAR(20)
 AS
 BEGIN
+	DELETE FROM UserAddress
+    WHERE UserID = @UserID
     DELETE FROM Users
     WHERE ID = @UserID
 END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add UserAddress
-
+GO
 CREATE PROCEDURE sp_AddUserAddress
     @AddressID VARCHAR(20),
     @UserID VARCHAR(20),
@@ -441,7 +444,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update UserAddress
-
+GO
 CREATE PROCEDURE sp_UpdateUserAddress
     @AddressID VARCHAR(20),
     @NewUserID VARCHAR(20),
@@ -455,7 +458,7 @@ BEGIN
 END
 
 --Stored Proceduce: Delete UserAddress
-
+GO
 CREATE PROCEDURE sp_DeleteUserAddress
     @AddressID VARCHAR(20)
 AS
@@ -466,7 +469,7 @@ END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add Cart
-
+GO
 CREATE PROCEDURE sp_AddCart
     @CartID VARCHAR(20),
     @UserID VARCHAR(20),
@@ -479,7 +482,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update Cart
-
+GO
 CREATE PROCEDURE sp_UpdateCart
     @CartID VARCHAR(20),
     @NewUserID VARCHAR(20),
@@ -495,18 +498,20 @@ BEGIN
 END
 
 --Stored Proceduce: Delete Cart
-
+GO
 CREATE PROCEDURE sp_DeleteCart
     @CartID VARCHAR(20)
 AS
 BEGIN
+	DELETE FROM CartItems
+    WHERE CartID = @CartID
     DELETE FROM Carts
     WHERE ID = @CartID
 END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add CartItem
-
+GO
 CREATE PROCEDURE sp_AddCartItem
     @CartItemID VARCHAR(20),
     @CartID VARCHAR(20),
@@ -519,7 +524,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update CartItem
-
+GO
 CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
     @NewCartID VARCHAR(20),
@@ -535,7 +540,7 @@ BEGIN
 END
 
 --Stored Proceduce: Delete CartItem
-
+GO
 CREATE PROCEDURE sp_DeleteCartItem
     @CartItemID VARCHAR(20)
 AS
@@ -546,7 +551,7 @@ END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add OrderStatus
-
+GO
 CREATE PROCEDURE sp_AddOrderStatus
     @StatusID VARCHAR(20),
     @StatusName NVARCHAR(50)
@@ -557,7 +562,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update OrderStatus
-
+GO
 CREATE PROCEDURE sp_UpdateOrderStatus
     @StatusID VARCHAR(20),
     @NewStatusName NVARCHAR(50)
@@ -569,7 +574,7 @@ BEGIN
 END
 
 --Stored Proceduce: Delete OrderStatus
-
+GO
 CREATE PROCEDURE sp_DeleteOrderStatus
     @StatusID VARCHAR(20)
 AS
@@ -580,7 +585,7 @@ END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add Order
-
+GO
 CREATE PROCEDURE sp_AddOrder
     @OrderID VARCHAR(20),
     @UserID VARCHAR(20),
@@ -594,7 +599,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update Order
-
+GO
 CREATE PROCEDURE sp_UpdateOrder
     @OrderID VARCHAR(20),
     @NewUserID VARCHAR(20),
@@ -612,18 +617,20 @@ BEGIN
 END
 
 --Stored Proceduce: Delete Order
-
+GO
 CREATE PROCEDURE sp_DeleteOrder
     @OrderID VARCHAR(20)
 AS
 BEGIN
+	DELETE FROM OrderItems
+    WHERE OrderID = @OrderID
     DELETE FROM Orders
     WHERE ID = @OrderID
 END
 
 ----------------------------------------------------------
 --Stored Proceduce: Add OrderItem
-
+GO
 CREATE PROCEDURE sp_AddOrderItem
     @OrderItemID VARCHAR(20),
     @OrderID VARCHAR(20),
@@ -637,7 +644,7 @@ BEGIN
 END
 
 --Stored Proceduce: Update OrderItem
-
+GO
 CREATE PROCEDURE sp_UpdateOrderItem
     @OrderItemID VARCHAR(20),
     @NewOrderID VARCHAR(20),
@@ -655,7 +662,7 @@ BEGIN
 END
 
 --Stored Proceduce: Delete OrderItem
-
+GO
 CREATE PROCEDURE sp_DeleteOrderItem
     @OrderItemID VARCHAR(20)
 AS
@@ -664,4 +671,3 @@ BEGIN
     WHERE ID = @OrderItemID
 END
 ----------------------------------------------------------
-
