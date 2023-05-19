@@ -210,8 +210,8 @@ BEGIN
     RAISERROR ('Your Wallet Balance is Insufficient to Place this Order. Please Top-up your Wallet and try again.', 16, 1)
   END
 END
---Trigger cancel
 GO
+--Trigger cancel
 CREATE TRIGGER tr_Order_Cancel
 ON Orders
 AFTER UPDATE
@@ -236,10 +236,10 @@ BEGIN
         END
     END
 END
-
-------------------------------------------------------
---Stored Proceduce: get order date
 GO
+------------------------------------------------------
+--Stored Procedure: get order date
+
 CREATE PROCEDURE sp_GetOrdersByDateRange
     @startDate DATETIME,
     @endDate DATETIME
@@ -251,13 +251,13 @@ BEGIN
        OR OrderDate = @startDate 
        OR OrderDate = @endDate
 END
-
+GO
 --EXEC sp_GetOrdersByDateRange '2023-01-25', '2023-04-27'
 --DROP PROCEDURE sp_GetOrdersByDateRange
 
 -----------------------------
---Stored Proceduce: Add Catagory
-GO
+--Stored Procedure: Add Catagory
+
 CREATE PROCEDURE sp_AddCategory
     @CategoryID VARCHAR(20),
     @CategoryName NVARCHAR(50)
@@ -266,9 +266,9 @@ BEGIN
     INSERT INTO Categories (ID, CategoryName)
     VALUES (@CategoryID, @CategoryName)
 END
-
---Stored Proceduce: Update Catagory
 GO
+--Stored Procedure: Update Catagory
+
 CREATE PROCEDURE sp_UpdateCategory
     @CategoryID VARCHAR(20),
     @NewCategoryName NVARCHAR(50)
@@ -278,9 +278,9 @@ BEGIN
     SET CategoryName = @NewCategoryName
     WHERE ID = @CategoryID
 END
-
---Stored Proceduce: Delete Catagory
 GO
+--Stored Procedure: Delete Catagory
+
 CREATE PROCEDURE sp_DeleteCategory
     @CategoryID VARCHAR(20)
 AS
@@ -288,9 +288,10 @@ BEGIN
     DELETE FROM Categories
     WHERE ID = @CategoryID
 END
----------------------------------------------------------
---Stored Proceduce: Add Product
 GO
+---------------------------------------------------------
+--Stored Procedure: Add Product
+
 CREATE PROCEDURE sp_AddProduct
     @ProductID VARCHAR(20),
     @CategoryID VARCHAR(20),
@@ -304,9 +305,9 @@ BEGIN
     INSERT INTO Products (ID, CategoryID, ImageUrl, ProductName, Price, Quantity, ProductDescription)
     VALUES (@ProductID, @CategoryID, @ImageUrl, @ProductName, @Price, @Quantity, @ProductDescription)
 END
-
---Stored Proceduce: Update Product
 GO
+--Stored Procedure: Update Product
+
 CREATE PROCEDURE sp_UpdateProduct
     @ProductID VARCHAR(20),
     @NewCategoryID VARCHAR(20),
@@ -326,9 +327,20 @@ BEGIN
         ProductDescription = @NewProductDescription
     WHERE ID = @ProductID
 END
-
---Stored Proceduce: Delete Product
 GO
+--Stored Procedure: Search Product
+
+CREATE PROCEDURE sp_Ser_Prod_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM Products
+    WHERE ID = @ID
+END
+GO
+--Stored Procedure: Delete Product
+
 CREATE PROCEDURE sp_DeleteProduct
     @ProductID VARCHAR(20)
 AS
@@ -336,10 +348,10 @@ BEGIN
     DELETE FROM Products
     WHERE ID = @ProductID
 END
-
+GO
 ----------------------------------------------------------
 --Stored Proceduce: Add UserRole
-GO
+
 CREATE PROCEDURE sp_AddUserRole
     @RoleID VARCHAR(20),
     @RoleName NVARCHAR(20)
@@ -348,9 +360,9 @@ BEGIN
     INSERT INTO UserRole (ID, RoleName)
     VALUES (@RoleID, @RoleName)
 END
-
---Stored Proceduce: Update UserRole
 GO
+--Stored Proceduce: Update UserRole
+
 CREATE PROCEDURE sp_UpdateUserRole
     @RoleID VARCHAR(20),
     @NewRoleName NVARCHAR(20)
@@ -360,9 +372,9 @@ BEGIN
     SET RoleName = @NewRoleName
     WHERE ID = @RoleID
 END
-
---Stored Proceduce: Delete UserRole
 GO
+--Stored Proceduce: Delete UserRole
+
 CREATE PROCEDURE sp_DeleteUserRole
     @RoleID VARCHAR(20)
 AS
@@ -370,10 +382,21 @@ BEGIN
     DELETE FROM UserRole
     WHERE ID = @RoleID
 END
-
-----------------------------------------------------------
---Stored Proceduce: Add User
 GO
+--Stored Procedure: Search UserRole
+
+CREATE PROCEDURE sp_Ser_UserR_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM UserRole
+    WHERE ID = @ID
+END
+GO
+----------------------------------------------------------
+--Stored Procedure: Add User
+
 CREATE PROCEDURE sp_AddUser
     @UserID VARCHAR(20),
     @FirstName NVARCHAR(50),
@@ -389,10 +412,10 @@ BEGIN
     INSERT INTO Users (ID, FirstName, LastName, Username, PasswordHash, Email, Phone, WalletBalance, RoleID)
     VALUES (@UserID, @FirstName, @LastName, @Username, @PasswordHash, @Email, @Phone, @WalletBalance, @RoleID)
 END
-
-
---Stored Proceduce: Update User
 GO
+
+--Stored Procedure: Update User
+
 CREATE PROCEDURE sp_UpdateUser
     @UserID VARCHAR(20),
     @NewFirstName NVARCHAR(50),
@@ -416,10 +439,10 @@ BEGIN
         RoleID = @NewRoleID
     WHERE ID = @UserID
 END
-
-
---Stored Proceduce: Delete User
 GO
+
+--Stored Procedure: Delete User
+
 CREATE PROCEDURE sp_DeleteUser
     @UserID VARCHAR(20)
 AS
@@ -429,10 +452,21 @@ BEGIN
     DELETE FROM Users
     WHERE ID = @UserID
 END
-
-----------------------------------------------------------
---Stored Proceduce: Add UserAddress
 GO
+--Stored Procedure: Search UserRole
+
+CREATE PROCEDURE sp_Ser_User_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM Users
+    WHERE ID = @ID
+END
+GO
+----------------------------------------------------------
+--Stored Procedure: Add UserAddress
+
 CREATE PROCEDURE sp_AddUserAddress
     @AddressID VARCHAR(20),
     @UserID VARCHAR(20),
@@ -442,9 +476,9 @@ BEGIN
     INSERT INTO UserAddress (ID, UserID, AddressDetails)
     VALUES (@AddressID, @UserID, @AddressDetails)
 END
-
---Stored Proceduce: Update UserAddress
 GO
+--Stored Procedure: Update UserAddress
+
 CREATE PROCEDURE sp_UpdateUserAddress
     @AddressID VARCHAR(20),
     @NewUserID VARCHAR(20),
@@ -456,9 +490,9 @@ BEGIN
         AddressDetails = @NewAddressDetails
     WHERE ID = @AddressID
 END
-
---Stored Proceduce: Delete UserAddress
 GO
+--Stored Procedure: Delete UserAddress
+
 CREATE PROCEDURE sp_DeleteUserAddress
     @AddressID VARCHAR(20)
 AS
@@ -466,10 +500,21 @@ BEGIN
     DELETE FROM UserAddress
     WHERE ID = @AddressID
 END
-
-----------------------------------------------------------
---Stored Proceduce: Add Cart
 GO
+--Stored Procedure: Search UserAddress
+
+CREATE PROCEDURE sp_Ser_UserA_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM UserAddress
+    WHERE ID = @ID
+END
+GO
+----------------------------------------------------------
+--Stored Procedure: Add Cart
+
 CREATE PROCEDURE sp_AddCart
     @CartID VARCHAR(20),
     @UserID VARCHAR(20),
@@ -480,9 +525,9 @@ BEGIN
     INSERT INTO Carts (ID, UserID, TotalPrice, UpdateAt)
     VALUES (@CartID, @UserID, @TotalPrice, @UpdateAt)
 END
-
---Stored Proceduce: Update Cart
 GO
+--Stored Procedure: Update Cart
+
 CREATE PROCEDURE sp_UpdateCart
     @CartID VARCHAR(20),
     @NewUserID VARCHAR(20),
@@ -496,9 +541,9 @@ BEGIN
         UpdateAt = @NewUpdateAt
     WHERE ID = @CartID
 END
-
---Stored Proceduce: Delete Cart
 GO
+--Stored Procedure: Delete Cart
+
 CREATE PROCEDURE sp_DeleteCart
     @CartID VARCHAR(20)
 AS
@@ -508,10 +553,21 @@ BEGIN
     DELETE FROM Carts
     WHERE ID = @CartID
 END
-
-----------------------------------------------------------
---Stored Proceduce: Add CartItem
 GO
+--Stored Procedure: Search Carts
+
+CREATE PROCEDURE sp_Ser_Carts_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM Carts
+    WHERE ID = @ID
+END
+GO
+----------------------------------------------------------
+--Stored Procedure: Add CartItem
+
 CREATE PROCEDURE sp_AddCartItem
     @CartItemID VARCHAR(20),
     @CartID VARCHAR(20),
@@ -522,9 +578,9 @@ BEGIN
     INSERT INTO CartItems (ID, CartID, ProductID, Quantity)
     VALUES (@CartItemID, @CartID, @ProductID, @Quantity)
 END
-
---Stored Proceduce: Update CartItem
 GO
+--Stored Procedure: Update CartItem
+
 CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
     @NewCartID VARCHAR(20),
@@ -538,9 +594,9 @@ BEGIN
         Quantity = @NewQuantity
     WHERE ID = @CartItemID
 END
-
---Stored Proceduce: Delete CartItem
 GO
+--Stored Procedure: Delete CartItem
+
 CREATE PROCEDURE sp_DeleteCartItem
     @CartItemID VARCHAR(20)
 AS
@@ -548,10 +604,21 @@ BEGIN
     DELETE FROM CartItems
     WHERE ID = @CartItemID
 END
-
-----------------------------------------------------------
---Stored Proceduce: Add OrderStatus
 GO
+--Stored Procedure: Search CartItems
+
+CREATE PROCEDURE sp_Ser_CartItems_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM CartItems
+    WHERE ID = @ID
+END
+GO
+----------------------------------------------------------
+--Stored Procedure: Add OrderStatus
+
 CREATE PROCEDURE sp_AddOrderStatus
     @StatusID VARCHAR(20),
     @StatusName NVARCHAR(50)
@@ -560,9 +627,9 @@ BEGIN
     INSERT INTO OrderStatus (ID, StatusName)
     VALUES (@StatusID, @StatusName)
 END
-
---Stored Proceduce: Update OrderStatus
 GO
+--Stored Procedure: Update OrderStatus
+
 CREATE PROCEDURE sp_UpdateOrderStatus
     @StatusID VARCHAR(20),
     @NewStatusName NVARCHAR(50)
@@ -572,9 +639,9 @@ BEGIN
     SET StatusName = @NewStatusName
     WHERE ID = @StatusID
 END
-
---Stored Proceduce: Delete OrderStatus
 GO
+--Stored Procedure: Delete OrderStatus
+
 CREATE PROCEDURE sp_DeleteOrderStatus
     @StatusID VARCHAR(20)
 AS
@@ -582,10 +649,21 @@ BEGIN
     DELETE FROM OrderStatus
     WHERE ID = @StatusID
 END
-
-----------------------------------------------------------
---Stored Proceduce: Add Order
 GO
+--Stored Procedure: Search OrderStatus
+
+CREATE PROCEDURE sp_Ser_OrderStatus_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM OrderStatus
+    WHERE ID = @ID
+END
+GO
+----------------------------------------------------------
+--Stored Procedure: Add Order
+
 CREATE PROCEDURE sp_AddOrder
     @OrderID VARCHAR(20),
     @UserID VARCHAR(20),
@@ -597,9 +675,9 @@ BEGIN
     INSERT INTO Orders (ID, UserID, OrderStatusID, OrderDate, TotalPrice)
     VALUES (@OrderID, @UserID, @OrderStatusID, @OrderDate, @TotalPrice)
 END
-
---Stored Proceduce: Update Order
 GO
+--Stored Procedure: Update Order
+
 CREATE PROCEDURE sp_UpdateOrder
     @OrderID VARCHAR(20),
     @NewUserID VARCHAR(20),
@@ -615,9 +693,9 @@ BEGIN
         TotalPrice = @NewTotalPrice
     WHERE ID = @OrderID
 END
-
---Stored Proceduce: Delete Order
 GO
+--Stored Procedure: Delete Order
+
 CREATE PROCEDURE sp_DeleteOrder
     @OrderID VARCHAR(20)
 AS
@@ -627,10 +705,21 @@ BEGIN
     DELETE FROM Orders
     WHERE ID = @OrderID
 END
-
-----------------------------------------------------------
---Stored Proceduce: Add OrderItem
 GO
+--Stored Procedure: Search Order
+
+CREATE PROCEDURE sp_Ser_Order_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM Orders
+    WHERE ID = @ID
+END
+GO
+----------------------------------------------------------
+--Stored Procedure: Add OrderItem
+
 CREATE PROCEDURE sp_AddOrderItem
     @OrderItemID VARCHAR(20),
     @OrderID VARCHAR(20),
@@ -642,9 +731,9 @@ BEGIN
     INSERT INTO OrderItems (ID, OrderID, ProductID, Quantity, Price)
     VALUES (@OrderItemID, @OrderID, @ProductID, @Quantity, @Price)
 END
-
---Stored Proceduce: Update OrderItem
 GO
+--Stored Procedure: Update OrderItem
+
 CREATE PROCEDURE sp_UpdateOrderItem
     @OrderItemID VARCHAR(20),
     @NewOrderID VARCHAR(20),
@@ -660,9 +749,9 @@ BEGIN
         Price = @NewPrice
     WHERE ID = @OrderItemID
 END
-
---Stored Proceduce: Delete OrderItem
 GO
+--Stored Procedure: Delete OrderItem
+
 CREATE PROCEDURE sp_DeleteOrderItem
     @OrderItemID VARCHAR(20)
 AS
@@ -670,4 +759,16 @@ BEGIN
     DELETE FROM OrderItems
     WHERE ID = @OrderItemID
 END
+GO
+--Stored Procedure: Search OrderItems
+
+CREATE PROCEDURE sp_Ser_OrderItem_By_ID
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM OrderItems
+    WHERE ID = @ID
+END
+GO
 ----------------------------------------------------------
