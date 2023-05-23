@@ -10,9 +10,9 @@ namespace SmartShop.Models
         public string OrderStatusID { get; set; }
         public System.DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }
-    
-        public ICollection<OrderItem> OrderItems { get; set; }
-        public OrderStatu OrderStatu { get; set; }
-        public User User { get; set; }
+
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public OrderStatu OrderStatu { get; set; } = new OrderStatu();
+        public User User { get; set; } = new User();
     }
 }

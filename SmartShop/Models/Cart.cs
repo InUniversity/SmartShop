@@ -7,6 +7,6 @@ namespace SmartShop.Models
         public string ID { get; set; }
         public string UserID { get; set; }
         public decimal TotalPrice { get; set; }
-        public DateTime UpdateAt { get; set; }
+        public DateTime UpdateAt { get; set; } = DateTime.Now;
     }
 }
