@@ -33,29 +33,60 @@ namespace SmartShop.Database
             return rowsAffected > 0;
         }
 
-        public object GetSingleObject<T>(string spCmd, SqlParameter[] paras, Func<SqlDataReader, T> converter)
+        public object? GetSingleObject<T>(string sqlStr, SqlParameter[] paras, Func<SqlDataReader, T> converter)
         {
-            var list = GetEnumerable(spCmd, paras, converter).ToList();
+            var list = GetEnumerable(sqlStr, paras, converter).ToList();
             return list.Count > 0 ? list[0] : null;
         }
 
-        public IEnumerable<T> GetEnumerable<T>(string spCmd, SqlParameter[] paras, Func<SqlDataReader, T> converter)
+        public IEnumerable<T> GetEnumerable<T>(string sqlStr, SqlParameter[] paras, Func<SqlDataReader, T> converter)
         {
             List<T> list = new List<T>();
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(spCmd, conn);
+                SqlCommand cmd = new SqlCommand(sqlStr, conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddRange(paras);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                     list.Add(converter(reader));
+                cmd.Dispose();
+                reader.Close();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return list;
+            }
+            finally 
+            { 
+                conn.Close(); 
+            }
+            return list;
+        }
+       
+        public object? GetSingleObject<T>(string sqlStr, Func<SqlDataReader, T> converter)
+        {
+            var list = GetEnumerable(sqlStr, converter).ToList();
+            return list.Count > 0 ? list[0] : null;
+        }
+        
+        public IEnumerable<T> GetEnumerable<T>(string sqlStr, Func<SqlDataReader, T> converter)
+        {
+            List<T> list = new List<T>();
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sqlStr, conn);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    list.Add(converter(reader));
+                cmd.Dispose();
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
             finally 
             { 
