@@ -1,7 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 using SmartShop.ViewModels.Base;
-using SmartShop.ViewModels.UserControls;
 using SmartShop.Views.UserControls;
 
 namespace SmartShop.ViewModels
@@ -11,19 +10,17 @@ namespace SmartShop.ViewModels
         private ContentControl currentChildView;
         public ContentControl CurrentChildView { get => currentChildView; set { currentChildView = value; OnPropertyChanged(); } }
 
-        private ProductsViewModel productsVM = new ProductsViewModel();
         private ProductsUC productsView;
-        private CartViewModel cartVM = new CartViewModel();
         private CartUC cartView;
         
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }
 
-        public BuyerViewModel()
+        public BuyerViewModel(ProductsUC productsView, CartUC cartView)
         {
-            productsView = new ProductsUC {DataContext = productsVM};
-            cartView = new CartUC {DataContext = cartVM};
-            CurrentChildView = productsView;
+            this.productsView = productsView;
+            this.cartView = cartView;
+            MoveToProductsView();
             SetCommands();
         }
 

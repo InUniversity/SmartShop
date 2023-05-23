@@ -63,6 +63,11 @@ namespace SmartShop.Repositories
             };
             return (Product)dbConn.GetSingleObject(spCmd, paras, Converter); 
         }
+        
+        public List<Product> GetAll()
+        {
+            throw new System.NotImplementedException();
+        }
 
         private Product Converter(SqlDataReader reader)
         {

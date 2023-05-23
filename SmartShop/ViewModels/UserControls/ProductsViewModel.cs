@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using SmartShop.Models;
+using SmartShop.Repositories;
 
 namespace SmartShop.ViewModels.UserControls
 {
@@ -13,14 +14,19 @@ namespace SmartShop.ViewModels.UserControls
         
         public ICommand AddToCartCommand { get; private set; }
 
-        public ProductsViewModel()
+        private readonly ProductRepository prodRepos;
+
+        public ProductsViewModel(ProductRepository prodRepos)
         {
+            this.prodRepos = prodRepos;
             LoadProducts();
             SetCommands();
         }
 
         private void LoadProducts()
         {
+            // TODO
+            // Products = prodRepos.GetAll();
             Products = new List<Product>()
             {
                 new Product { ID = "123123" },
