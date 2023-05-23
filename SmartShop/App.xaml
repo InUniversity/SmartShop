@@ -10,6 +10,21 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Teal.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="TitleTxtStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Foreground" Value="Teal" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+
+            <Style x:Key="NormalTxtStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignBody2TextBlock}">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

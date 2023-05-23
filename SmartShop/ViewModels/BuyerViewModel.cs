@@ -31,8 +31,11 @@ namespace SmartShop.ViewModels
         {
             var dbConn = new DbConnection();
             var prodRepos = new ProductRepository(dbConn);
+            var orderRepos = new OrderRepository(dbConn);
 
-            var paymentVM = new PaymentViewModel();
+            var userAddressVM = new UserAddressViewModel();
+            var orderItemsVM = new OrderItemsViewModel(orderRepos);
+            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM);
             var cartVM = new CartViewModel(paymentVM, this);
             var prodVM = new ProductsViewModel(prodRepos, cartVM);
             

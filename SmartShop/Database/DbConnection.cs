@@ -94,5 +94,32 @@ namespace SmartShop.Database
             }
             return list;
         }
+        
+        public decimal GetTotalDecimal(string sqlStr)
+        {
+            var total = default(decimal);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sqlStr, conn);
+
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    total = Convert.ToDecimal(result);
+                }
+                
+                cmd.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally 
+            { 
+                conn.Close(); 
+            }
+            return total;
+        }
     }
 }

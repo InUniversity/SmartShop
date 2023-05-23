@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartShop.Database;
 using SmartShop.Models;
 
@@ -62,6 +59,12 @@ namespace SmartShop.Repositories
                 new SqlParameter($"@{ordID}", id),
             };
             return (Order)dbConn.GetSingleObject(spCmd, paras, Converter);
+        }
+
+        public decimal GetTotalPrice(string orderID)
+        {
+            string sqlStr = $"SELECT SUM ";
+            return dbConn.GetTotalDecimal(sqlStr);
         }
 
         private Order Converter(SqlDataReader reader)

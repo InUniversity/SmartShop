@@ -12,30 +12,31 @@ namespace SmartShop.ViewModels.UserControls
     
     public class PaymentViewModel : BaseViewModel, IReceiveOrder
     {
-        private List<OrderItem> orderItems = new List<OrderItem>(); 
-        public List<OrderItem> OrderItems { get => orderItems; set { orderItems = value; OnPropertyChanged(); } }
-        
-        
-        public ICommand ValidateCommand { get; private set; }
+        public ICommand PayCommand { get; private set; }
 
-        public PaymentViewModel()
+        public UserAddressViewModel UserAddressVM { get; }
+        public OrderItemsViewModel OrderItemsVM { get; }
+
+        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderItemsViewModel orderItemsVM)
         {
+            UserAddressVM = userAddressVM;
+            OrderItemsVM = orderItemsVM;
             SetCommands();
         }
 
         private void SetCommands()
         {
-            ValidateCommand = new RelayCommand<object>(ExecuteValidate);
+            PayCommand = new RelayCommand<object>(ExecutePay);
         }
 
-        private void ExecuteValidate(object obj)
+        private void ExecutePay(object obj)
         {
             throw new NotImplementedException();
         }
 
         public void Receive(List<OrderItem> items)
         {
-            OrderItems = items;
+            OrderItemsVM.Receive(items);
         }
     }
 }
