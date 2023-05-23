@@ -16,13 +16,13 @@ namespace SmartShop.Repositories
 
         }
 
-        public bool Add(OrderStatu ordstatu)
+        public bool Add(OrderStatus ordstatu)
         {
             string spCmd = $"sp_AddOrderStatus";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@StatusID", ordstatu.ID),
-                new SqlParameter("@StatusName", ordstatu.StatusName)
+                new SqlParameter("@StatusName", ordstatu.Name)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -37,32 +37,32 @@ namespace SmartShop.Repositories
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
 
-        public bool Update(OrderStatu ordstatu)
+        public bool Update(OrderStatus ordstatu)
         {
             string spCmd = $"sp_UpdateOrderStatus";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@StatusID", ordstatu.ID),
-                new SqlParameter("@NewStatusName", ordstatu.StatusName)
+                new SqlParameter("@NewStatusName", ordstatu.Name)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
-        public OrderStatu SearchByID(string id)
+        public OrderStatus SearchByID(string id)
         {
             string spCmd = $"sp_Ser_OrderStatus_By_ID";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter($"@{ordstID}", id),
             };
-            return (OrderStatu)dbConn.GetSingleObject(spCmd, paras, Converter);
+            return (OrderStatus)dbConn.GetSingleObject(spCmd, paras, Converter);
         }
 
-        private OrderStatu Converter(SqlDataReader reader)
+        private OrderStatus Converter(SqlDataReader reader)
         {
-            return new OrderStatu
+            return new OrderStatus
             {
                 ID = (string)reader[ordstID],
-                StatusName = (string)reader[ordstname],
+                Name = (string)reader[ordstname],
             };
         }
     }

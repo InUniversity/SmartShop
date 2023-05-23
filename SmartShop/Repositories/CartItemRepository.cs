@@ -23,7 +23,7 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter("@CartItemID", cartit.ID),
                 new SqlParameter("@CartID",cartit.CartID),
-                new SqlParameter("@ProductID", cartit.ProductID),
+                new SqlParameter("@ProductID", cartit.ProdID),
                 new SqlParameter("@Quantity", cartit.Quantity)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
@@ -46,7 +46,7 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter("@CartItemID", cartit.ID),
                 new SqlParameter("@NewCartID",cartit.CartID),
-                new SqlParameter("@NewProductID", cartit.ProductID),
+                new SqlParameter("@NewProductID", cartit.ProdID),
                 new SqlParameter("@NewQuantity", cartit.Quantity)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
@@ -68,7 +68,7 @@ namespace SmartShop.Repositories
             {
                 ID = (string)reader[cartitID],
                 CartID = (string)reader[cartit_cartID],
-                ProductID = (string)reader[cartit_prodID],
+                ProdID = (string)reader[cartit_prodID],
                 Quantity = (int)reader[cartitQty],
             };
         }

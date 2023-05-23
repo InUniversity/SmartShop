@@ -23,8 +23,8 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@UserID", order.UserID),
-                new SqlParameter("@OrderStatusID", order.OrderStatusID),
-                new SqlParameter("@OrderDate", order.OrderDate),
+                new SqlParameter("@OrderStatusID", order.StatusID),
+                new SqlParameter("@OrderDate", order.Date),
                 new SqlParameter("@TotalPrice", order.TotalPrice)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
@@ -47,8 +47,8 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@NewUserID", order.UserID),
-                new SqlParameter("@NewOrderStatusID", order.OrderStatusID),
-                new SqlParameter("@NewOrderDate", order.OrderDate),
+                new SqlParameter("@NewOrderStatusID", order.StatusID),
+                new SqlParameter("@NewOrderDate", order.Date),
                 new SqlParameter("@NewTotalPrice", order.TotalPrice)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
@@ -70,8 +70,8 @@ namespace SmartShop.Repositories
             {
                 ID = (string)reader[ordID],
                 UserID = (string)reader[orduID],
-                OrderStatusID = (string)reader[ordSttusID],
-                OrderDate = (DateTime)reader[ordDate],
+                StatusID = (string)reader[ordSttusID],
+                Date = (DateTime)reader[ordDate],
                 TotalPrice = reader.GetDecimal(reader.GetOrdinal(ordTtP)),
             };
         }

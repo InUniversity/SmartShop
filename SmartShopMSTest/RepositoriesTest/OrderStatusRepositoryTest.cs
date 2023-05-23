@@ -26,19 +26,19 @@ namespace SmartShopMSTest.RepositoriesTest
         [TestMethod]
         public void Add_Delete_Update_Success()
         {
-            var addTarget = new OrderStatu
+            var addTarget = new OrderStatus
             {
                 ID = "OS1234",
-                StatusName = "hoatdong"
+                Name = "hoatdong"
             };
             bool isAddSuccess = myRepo.Add(addTarget);
             var addResult = myRepo.SearchByID(addTarget.ID);
 
             // Do not modify the ID
-            var updateTarget = new OrderStatu
+            var updateTarget = new OrderStatus
             {
                 ID = addTarget.ID,
-                StatusName = "khonghoatdong"
+                Name = "khonghoatdong"
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
@@ -58,10 +58,10 @@ namespace SmartShopMSTest.RepositoriesTest
             Assert.IsNull(deleteResult);
         }
 
-        private void AssertObj(OrderStatu expected, OrderStatu actual)
+        private void AssertObj(OrderStatus expected, OrderStatus actual)
         {
             Assert.AreEqual(expected.ID, actual.ID);
-            Assert.AreEqual(expected.StatusName, actual.StatusName);
+            Assert.AreEqual(expected.Name, actual.Name);
         }
     }
 }

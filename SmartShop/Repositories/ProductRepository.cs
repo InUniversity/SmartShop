@@ -24,7 +24,7 @@ namespace SmartShop.Repositories
                 new SqlParameter("@ProductName", prod.Name),
                 new SqlParameter("@Price", prod.Price),
                 new SqlParameter("@Quantity", prod.Quantity),
-                new SqlParameter("@ProductDescription", prod.Description)
+                new SqlParameter("@ProductDescription", prod.Desc)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -50,7 +50,7 @@ namespace SmartShop.Repositories
                 new SqlParameter("@NewProductName", prod.Name),
                 new SqlParameter("@NewPrice", prod.Price),
                 new SqlParameter("@NewQuantity", prod.Quantity),
-                new SqlParameter("@NewProductDescription", prod.Description)
+                new SqlParameter("@NewProductDescription", prod.Desc)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras); 
         }
@@ -81,7 +81,7 @@ namespace SmartShop.Repositories
                 Name = (string)reader[prodName],
                 Price = reader.GetDecimal(reader.GetOrdinal(prodPrice)),
                 Quantity = (int)reader[prodQty],
-                Description = (string)reader[prodDescription],
+                Desc = (string)reader[prodDescription],
             };
         }
     }

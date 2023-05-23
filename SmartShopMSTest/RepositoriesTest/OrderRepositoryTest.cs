@@ -30,9 +30,9 @@ namespace SmartShopMSTest.RepositoriesTest
             {
                 ID = "PRO44333",
                 UserID = "USER0001",
-                ProductID = "",
-                OrderStatusID = "ORDERS0001",
-                OrderDate = new DateTime(2022, 2, 2, 0, 0, 0),
+                ProdID = "",
+                StatusID = "ORDERS0001",
+                Date = new DateTime(2022, 2, 2, 0, 0, 0),
                 TotalPrice = (decimal)1.12
             };
             bool isAddSuccess = myRepo.Add(addTarget);
@@ -43,9 +43,9 @@ namespace SmartShopMSTest.RepositoriesTest
             {
                 ID = addTarget.ID,
                 UserID = "USER0001",
-                ProductID = "",
-                OrderStatusID = "ORDERS0001",
-                OrderDate = new DateTime(2022, 2, 2, 0, 0, 0),
+                ProdID = "",
+                StatusID = "ORDERS0001",
+                Date = new DateTime(2022, 2, 2, 0, 0, 0),
                 TotalPrice = (decimal)1.12
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
@@ -70,8 +70,8 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             Assert.AreEqual(expected.ID, actual.ID);
             Assert.AreEqual(expected.UserID, actual.UserID);
-            Assert.AreEqual(expected.OrderStatusID, actual.OrderStatusID);
-            Assert.AreEqual(expected.OrderDate, actual.OrderDate);
+            Assert.AreEqual(expected.StatusID, actual.StatusID);
+            Assert.AreEqual(expected.Date, actual.Date);
             Assert.AreEqual(expected.TotalPrice, actual.TotalPrice);
         }
     }

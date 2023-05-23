@@ -32,7 +32,7 @@ namespace SmartShopMSTest.RepositoriesTest
                 FirstName = "Tan",
                 LastName = "Le",
                 Username = "Letan123",
-                PasswordHash = "123",
+                Pass = "123",
                 Email = "letan@gmail.com",
                 Phone = "0776506179",
                 WalletBalance = (decimal)101230.12,
@@ -48,7 +48,7 @@ namespace SmartShopMSTest.RepositoriesTest
                 FirstName = "An",
                 LastName = "Tran",
                 Username = "Antran12",
-                PasswordHash = "123",
+                Pass = "123",
                 Email = "antran@gmail.com",
                 Phone = "0776506179",
                 WalletBalance = (decimal)101230.12,
@@ -78,7 +78,7 @@ namespace SmartShopMSTest.RepositoriesTest
             Assert.AreEqual(expected.FirstName, actual.FirstName);
             Assert.AreEqual(expected.LastName, actual.LastName);
             Assert.AreEqual(expected.Username, actual.Username);
-            Assert.AreEqual(expected.PasswordHash, actual.PasswordHash);
+            Assert.AreEqual(expected.Pass, actual.Pass);
             Assert.AreEqual(expected.Email, actual.Email);
             Assert.AreEqual(expected.Phone, actual.Phone);
             Assert.AreEqual(expected.WalletBalance, actual.WalletBalance);
