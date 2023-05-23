@@ -21,19 +21,7 @@ namespace SmartShop
 
         private void Init()
         {
-            // Init DAO
-            var dbConn = new DbConnection();
-            var prodRepos = new ProductRepository(dbConn);
-
-            // Init ViewModel
-            var cartVM = new CartViewModel();
-            var cartView = new CartUC { DataContext = cartVM };
-            
-            var prodVM = new ProductsViewModel(prodRepos, cartVM);
-            var prodView = new ProductsUC { DataContext = prodVM };
-            
-            // Init View
-            var viewModel = new BuyerViewModel(prodView, cartView);
+            var viewModel = new BuyerViewModel();
             var window = new BuyerWindow { DataContext = viewModel };
             window.Show();
         }

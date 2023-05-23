@@ -4,5 +4,6 @@ namespace SmartShop.ViewModels
     {
         void MoveToProductsView();
         void MoveToCartView();
+        void MoveToPaymentView();
     }
 }
