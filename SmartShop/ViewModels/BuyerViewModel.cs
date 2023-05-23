@@ -1,6 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using SmartShop.Database;
+using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
+using SmartShop.ViewModels.UserControls;
 using SmartShop.Views.UserControls;
 
 namespace SmartShop.ViewModels
@@ -10,18 +13,35 @@ namespace SmartShop.ViewModels
         private ContentControl currentChildView;
         public ContentControl CurrentChildView { get => currentChildView; set { currentChildView = value; OnPropertyChanged(); } }
 
-        private ProductsUC productsView;
+        private ProductsUC prodsView;
         private CartUC cartView;
+        private PaymentUC paymentView;
         
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }
 
-        public BuyerViewModel(ProductsUC productsView, CartUC cartView)
+        public BuyerViewModel()
         {
-            this.productsView = productsView;
-            this.cartView = cartView;
+            InitComponentsView();
             MoveToProductsView();
             SetCommands();
+        }
+
+        private void InitComponentsView()
+        {
+            var dbConn = new DbConnection();
+            var prodRepos = new ProductRepository(dbConn);
+            var orderRepos = new OrderRepository(dbConn);
+
+            var userAddressVM = new UserAddressViewModel();
+            var orderItemsVM = new OrderItemsViewModel(orderRepos);
+            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM);
+            var cartVM = new CartViewModel(paymentVM, this);
+            var prodVM = new ProductsViewModel(prodRepos, cartVM);
+            
+            paymentView = new PaymentUC { DataContext = paymentVM };
+            cartView = new CartUC { DataContext = cartVM };
+            prodsView = new ProductsUC { DataContext = prodVM };
         }
 
         private void SetCommands()
@@ -32,12 +52,17 @@ namespace SmartShop.ViewModels
 
         public void MoveToProductsView()
         {
-            CurrentChildView = productsView;
+            CurrentChildView = prodsView;
         }
 
         public void MoveToCartView()
         {
             CurrentChildView = cartView;
+        }
+
+        public void MoveToPaymentView()
+        {
+            CurrentChildView = paymentView;
         }
     }
 }

@@ -7,7 +7,6 @@ namespace SmartShop.Models
         public string ProdID { get; set; }
         public int Quantity { get; set; }
 
-        public Cart Cart { get; set; } = new Cart();
-        public Product Product { get; set; } = new Product();
+        public Product Prod { get; set; } = new Product();
     }
 }
