@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SmartShop.Views.UserControls"
              mc:Ignorable="d" 
+             Name="prodsUC"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ScrollViewer Grid.Column="1" Grid.Row="1" Background="#FFF1f1f1">
             <StackPanel>
-                <TextBlock Text="Items" Margin="10" FontSize="22" FontWeight="Medium"/>
                 <StackPanel Margin="20 0" >
-                    <ItemsControl x:Name="ListViewProducts" ItemsSource="{Binding Product}">
+                    <ItemsControl ItemsSource="{Binding ElementName=prodsUC, Path=DataContext.prodsUC}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Margin="10" Width="600" Height="150">
@@ -34,14 +34,14 @@
 
                                             </TextBox>
                                         </Border>
-                                        <Border Width="60" Height="50"  Margin="25,0,0,0">
-                                            <Button Margin="5" BorderThickness="0" >
-                                                <Button.Background  >
-                                                    <ImageBrush ImageSource="/Views/UserControls/add.jpg" TileMode="None"/>
-                                                </Button.Background>
+                                        <!-- <Border Width="60" Height="50"  Margin="25,0,0,0"> -->
+                                            <!-- <Button Margin="5" BorderThickness="0" > -->
+                                            <!--     <Button.Background  > -->
+                                            <!--         <ImageBrush ImageSource="/Views/UserControls/add.jpg" TileMode="None"/> -->
+                                            <!--     </Button.Background> -->
 
-                                            </Button>
-                                        </Border>
+                                            <!-- </Button> -->
+                                        <!-- </Border> -->
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
