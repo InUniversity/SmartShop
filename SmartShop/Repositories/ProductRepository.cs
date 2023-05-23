@@ -2,6 +2,7 @@
 using SmartShop.Models;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace SmartShop.Repositories
 {
@@ -66,7 +67,8 @@ namespace SmartShop.Repositories
         
         public List<Product> GetAll()
         {
-            throw new System.NotImplementedException();
+            string sqlStr = $"SELECT * FROM {prodTbl}";
+            return dbConn.GetEnumerable(sqlStr, Converter).ToList();
         }
 
         private Product Converter(SqlDataReader reader)

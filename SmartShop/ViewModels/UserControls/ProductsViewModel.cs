@@ -25,15 +25,7 @@ namespace SmartShop.ViewModels.UserControls
 
         private void LoadProducts()
         {
-            // TODO
-            // Products = prodRepos.GetAll();
-            Products = new List<Product>()
-            {
-                new Product { ID = "123123" },
-                new Product { ID = "123124" },
-                new Product { ID = "123125" },
-                new Product { ID = "123126" }
-            };
+            Products = prodRepos.GetAll();
         }
 
         private void SetCommands()
