@@ -20,7 +20,7 @@ namespace SmartShop.Repositories
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@RoleID", urole.ID),
-                new SqlParameter("@RoleName", urole.RoleName)
+                new SqlParameter("@RoleName", urole.Name)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -41,7 +41,7 @@ namespace SmartShop.Repositories
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@RoleID", urole.ID),
-                new SqlParameter("@NewRoleName", urole.RoleName)
+                new SqlParameter("@NewRoleName", urole.Name)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -61,7 +61,7 @@ namespace SmartShop.Repositories
             return new UserRole
             {
                 ID = (string)reader[uroleID],
-                RoleName = (string)reader[uroleRname],
+                Name = (string)reader[uroleRname],
             };
         }
     }

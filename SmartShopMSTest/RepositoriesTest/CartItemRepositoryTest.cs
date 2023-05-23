@@ -30,7 +30,7 @@ namespace SmartShopMSTest.RepositoriesTest
             {
                 ID = "CARTIT1234",
                 CartID = "CART0001",
-                ProductID = "PRO0001",
+                ProdID = "PRO0001",
                 Quantity = 1
             };
             bool isAddSuccess = myRepo.Add(addTarget);
@@ -41,7 +41,7 @@ namespace SmartShopMSTest.RepositoriesTest
             {
                 ID = addTarget.ID,
                 CartID = "CART0001",
-                ProductID = "PRO0001",
+                ProdID = "PRO0001",
                 Quantity = 10
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
@@ -66,7 +66,7 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             Assert.AreEqual(expected.ID, actual.ID);
             Assert.AreEqual(expected.CartID, actual.CartID);
-            Assert.AreEqual(expected.ProductID, actual.ProductID);
+            Assert.AreEqual(expected.ProdID, actual.ProdID);
             Assert.AreEqual(expected.Quantity, actual.Quantity);
         }
     }

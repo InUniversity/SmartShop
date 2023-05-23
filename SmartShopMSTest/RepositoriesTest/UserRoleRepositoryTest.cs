@@ -29,7 +29,7 @@ namespace SmartShopMSTest.RepositoriesTest
             var addTarget = new UserRole
             {
                 ID = "PRO1234",
-                RoleName = "manager"
+                Name = "manager"
             };
             bool isAddSuccess = myRepo.Add(addTarget);
             var addResult = myRepo.SearchByID(addTarget.ID);
@@ -38,7 +38,7 @@ namespace SmartShopMSTest.RepositoriesTest
             var updateTarget = new UserRole
             {
                 ID = addTarget.ID,
-                RoleName = "employee"
+                Name = "employee"
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
@@ -61,7 +61,7 @@ namespace SmartShopMSTest.RepositoriesTest
         private void AssertObj(UserRole expected, UserRole actual)
         {
             Assert.AreEqual(expected.ID, actual.ID);
-            Assert.AreEqual(expected.RoleName, actual.RoleName);
+            Assert.AreEqual(expected.Name, actual.Name);
 
         }
     }
