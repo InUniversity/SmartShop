@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SmartShop.Database;
+using SmartShop.Models;
+
+namespace SmartShop.Repositories
+{
+    public class UserRepository :BaseRepository
+    {
+        public UserRepository(DbConnection dbConn) : base(dbConn)
+        {
+
+        }
+
+        public bool Add(User user)
+        {
+            string spCmd = $"sp_AddUser";
+            SqlParameter[] paras = new[]
+            {
+                new SqlParameter("@UserID", user.ID),
+                new SqlParameter("@FirstName", user.FirstName),
+                new SqlParameter("@LastName", user.LastName),
+                new SqlParameter("@Username", user.Username),
+                new SqlParameter("@PasswordHash", user.PasswordHash),
+                new SqlParameter("@Email", user.Email),
+                new SqlParameter("@Phone", user.Phone),
+                new SqlParameter("@WalletBalance", user.WalletBalance),
+                new SqlParameter("@RoleID", user.RoleID)
+
+            };
+            return dbConn.ExecuteNonQuery(spCmd, paras);
+        }
+
+        public bool Delete(string id)
+        {
+            string spCmd = $"sp_DeleteUser";
+            SqlParameter[] paras = new[]
+            {
+                new SqlParameter("@UserID", id),
+            };
+            return dbConn.ExecuteNonQuery(spCmd, paras);
+        }
+
+        public bool Update(User user)
+        {
+            string spCmd = $"sp_UpdateUser";
+            SqlParameter[] paras = new[]
+            {
+                new SqlParameter("@UserID", user.ID),
+                new SqlParameter("@NewFirstName", user.FirstName),
+                new SqlParameter("@NewLastName", user.LastName),
+                new SqlParameter("@NewUsername", user.Username),
+                new SqlParameter("@NewPasswordHash", user.PasswordHash),
+                new SqlParameter("@NewEmail", user.Email),
+                new SqlParameter("@NewPhone", user.Phone),
+                new SqlParameter("@NewWalletBalance", user.WalletBalance),
+                new SqlParameter("@NewRoleID", user.RoleID)
+            };
+            return dbConn.ExecuteNonQuery(spCmd, paras);
+        }
+
+        public User SearchByID(string id)
+        {
+            string spCmd = $"sp_Ser_User_By_ID";
+            SqlParameter[] paras = new[]
+            {
+                new SqlParameter($"@{userID}", id),
+            };
+            return (User)dbConn.GetSingleObject(spCmd, paras, Converter);
+        }
+
+        private User Converter(SqlDataReader reader)
+        {
+            return new User
+            {
+                ID = (string)reader[userID],
+                FirstName = (string)reader[userfname],
+                LastName = (string)reader[userlname],
+                Username = (string)reader[username],
+                PasswordHash = (string)reader[pass],
+                Email = (string)reader[useremail],
+                Phone = (string)reader[userphone],
+                WalletBalance = reader.GetDecimal(reader.GetOrdinal(userwBalance)),
+                RoleID = (string)reader[userrID],
+            };
+        }
+    }
+}
