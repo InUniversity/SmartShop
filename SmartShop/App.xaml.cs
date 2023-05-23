@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using SmartShop.Database;
 using SmartShop.Repositories;
 using SmartShop.View;
@@ -21,44 +15,27 @@ namespace SmartShop
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var window = CreateBuyerView();
-            window.Show();
+            Init();
             base.OnStartup(e);
         }
 
-        private BuyerWindow CreateBuyerView()
+        private void Init()
         {
-            var viewModel = CreateBuyerVM();
-            return new BuyerWindow { DataContext = viewModel };
-        }
-
-        private BuyerViewModel CreateBuyerVM()
-        {
-            var prodView = CreateProdView();
-            var cartView = CreateCartView();
-            return new BuyerViewModel(prodView, cartView);
-        }
-        
-        private ProductsUC CreateProdView()
-        {
-            return new ProductsUC { DataContext = CreateProdVM() };
-        }
-
-        private ProductsViewModel CreateProdVM()
-        {
+            // Init DAO
             var dbConn = new DbConnection();
             var prodRepos = new ProductRepository(dbConn);
-            return new ProductsViewModel(prodRepos);
-        }
 
-        private CartUC CreateCartView()
-        {
-            return new CartUC { DataContext = CreateCartVM() };
-        }
-
-        private CartViewModel CreateCartVM()
-        {
-            return new CartViewModel();
+            // Init ViewModel
+            var cartVM = new CartViewModel();
+            var cartView = new CartUC { DataContext = cartVM };
+            
+            var prodVM = new ProductsViewModel(prodRepos, cartVM);
+            var prodView = new ProductsUC { DataContext = prodVM };
+            
+            // Init View
+            var viewModel = new BuyerViewModel(prodView, cartView);
+            var window = new BuyerWindow { DataContext = viewModel };
+            window.Show();
         }
     }
 }

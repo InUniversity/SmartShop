@@ -9,33 +9,36 @@ namespace SmartShop.ViewModels.UserControls
 {
     public class ProductsViewModel : BaseViewModel
     {
-        private List<Product> products;
-        public List<Product> Products { get => products; set { products = value; OnPropertyChanged(); } }
+        private List<CartItem> cartItems;
+        public List<CartItem> CartItems { get => cartItems; set { cartItems = value; OnPropertyChanged(); } }
         
         public ICommand AddToCartCommand { get; private set; }
 
         private readonly ProductRepository prodRepos;
+        private IReceiveCartItem cartIns;
 
-        public ProductsViewModel(ProductRepository prodRepos)
+        public ProductsViewModel(ProductRepository prodRepos, IReceiveCartItem cartIns)
         {
             this.prodRepos = prodRepos;
+            this.cartIns = cartIns; 
             LoadProducts();
             SetCommands();
         }
 
         private void LoadProducts()
         {
-            Products = prodRepos.GetAll();
+            var products = prodRepos.GetAll();
+            // Init cart item from product items 
         }
 
         private void SetCommands()
         {
-            AddToCartCommand = new RelayCommand<Product>(ExecuteAddToCard);
+            AddToCartCommand = new RelayCommand<CartItem>(ExecuteAddToCard);
         }
 
-        private void ExecuteAddToCard(Product prod)
+        private void ExecuteAddToCard(CartItem item)
         {
-            throw new NotImplementedException();
+            cartIns.Receive(item);
         }
     }
 }
