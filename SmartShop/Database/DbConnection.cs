@@ -95,18 +95,19 @@ namespace SmartShop.Database
             return list;
         }
         
-        public decimal GetTotalDecimal(string sqlStr)
+        public T GetTotalDecimal<T>(string fnCmd, SqlParameter[] paras)
         {
-            var total = default(decimal);
+            var total = default(T);
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(sqlStr, conn);
+                SqlCommand cmd = new SqlCommand(fnCmd, conn);
+                cmd.Parameters.AddRange(paras);
 
                 object result = cmd.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
+                if (result != null && result != DBNull.Value && result is T tResult)
                 {
-                    total = Convert.ToDecimal(result);
+                    total = tResult;
                 }
                 
                 cmd.Dispose();

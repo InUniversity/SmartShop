@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RepositoriesTest\CartItemRepositoryTest.cs" />
-    <Compile Include="RepositoriesTest\CartRepositoryTest.cs" />
     <Compile Include="RepositoriesTest\OrderRepositoryTest.cs" />
     <Compile Include="RepositoriesTest\OrderStatusRepositoryTest.cs" />
     <Compile Include="RepositoriesTest\ProductRepositoryTest.cs" />

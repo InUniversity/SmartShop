@@ -78,7 +78,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\DbConnection.cs" />
-    <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CurrentUser.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CartItemRepository.cs" />
-    <Compile Include="Repositories\CartRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\OrderStatusRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Linq;
 using SmartShop.Database;
 using SmartShop.Models;
 
@@ -21,8 +20,7 @@ namespace SmartShop.Repositories
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@UserID", order.UserID),
                 new SqlParameter("@OrderStatusID", order.StatusID),
-                new SqlParameter("@OrderDate", order.Date),
-                new SqlParameter("@TotalPrice", order.TotalPrice)
+                new SqlParameter("@OrderDate", order.Date)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -39,14 +37,13 @@ namespace SmartShop.Repositories
 
         public bool Update(Order order)
         {
-            string spCmd = $"sp_uUpdateOrder111";
+            string spCmd = $"sp_UpdateOrder";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@NewUserID", order.UserID),
                 new SqlParameter("@NewOrderStatusID", order.StatusID),
-                new SqlParameter("@NewOrderDate", order.Date),
-                new SqlParameter("@NewTotalPrice", order.TotalPrice)
+                new SqlParameter("@NewOrderDate", order.Date)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -63,8 +60,12 @@ namespace SmartShop.Repositories
 
         public decimal GetTotalPrice(string orderID)
         {
-            string sqlStr = $"SELECT SUM ";
-            return dbConn.GetTotalDecimal(sqlStr);
+            string fnCmd = "SELECT dbo.fn_CalculateTotalOrder(@OrderID)";
+            SqlParameter[] paras = new[]
+            {
+                new SqlParameter("@OrderID", orderID)
+            };
+            return dbConn.GetTotalDecimal<decimal>(fnCmd, paras);
         }
 
         private Order Converter(SqlDataReader reader)
@@ -74,8 +75,7 @@ namespace SmartShop.Repositories
                 ID = (string)reader[ordID],
                 UserID = (string)reader[orduID],
                 StatusID = (string)reader[ordSttusID],
-                Date = (DateTime)reader[ordDate],
-                TotalPrice = reader.GetDecimal(reader.GetOrdinal(ordTtP)),
+                Date = (DateTime)reader[ordDate]
             };
         }
     }

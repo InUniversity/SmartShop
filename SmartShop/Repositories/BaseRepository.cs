@@ -12,25 +12,18 @@ namespace SmartShop.Repositories
         protected const string prodPrice = "Price";
         protected const string prodQty = "Quantity";
         protected const string prodDescription = "ProductDescription";
-        //Cart
-        protected const string cartTbl = "Carts";
-        protected const string cartID = "ID";
-        protected const string cartUserID = "UserID";
-        protected const string cartTtp = "TotalPrice";
-        protected const string cartUda = "UpdateAt";
         //cartItem
-        protected const string cartitTbl = "CartItems";
-        protected const string cartitID = "ID";
-        protected const string cartit_cartID = "CartID";
-        protected const string cartit_prodID = "ProductID";
-        protected const string cartitQty = "Quantity";
+        protected const string cartItTbl = "CartItems";
+        protected const string cartItID = "ID";
+        protected const string cartItUserID = "UserID";
+        protected const string cartItProdID = "ProductID";
+        protected const string cartItQty = "Quantity";
         //order
         protected const string ordTbl = "Orders";
         protected const string ordID = "ID";
         protected const string orduID = "UserID";
-        protected const string ordSttusID = "OrderStatusID";
+        protected const string ordSttusID = "StatusID";
         protected const string ordDate = "OrderDate";
-        protected const string ordTtP = "TotalPrice";
         //orderStatus
         protected const string ordstTbl = "OrderStatus";
         protected const string ordstID = "ID";
@@ -49,11 +42,11 @@ namespace SmartShop.Repositories
         //userrole
         protected const string uroleTbl = "UserRole";
         protected const string uroleID = "ID";
-        protected const string uroleRname = "RoleName";
+        protected const string uroleName = "RoleName";
         //useraddress
         protected const string uadresTbl = "UserAddress";
         protected const string uadresID = "ID";
-        protected const string uadresUsID = "UserID  ";
+        protected const string uadresUsID = "UserID";
         protected const string uadDetail = "AddressDetails";
 
         protected DbConnection dbConn;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using SmartShop.Database;
 using SmartShop.Models;
 
@@ -18,7 +13,7 @@ namespace SmartShop.Repositories
 
         public bool Add(User user)
         {
-            string spCmd = $"sp_AddUser";
+            string spCmd = "dbo.sp_AddUser";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@UserID", user.ID),
@@ -30,14 +25,13 @@ namespace SmartShop.Repositories
                 new SqlParameter("@Phone", user.Phone),
                 new SqlParameter("@WalletBalance", user.WalletBalance),
                 new SqlParameter("@RoleID", user.RoleID)
-
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
 
         public bool Delete(string id)
         {
-            string spCmd = $"sp_DeleteUser";
+            string spCmd = "dbo.sp_DeleteUser";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@UserID", id),
@@ -47,7 +41,7 @@ namespace SmartShop.Repositories
 
         public bool Update(User user)
         {
-            string spCmd = $"sp_UpdateUser";
+            string spCmd = "dbo.sp_UpdateUser";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@UserID", user.ID),
@@ -65,10 +59,10 @@ namespace SmartShop.Repositories
 
         public User SearchByID(string id)
         {
-            string spCmd = $"sp_Ser_User_By_ID";
+            string spCmd = "sp_Ser_User_By_ID";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter($"@{userID}", id),
+                new SqlParameter("@ID", id)
             };
             return (User)dbConn.GetSingleObject(spCmd, paras, Converter);
         }

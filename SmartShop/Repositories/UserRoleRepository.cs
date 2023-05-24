@@ -61,7 +61,7 @@ namespace SmartShop.Repositories
             return new UserRole
             {
                 ID = (string)reader[uroleID],
-                Name = (string)reader[uroleRname],
+                Name = (string)reader[uroleName],
             };
         }
     }

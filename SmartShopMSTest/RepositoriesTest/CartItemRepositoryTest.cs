@@ -28,8 +28,8 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             var addTarget = new CartItem
             {
-                ID = "CARTIT1234",
-                CartID = "CART0001",
+                ID = "CAI001245",
+                CartID = "CA0001",
                 ProdID = "PRO0001",
                 Quantity = 1
             };
@@ -40,7 +40,7 @@ namespace SmartShopMSTest.RepositoriesTest
             var updateTarget = new CartItem
             {
                 ID = addTarget.ID,
-                CartID = "CART0001",
+                CartID = "CA0001",
                 ProdID = "PRO0001",
                 Quantity = 10
             };

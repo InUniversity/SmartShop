@@ -3,10 +3,6 @@ using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartShopMSTest.RepositoriesTest
 {
@@ -30,10 +26,8 @@ namespace SmartShopMSTest.RepositoriesTest
             {
                 ID = "PRO44333",
                 UserID = "USER0001",
-                ProdID = "",
                 StatusID = "ORDERS0001",
-                Date = new DateTime(2022, 2, 2, 0, 0, 0),
-                TotalPrice = (decimal)1.12
+                Date = new DateTime(2022, 2, 2, 0, 0, 0)
             };
             bool isAddSuccess = myRepo.Add(addTarget);
             var addResult = myRepo.SearchByID(addTarget.ID);
@@ -43,10 +37,8 @@ namespace SmartShopMSTest.RepositoriesTest
             {
                 ID = addTarget.ID,
                 UserID = "USER0001",
-                ProdID = "",
                 StatusID = "ORDERS0001",
-                Date = new DateTime(2022, 2, 2, 0, 0, 0),
-                TotalPrice = (decimal)1.12
+                Date = new DateTime(2022, 2, 2, 0, 0, 0)
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
@@ -66,13 +58,23 @@ namespace SmartShopMSTest.RepositoriesTest
             Assert.IsNull(deleteResult);
         }
 
+        [DataTestMethod]
+        [DataRow("OR0001", 500.0, DisplayName = "Test1")]
+        [DataRow("OR0002", 20.0, DisplayName = "Test2")]
+        [DataRow("OR0003", 200.0, DisplayName = "Test3")]
+        public void GetTotalPrice(string orderID, double expected)
+        {
+            decimal actual = myRepo.GetTotalPrice(orderID);
+            
+            Assert.AreEqual((decimal)expected, actual);
+        }
+
         private void AssertObj(Order expected, Order actual)
         {
             Assert.AreEqual(expected.ID, actual.ID);
             Assert.AreEqual(expected.UserID, actual.UserID);
             Assert.AreEqual(expected.StatusID, actual.StatusID);
-            Assert.AreEqual(expected.Date, actual.Date);
-            Assert.AreEqual(expected.TotalPrice, actual.TotalPrice);
+            Assert.AreEqual(expected.Date.ToString(), actual.Date.ToString());
         }
     }
 }

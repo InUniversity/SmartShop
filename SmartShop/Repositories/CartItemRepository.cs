@@ -16,15 +16,15 @@ namespace SmartShop.Repositories
 
         }
 
-        public bool Add(CartItem cartit)
+        public bool Add(CartItem item)
         {
             string spCmd = $"sp_AddCartItem";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter("@CartItemID", cartit.ID),
-                new SqlParameter("@CartID",cartit.CartID),
-                new SqlParameter("@ProductID", cartit.ProdID),
-                new SqlParameter("@Quantity", cartit.Quantity)
+                new SqlParameter("@CartItemID", item.ID),
+                new SqlParameter("@UserID",item.CartID),
+                new SqlParameter("@ProductID", item.ProdID),
+                new SqlParameter("@Quantity", item.Quantity)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -39,15 +39,15 @@ namespace SmartShop.Repositories
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
 
-        public bool Update(CartItem cartit)
+        public bool Update(CartItem item)
         {
             string spCmd = $"sp_UpdateCartItem";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter("@CartItemID", cartit.ID),
-                new SqlParameter("@NewCartID",cartit.CartID),
-                new SqlParameter("@NewProductID", cartit.ProdID),
-                new SqlParameter("@NewQuantity", cartit.Quantity)
+                new SqlParameter("@CartItemID", item.ID),
+                new SqlParameter("@NewUserID",item.CartID),
+                new SqlParameter("@NewProductID", item.ProdID),
+                new SqlParameter("@NewQuantity", item.Quantity)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -57,7 +57,7 @@ namespace SmartShop.Repositories
             string spCmd = $"sp_Ser_CartItems_By_ID";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter($"@{cartitID}", id),
+                new SqlParameter($"@ID", id),
             };
             return (CartItem)dbConn.GetSingleObject(spCmd, paras, Converter);
         }
@@ -66,10 +66,10 @@ namespace SmartShop.Repositories
         {
             return new CartItem
             {
-                ID = (string)reader[cartitID],
-                CartID = (string)reader[cartit_cartID],
-                ProdID = (string)reader[cartit_prodID],
-                Quantity = (int)reader[cartitQty],
+                ID = (string)reader[cartItID],
+                CartID = (string)reader[cartItUserID],
+                ProdID = (string)reader[cartItProdID],
+                Quantity = (int)reader[cartItQty]
             };
         }
     }

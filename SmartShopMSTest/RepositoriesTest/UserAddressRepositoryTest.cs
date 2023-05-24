@@ -28,8 +28,8 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             var addTarget = new UserAddress
             {
-                ID = "USERA0007",
-                UserID = "USER0003",
+                ID = "URA0123",
+                UserID = "USR0001",
                 Details = "tra vinh xom A"
             };
             bool isAddSuccess = myRepo.Add(addTarget);
@@ -39,8 +39,8 @@ namespace SmartShopMSTest.RepositoriesTest
             var updateTarget = new UserAddress
             {
                 ID = addTarget.ID,
-                UserID = "USER0002",
-                Details = "tra vinh xom A"
+                UserID = "USR0002",
+                Details = "tra vinh xom B"
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
@@ -62,6 +62,7 @@ namespace SmartShopMSTest.RepositoriesTest
 
         private void AssertObj(UserAddress expected, UserAddress actual)
         {
+            Assert.IsNotNull(actual);
             Assert.AreEqual(expected.ID, actual.ID);
             Assert.AreEqual(expected.UserID, actual.UserID);
             Assert.AreEqual(expected.Details, actual.Details);

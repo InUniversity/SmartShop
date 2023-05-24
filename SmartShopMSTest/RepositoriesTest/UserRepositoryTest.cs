@@ -28,11 +28,11 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             var addTarget = new User
             {
-                ID = "USER0001",
+                ID = "USR0123",
                 FirstName = "Tan",
                 LastName = "Le",
                 Username = "Letan123",
-                Pass = "123",
+                Pass = "1234567",
                 Email = "letan@gmail.com",
                 Phone = "0776506179",
                 WalletBalance = (decimal)101230.12,
