@@ -22,7 +22,7 @@ namespace SmartShop.Repositories
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@CartItemID", item.ID),
-                new SqlParameter("@UserID",item.CartID),
+                new SqlParameter("@UserID",item.UserID),
                 new SqlParameter("@ProductID", item.ProdID),
                 new SqlParameter("@Quantity", item.Quantity)
             };
@@ -45,7 +45,7 @@ namespace SmartShop.Repositories
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@CartItemID", item.ID),
-                new SqlParameter("@NewUserID",item.CartID),
+                new SqlParameter("@NewUserID",item.UserID),
                 new SqlParameter("@NewProductID", item.ProdID),
                 new SqlParameter("@NewQuantity", item.Quantity)
             };
@@ -67,7 +67,7 @@ namespace SmartShop.Repositories
             return new CartItem
             {
                 ID = (string)reader[cartItID],
-                CartID = (string)reader[cartItUserID],
+                UserID = (string)reader[cartItUserID],
                 ProdID = (string)reader[cartItProdID],
                 Quantity = (int)reader[cartItQty]
             };

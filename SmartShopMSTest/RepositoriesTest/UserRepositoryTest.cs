@@ -29,8 +29,7 @@ namespace SmartShopMSTest.RepositoriesTest
             var addTarget = new User
             {
                 ID = "USR0123",
-                FirstName = "Tan",
-                LastName = "Le",
+                FullName = "Tan Le",
                 Username = "Letan123",
                 Pass = "1234567",
                 Email = "letan@gmail.com",
@@ -45,8 +44,7 @@ namespace SmartShopMSTest.RepositoriesTest
             var updateTarget = new User
             {
                 ID = addTarget.ID,
-                FirstName = "An",
-                LastName = "Tran",
+                FullName = "Tran An",
                 Username = "Antran12",
                 Pass = "123",
                 Email = "antran@gmail.com",
@@ -57,7 +55,8 @@ namespace SmartShopMSTest.RepositoriesTest
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
 
-            myRepo.Delete(addTarget.ID);
+            if (isAddSuccess)
+                myRepo.Delete(addTarget.ID);
             var deleteResult = myRepo.SearchByID(addTarget.ID);
 
             // test add
@@ -74,9 +73,9 @@ namespace SmartShopMSTest.RepositoriesTest
 
         private void AssertObj(User expected, User actual)
         {
+            Assert.IsNotNull(actual);
             Assert.AreEqual(expected.ID, actual.ID);
-            Assert.AreEqual(expected.FirstName, actual.FirstName);
-            Assert.AreEqual(expected.LastName, actual.LastName);
+            Assert.AreEqual(expected.FullName, actual.FullName);
             Assert.AreEqual(expected.Username, actual.Username);
             Assert.AreEqual(expected.Pass, actual.Pass);
             Assert.AreEqual(expected.Email, actual.Email);

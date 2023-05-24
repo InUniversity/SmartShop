@@ -43,7 +43,8 @@ namespace SmartShopMSTest.RepositoriesTest
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
 
-            myRepo.Delete(addTarget.ID);
+            if (isAddSuccess)
+                myRepo.Delete(addTarget.ID);
             var deleteResult = myRepo.SearchByID(addTarget.ID);
 
             // test add

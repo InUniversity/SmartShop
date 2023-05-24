@@ -29,9 +29,9 @@ namespace SmartShopMSTest.RepositoriesTest
             var addTarget = new CartItem
             {
                 ID = "CAI001245",
-                CartID = "CA0001",
+                UserID = "USR0001",
                 ProdID = "PRO0001",
-                Quantity = 1
+                Quantity = 2 
             };
             bool isAddSuccess = myRepo.Add(addTarget);
             var addResult = myRepo.SearchByID(addTarget.ID);
@@ -40,14 +40,15 @@ namespace SmartShopMSTest.RepositoriesTest
             var updateTarget = new CartItem
             {
                 ID = addTarget.ID,
-                CartID = "CA0001",
+                UserID = "USR0001",
                 ProdID = "PRO0001",
                 Quantity = 10
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
 
-            myRepo.Delete(addTarget.ID);
+            if (isAddSuccess)
+                myRepo.Delete(addTarget.ID);
             var deleteResult = myRepo.SearchByID(addTarget.ID);
 
             // test add
@@ -65,7 +66,7 @@ namespace SmartShopMSTest.RepositoriesTest
         private void AssertObj(CartItem expected, CartItem actual)
         {
             Assert.AreEqual(expected.ID, actual.ID);
-            Assert.AreEqual(expected.CartID, actual.CartID);
+            Assert.AreEqual(expected.UserID, actual.UserID);
             Assert.AreEqual(expected.ProdID, actual.ProdID);
             Assert.AreEqual(expected.Quantity, actual.Quantity);
         }

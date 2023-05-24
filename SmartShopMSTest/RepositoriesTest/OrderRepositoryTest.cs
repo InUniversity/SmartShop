@@ -24,9 +24,9 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             var addTarget = new Order
             {
-                ID = "PRO44333",
-                UserID = "USER0001",
-                StatusID = "ORDERS0001",
+                ID = "OR0123",
+                UserID = "USR0001",
+                StatusID = "ORS0001",
                 Date = new DateTime(2022, 2, 2, 0, 0, 0)
             };
             bool isAddSuccess = myRepo.Add(addTarget);
@@ -36,14 +36,15 @@ namespace SmartShopMSTest.RepositoriesTest
             var updateTarget = new Order
             {
                 ID = addTarget.ID,
-                UserID = "USER0001",
-                StatusID = "ORDERS0001",
+                UserID = "USR0001",
+                StatusID = "ORS0001",
                 Date = new DateTime(2022, 2, 2, 0, 0, 0)
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
 
-            myRepo.Delete(addTarget.ID);
+            if (isAddSuccess)
+                myRepo.Delete(addTarget.ID);
             var deleteResult = myRepo.SearchByID(addTarget.ID);
 
             // test add

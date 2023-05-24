@@ -31,8 +31,7 @@ namespace SmartShop.Repositories
         //user
         protected const string userTbl = "Users";
         protected const string userID = "ID";
-        protected const string userfname = "FirstName";
-        protected const string userlname = "LastName";
+        protected const string userfname = "FullName";
         protected const string username = "Username";
         protected const string pass = "PasswordHash";
         protected const string useremail = "Email";

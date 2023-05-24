@@ -14,12 +14,12 @@ namespace SmartShop.Repositories
 
         public bool Add(Order order)
         {
-            string spCmd = $"sp_AddOrder";
+            string spCmd = "sp_AddOrder";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@UserID", order.UserID),
-                new SqlParameter("@OrderStatusID", order.StatusID),
+                new SqlParameter("@StatusID", order.StatusID),
                 new SqlParameter("@OrderDate", order.Date)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
@@ -27,7 +27,7 @@ namespace SmartShop.Repositories
 
         public bool Delete(string id)
         {
-            string spCmd = $"sp_DeleteOrder";
+            string spCmd = "sp_DeleteOrder";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@OrderID", id),
@@ -37,12 +37,12 @@ namespace SmartShop.Repositories
 
         public bool Update(Order order)
         {
-            string spCmd = $"sp_UpdateOrder";
+            string spCmd = "sp_UpdateOrder";
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@NewUserID", order.UserID),
-                new SqlParameter("@NewOrderStatusID", order.StatusID),
+                new SqlParameter("@NewStatusID", order.StatusID),
                 new SqlParameter("@NewOrderDate", order.Date)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
@@ -53,7 +53,7 @@ namespace SmartShop.Repositories
             string spCmd = $"sp_Ser_Order_By_ID";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter($"@{ordID}", id),
+                new SqlParameter("@ID", id),
             };
             return (Order)dbConn.GetSingleObject(spCmd, paras, Converter);
         }

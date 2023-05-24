@@ -17,8 +17,7 @@ namespace SmartShop.Repositories
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@UserID", user.ID),
-                new SqlParameter("@FirstName", user.FirstName),
-                new SqlParameter("@LastName", user.LastName),
+                new SqlParameter("@FullName", user.FullName),
                 new SqlParameter("@Username", user.Username),
                 new SqlParameter("@PasswordHash", user.Pass),
                 new SqlParameter("@Email", user.Email),
@@ -45,8 +44,7 @@ namespace SmartShop.Repositories
             SqlParameter[] paras = new[]
             {
                 new SqlParameter("@UserID", user.ID),
-                new SqlParameter("@NewFirstName", user.FirstName),
-                new SqlParameter("@NewLastName", user.LastName),
+                new SqlParameter("@NewFullName", user.FullName),
                 new SqlParameter("@NewUsername", user.Username),
                 new SqlParameter("@NewPasswordHash", user.Pass),
                 new SqlParameter("@NewEmail", user.Email),
@@ -72,8 +70,7 @@ namespace SmartShop.Repositories
             return new User
             {
                 ID = (string)reader[userID],
-                FirstName = (string)reader[userfname],
-                LastName = (string)reader[userlname],
+                FullName = (string)reader[userfname],
                 Username = (string)reader[username],
                 Pass = (string)reader[pass],
                 Email = (string)reader[useremail],
