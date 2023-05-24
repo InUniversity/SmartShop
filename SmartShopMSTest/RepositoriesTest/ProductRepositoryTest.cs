@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartShop.ConvertToModel;
 using SmartShop.Database;
 using SmartShop.Models;
+using SmartShop.Queries;
 using SmartShop.Repositories;
 
 namespace SmartShop.Test.RepositoriesTest
@@ -18,7 +19,8 @@ namespace SmartShop.Test.RepositoriesTest
             dbConn = new DbConnection();
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
-            myRepo = new ProductRepository(dbConn, dbConv);
+            var prodQuery = new ProductQuery();
+            myRepo = new ProductRepository(dbConn, dbConv, prodQuery);
         }
 
         [TestMethod]

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using SmartShop.ConvertToModel;
 
@@ -13,30 +12,21 @@ namespace SmartShop.Database
         {
             this.convModelFactory = convModelFactory;
         }
-        
-        public List<T> ToList<T>(DataTable table) where T : class
+
+        public T ToSingleObject<T>(SqlDataReader reader) where T : class
         {
+            var list = ToList<T>(reader);
+            return list.Count > 0 ? list[0] : null;
+        }
+        
+        public List<T> ToList<T>(SqlDataReader reader) where T : class
+        {
+            if (reader == null) return new List<T>();
             var list = new List<T>();
             var factory = convModelFactory.Create(typeof(T));
-            foreach (DataRow row in table.Rows)
-            {
-
-                var obj = factory.Conv(row);
-                list.Add((T)obj);
-            }
+            while (reader.Read())
+                list.Add((T)factory.Conv(reader));
             return list;
-        }
-
-        public T ToModel<T>(DataRow row) where T : class
-        {
-            var factory = convModelFactory.Create(typeof(T));
-            return (T)factory.Conv(row);
-        }
-        
-        public T ToModel<T>(SqlDataReader reader) where T : class
-        {
-            var factory = convModelFactory.Create(typeof(T));
-            return (T)factory.Conv(reader);
         }
     }
 }

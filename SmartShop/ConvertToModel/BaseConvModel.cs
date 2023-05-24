@@ -59,7 +59,6 @@ namespace SmartShop.ConvertToModel
         protected const string uadresUsID = "UserID";
         protected const string uadDetail = "AddressDetails";
         
-        public abstract object Conv(DataRow row);
         public abstract object Conv(SqlDataReader reader);
     }
 }

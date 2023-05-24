@@ -1,54 +1,40 @@
-﻿using System.Data.SqlClient;
-using SmartShop.Database;
+﻿using SmartShop.Database;
+using SmartShop.Queries;
 
 namespace SmartShop.Repositories
 {
     public class UserRoleRepository : BaseRepository
     {
-        public UserRoleRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
+        private readonly UserRoleQuery query;
+        
+        public UserRoleRepository(DbConnection dbConn, DbConverter dbConv, UserRoleQuery query) : base(dbConn, dbConv)
         {
+            this.query = query;
         }
 
         public bool Add(UserRole urole)
         {
-            string spCmd = $"sp_AddUserRole";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@RoleID", urole.ID),
-                new SqlParameter("@RoleName", urole.Name)
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Add(urole);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public bool Delete(string id)
         {
-            string spCmd = $"sp_DeleteUserRole";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@RoleID", id),
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Delete(id);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public bool Update(UserRole urole)
         {
-            string spCmd = $"sp_UpdateUserRole";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@RoleID", urole.ID),
-                new SqlParameter("@NewRoleName", urole.Name)
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Update(urole);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public UserRole SearchByID(string id)
         {
-            string spCmd = $"sp_Ser_UserR_By_ID";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter($"@ID", id),
-            };
-            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<UserRole>);
+            var qry = query.SearchByID(id);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToSingleObject<UserRole>(reader);
         }
     }
 }

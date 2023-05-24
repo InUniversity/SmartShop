@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartShop.ConvertToModel;
+using SmartShop.Queries;
 
 namespace SmartShopMSTest.RepositoriesTest
 {
@@ -23,7 +24,8 @@ namespace SmartShopMSTest.RepositoriesTest
             dbConn = new DbConnection();
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
-            myRepo = new CartItemRepository(dbConn, dbConv);
+            var query = new CartItemQuery();
+            myRepo = new CartItemRepository(dbConn, dbConv, query);
         }
 
         [TestMethod]
