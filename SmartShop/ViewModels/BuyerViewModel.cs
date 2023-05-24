@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using SmartShop.ConvertToModel;
 using SmartShop.Database;
+using SmartShop.Queries;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
 using SmartShop.ViewModels.UserControls;
@@ -33,10 +34,14 @@ namespace SmartShop.ViewModels
             var dbConn = new DbConnection();
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
+
+            var prodQuery = new ProductQuery();
+            var orderQuery = new OrderQuery();
+            var addressQuery = new UserAddressQuery();
             
-            var prodRepos = new ProductRepository(dbConn, dbConv);
-            var orderRepos = new OrderRepository(dbConn, dbConv);
-            var addressRepos = new UserAddressRepository(dbConn, dbConv);
+            var prodRepos = new ProductRepository(dbConn, dbConv, prodQuery);
+            var orderRepos = new OrderRepository(dbConn, dbConv, orderQuery);
+            var addressRepos = new UserAddressRepository(dbConn, dbConv, addressQuery);
 
             var userAddressVM = new UserAddressViewModel(addressRepos);
             var orderItemsVM = new OrderItemsViewModel(orderRepos);

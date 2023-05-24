@@ -1,59 +1,40 @@
 ﻿using SmartShop.Models;
-using System.Data.SqlClient;
 using SmartShop.Database;
+using SmartShop.Queries;
 
 namespace SmartShop.Repositories
 {
     public class CartItemRepository : BaseRepository
     {
-        public CartItemRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
+        private readonly CartItemQuery query;
+        
+        public CartItemRepository(DbConnection dbConn, DbConverter dbConv, CartItemQuery query) : base(dbConn, dbConv)
         {
+            this.query = query;
         }
 
         public bool Add(CartItem item)
         {
-            string spCmd = $"sp_AddCartItem";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@CartItemID", item.ID),
-                new SqlParameter("@UserID",item.UserID),
-                new SqlParameter("@ProductID", item.ProdID),
-                new SqlParameter("@Quantity", item.Quantity)
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Add(item);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public bool Delete(string id)
         {
-            string spCmd = $"sp_DeleteCartItem";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@CartItemID", id),
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Delete(id);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public bool Update(CartItem item)
         {
-            string spCmd = $"sp_UpdateCartItem";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@CartItemID", item.ID),
-                new SqlParameter("@NewUserID",item.UserID),
-                new SqlParameter("@NewProductID", item.ProdID),
-                new SqlParameter("@NewQuantity", item.Quantity)
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Update(item);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public CartItem SearchByID(string id)
         {
-            string spCmd = $"sp_Ser_CartItems_By_ID";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter($"@ID", id),
-            };
-            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<CartItem>);
+            var qry = query.SearchByID(id);
+            return dbConn.GetSingleObject(qry, dbConv.ToModel<CartItem>);
         }
     }
 }

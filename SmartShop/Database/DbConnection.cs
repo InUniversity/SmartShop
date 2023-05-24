@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using SmartShop.Services;
 
 namespace SmartShop.Database
 {
@@ -10,15 +11,16 @@ namespace SmartShop.Database
     {
         private readonly SqlConnection conn = new SqlConnection(Properties.Settings.Default.connStr);
 
-        public bool ExecuteNonQuery(string spCmd, SqlParameter[] paras)
+        public bool ExecuteNonQuery(QueryService query)
         {
             int rowsAffected = 1;
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(spCmd, conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddRange(paras);
+                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
+                cmd.CommandType = query.CmdType;
+                cmd.Parameters.AddRange(query.Paras);
+                
                 rowsAffected = cmd.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -33,14 +35,16 @@ namespace SmartShop.Database
             return rowsAffected > 0;
         }
 
-        public DataTable GetTableUseFunction(string fnCmd, SqlParameter[] paras)
+        public DataTable GetTable(QueryService query)
         {
             DataTable table = new DataTable();
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(fnCmd, conn);
-                cmd.Parameters.AddRange(paras);
+                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
+                cmd.CommandType = query.CmdType;
+                cmd.Parameters.AddRange(query.Paras);
+                
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.Fill(table);
                 cmd.Dispose();
@@ -56,51 +60,22 @@ namespace SmartShop.Database
             return table; 
         }
 
-        public T GetSingleObject<T>(string sqlStr, SqlParameter[] paras, Func<SqlDataReader, T> converter) where T : class
+        public T GetSingleObject<T>(QueryService query, Func<SqlDataReader, T> converter) where T : class
         {
-            var list = GetEnumerable(sqlStr, paras, converter).ToList();
+            var list = GetEnumerable(query, converter).ToList();
             return list.Count > 0 ? list[0] : null;
         }
 
-        public IEnumerable<T> GetEnumerable<T>(string sqlStr, SqlParameter[] paras, Func<SqlDataReader, T> converter)
+        public IEnumerable<T> GetEnumerable<T>(QueryService query, Func<SqlDataReader, T> converter)
         {
             List<T> list = new List<T>();
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(sqlStr, conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddRange(paras);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                    list.Add(converter(reader));
-                cmd.Dispose();
-                reader.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally 
-            { 
-                conn.Close(); 
-            }
-            return list;
-        }
-       
-        public T GetSingleObject<T>(string sqlStr, Func<SqlDataReader, T> converter) where T : class
-        {
-            var list = GetEnumerable(sqlStr, converter).ToList();
-            return list.Count > 0 ? list[0] : null;
-        }
-        
-        public IEnumerable<T> GetEnumerable<T>(string sqlStr, Func<SqlDataReader, T> converter)
-        {
-            List<T> list = new List<T>();
-            try
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sqlStr, conn);
+                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
+                cmd.CommandType = query.CmdType;
+                cmd.Parameters.AddRange(query.Paras);
+                
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                     list.Add(converter(reader));
@@ -118,14 +93,15 @@ namespace SmartShop.Database
             return list;
         }
         
-        public T GetTotalDecimal<T>(string fnCmd, SqlParameter[] paras)
+        public T GetTotalDecimal<T>(QueryService query)
         {
             var total = default(T);
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(fnCmd, conn);
-                cmd.Parameters.AddRange(paras);
+                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
+                cmd.CommandType = query.CmdType;
+                cmd.Parameters.AddRange(query.Paras);
 
                 object result = cmd.ExecuteScalar();
                 if (result != null && result != DBNull.Value && result is T tResult)

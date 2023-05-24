@@ -1,70 +1,46 @@
-﻿using System;
-using System.Data.SqlClient;
-using SmartShop.Database;
+﻿using SmartShop.Database;
 using SmartShop.Models;
+using SmartShop.Queries;
 
 namespace SmartShop.Repositories
 {
     public class OrderRepository : BaseRepository
     {
-        public OrderRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
+        private readonly OrderQuery query;
+        
+        public OrderRepository(DbConnection dbConn, DbConverter dbConv, OrderQuery query) : base(dbConn, dbConv)
         {
+            this.query = query;
         }
 
         public bool Add(Order order)
         {
-            string spCmd = "sp_AddOrder";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@OrderID", order.ID),
-                new SqlParameter("@UserID", order.UserID),
-                new SqlParameter("@StatusID", order.StatusID),
-                new SqlParameter("@OrderDate", order.Date)
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Add(order);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public bool Delete(string id)
         {
-            string spCmd = "sp_DeleteOrder";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@OrderID", id),
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Delete(id);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public bool Update(Order order)
         {
-            string spCmd = "sp_UpdateOrder";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@OrderID", order.ID),
-                new SqlParameter("@NewUserID", order.UserID),
-                new SqlParameter("@NewStatusID", order.StatusID),
-                new SqlParameter("@NewOrderDate", order.Date)
-            };
-            return dbConn.ExecuteNonQuery(spCmd, paras);
+            var qry = query.Update(order);
+            return dbConn.ExecuteNonQuery(qry);
         }
 
         public Order SearchByID(string id)
         {
-            string spCmd = $"sp_Ser_Order_By_ID";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@ID", id),
-            };
-            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<Order>);
+            var qry = query.SearchByID(id);
+            return dbConn.GetSingleObject(qry, dbConv.ToModel<Order>);
         }
 
         public decimal GetTotalPrice(string orderID)
         {
-            string fnCmd = "SELECT dbo.fn_CalculateTotalOrder(@OrderID)";
-            SqlParameter[] paras = new[]
-            {
-                new SqlParameter("@OrderID", orderID)
-            };
-            return dbConn.GetTotalDecimal<decimal>(fnCmd, paras);
+            var qry = query.GetTotalPrice(orderID);
+            return dbConn.GetTotalDecimal<decimal>(qry);
         }
     }
 }
