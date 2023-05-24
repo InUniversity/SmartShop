@@ -156,11 +156,11 @@ GO
 ------------------------------------------------------
 
 --function: calculate total each order item
-CREATE FUNCTION fn_CalculateTotalOrderItem(@OrdItemID NVARCHAR(20))
+CREATE FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @ItemPrice DECIMAL(18, 2) = 0
-    DECLARE @ProdID NVARCHAR(20)
+    DECLARE @ProdID VARCHAR(20)
 
     -- get product of item
     SELECT @ProdID = ProductID
