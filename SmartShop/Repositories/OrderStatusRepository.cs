@@ -35,7 +35,8 @@ namespace SmartShop.Repositories
         public OrderStatus SearchByID(string id)
         {
             var qry = query.SearchByID(id);
-            return dbConn.GetSingleObject(qry, dbConv.ToModel<OrderStatus>);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToSingleObject<OrderStatus>(reader);
         }
     }
 }

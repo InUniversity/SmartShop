@@ -20,7 +20,7 @@ namespace SmartShop.Queries
 
         public QueryService Delete(string id)
         {
-            var query = new QueryService("sp_AddOrder", CommandType.StoredProcedure);
+            var query = new QueryService("sp_DeleteUserRole", CommandType.StoredProcedure);
             query.Paras = new[]
             {
                 new SqlParameter("@RoleID", id),

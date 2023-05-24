@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using SmartShop.Services;
 
 namespace SmartShop.Database
@@ -17,7 +15,7 @@ namespace SmartShop.Database
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
+                using var cmd = new SqlCommand(query.CmdStr, conn);
                 cmd.CommandType = query.CmdType;
                 cmd.Parameters.AddRange(query.Paras);
                 
@@ -35,71 +33,32 @@ namespace SmartShop.Database
             return rowsAffected > 0;
         }
 
-        public DataTable GetTable(QueryService query)
+        public SqlDataReader ExecuteReader(QueryService query)
         {
-            DataTable table = new DataTable();
+            SqlDataReader reader = null;
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
+                using var cmd = new SqlCommand(query.CmdStr, conn);
                 cmd.CommandType = query.CmdType;
                 cmd.Parameters.AddRange(query.Paras);
-                
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(table);
-                cmd.Dispose();
+
+                reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            finally 
-            { 
-                conn.Close(); 
-            }
-            return table; 
-        }
-
-        public T GetSingleObject<T>(QueryService query, Func<SqlDataReader, T> converter) where T : class
-        {
-            var list = GetEnumerable(query, converter).ToList();
-            return list.Count > 0 ? list[0] : null;
-        }
-
-        public IEnumerable<T> GetEnumerable<T>(QueryService query, Func<SqlDataReader, T> converter)
-        {
-            List<T> list = new List<T>();
-            try
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
-                cmd.CommandType = query.CmdType;
-                cmd.Parameters.AddRange(query.Paras);
-                
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                    list.Add(converter(reader));
-                cmd.Dispose();
-                reader.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally 
-            { 
-                conn.Close(); 
-            }
-            return list;
+            return reader;
         }
         
-        public T GetTotalDecimal<T>(QueryService query)
+        public T ExecuteScalar<T>(QueryService query)
         {
             var total = default(T);
             try
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(query.CmdStr, conn);
+                using var cmd = new SqlCommand(query.CmdStr, conn);
                 cmd.CommandType = query.CmdType;
                 cmd.Parameters.AddRange(query.Paras);
 
@@ -108,8 +67,6 @@ namespace SmartShop.Database
                 {
                     total = tResult;
                 }
-                
-                cmd.Dispose();
             }
             catch (Exception e)
             {

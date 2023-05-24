@@ -1,7 +1,6 @@
 ﻿using SmartShop.Database;
 using SmartShop.Models;
 using System.Collections.Generic;
-using System.Linq;
 using SmartShop.Queries;
 
 namespace SmartShop.Repositories
@@ -36,14 +35,16 @@ namespace SmartShop.Repositories
         public Product SearchByID(string id)
         {
             var qry = query.SearchByID(id);
-            return dbConn.GetSingleObject(qry, dbConv.ToModel<Product>); 
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToSingleObject<Product>(reader); 
         }
         
         public List<Product> GetAll()
         {
             // Call function ?
             var qry = query.GetAll();
-            return dbConn.GetEnumerable(qry, dbConv.ToModel<Product>).ToList();
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToList<Product>(reader);
         }
     }
 }

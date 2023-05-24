@@ -34,7 +34,8 @@ namespace SmartShop.Repositories
         public CartItem SearchByID(string id)
         {
             var qry = query.SearchByID(id);
-            return dbConn.GetSingleObject(qry, dbConv.ToModel<CartItem>);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToSingleObject<CartItem>(reader);
         }
     }
 }

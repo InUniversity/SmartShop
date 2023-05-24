@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Queries;
@@ -37,7 +36,8 @@ namespace SmartShop.Repositories
         public UserAddress SearchByID(string id)
         {
             var qry = query.SearchByID(id);
-            return dbConn.GetSingleObject(qry, dbConv.ToModel<UserAddress>);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToSingleObject<UserAddress>(reader);
         }
 
         public List<UserAddress> SearchByUserID(string userID)

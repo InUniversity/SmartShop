@@ -34,13 +34,14 @@ namespace SmartShop.Repositories
         public Order SearchByID(string id)
         {
             var qry = query.SearchByID(id);
-            return dbConn.GetSingleObject(qry, dbConv.ToModel<Order>);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToSingleObject<Order>(reader);
         }
 
         public decimal GetTotalPrice(string orderID)
         {
             var qry = query.GetTotalPrice(orderID);
-            return dbConn.GetTotalDecimal<decimal>(qry);
+            return dbConn.ExecuteScalar<decimal>(qry);
         }
     }
 }

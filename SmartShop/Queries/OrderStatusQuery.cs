@@ -41,7 +41,7 @@ namespace SmartShop.Queries
         
         public QueryService SearchByID(string id)
         {
-            var query = new QueryService("sp_Ser_OrderStatus_By_ID", CommandType.StoredProcedure);
+            var query = new QueryService("sp_Ser_OrderStatus_By_ID", CommandType.Text);
             query.Paras = new[]
             {
                 new SqlParameter("@ID", id)

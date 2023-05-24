@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using System.Data.SqlClient;
 using SmartShop.Models;
 
@@ -7,24 +6,6 @@ namespace SmartShop.ConvertToModel
 {
     public class ToOrderStatus : BaseConvModel
     {
-        public override object Conv(DataRow row)
-        {
-            OrderStatus status = null;
-            try
-            {
-                status = new OrderStatus
-                {
-                    ID = (string)row[ordSttusID],
-                    Name = (string)row[ordStaName]
-                };
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            return status;
-        }
-
         public override object Conv(SqlDataReader reader)
         {
             OrderStatus status = null;
