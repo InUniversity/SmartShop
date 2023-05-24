@@ -6,9 +6,8 @@ namespace SmartShop.Repositories
 {
     public class UserRepository :BaseRepository
     {
-        public UserRepository(DbConnection dbConn) : base(dbConn)
+        public UserRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-
         }
 
         public bool Add(User user)
@@ -62,22 +61,7 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter("@ID", id)
             };
-            return (User)dbConn.GetSingleObject(spCmd, paras, Converter);
-        }
-
-        private User Converter(SqlDataReader reader)
-        {
-            return new User
-            {
-                ID = (string)reader[userID],
-                FullName = (string)reader[userfname],
-                Username = (string)reader[username],
-                Pass = (string)reader[pass],
-                Email = (string)reader[useremail],
-                Phone = (string)reader[userphone],
-                WalletBalance = reader.GetDecimal(reader.GetOrdinal(userwBalance)),
-                RoleID = (string)reader[userrID],
-            };
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<User>);
         }
     }
 }

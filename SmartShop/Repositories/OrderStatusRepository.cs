@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using SmartShop.Database;
 using SmartShop.Models;
 
@@ -11,9 +6,8 @@ namespace SmartShop.Repositories
 {
     public class OrderStatusRepository :BaseRepository
     {
-        public OrderStatusRepository(DbConnection dbConn) : base(dbConn)
+        public OrderStatusRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-
         }
 
         public bool Add(OrderStatus ordstatu)
@@ -47,23 +41,15 @@ namespace SmartShop.Repositories
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
+        
         public OrderStatus SearchByID(string id)
         {
             string spCmd = $"sp_Ser_OrderStatus_By_ID";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter($"@{ordstID}", id),
+                new SqlParameter($"@ID", id)
             };
-            return (OrderStatus)dbConn.GetSingleObject(spCmd, paras, Converter);
-        }
-
-        private OrderStatus Converter(SqlDataReader reader)
-        {
-            return new OrderStatus
-            {
-                ID = (string)reader[ordstID],
-                Name = (string)reader[ordstname],
-            };
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<OrderStatus>);
         }
     }
 }

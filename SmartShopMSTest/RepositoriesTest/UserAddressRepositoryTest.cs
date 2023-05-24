@@ -2,11 +2,7 @@
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SmartShop.ConvertToModel;
 
 namespace SmartShopMSTest.RepositoriesTest
 {
@@ -20,7 +16,9 @@ namespace SmartShopMSTest.RepositoriesTest
         public void SetUp()
         {
             dbConn = new DbConnection();
-            myRepo = new UserAddressRepository(dbConn);
+            var convModelFactory = new ConvModelFactory();
+            var dbConv = new DbConverter(convModelFactory);
+            myRepo = new UserAddressRepository(dbConn, dbConv);
         }
 
         [TestMethod]

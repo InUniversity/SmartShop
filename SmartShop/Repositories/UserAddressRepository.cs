@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartShop.Database;
 using SmartShop.Models;
 
 namespace SmartShop.Repositories
 {
-    public class UserAddressRepository :BaseRepository
+    public class UserAddressRepository : BaseRepository
     {
-        public UserAddressRepository(DbConnection dbConn) : base(dbConn)
+        public UserAddressRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-
         }
 
         public bool Add(UserAddress address)
@@ -57,17 +53,12 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter($"@ID", id),
             };
-            return (UserAddress)dbConn.GetSingleObject(spCmd, paras, Converter);
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<UserAddress>);
         }
 
-        private UserAddress Converter(SqlDataReader reader)
+        public List<UserAddress> SearchByUserID(string userID)
         {
-            return new UserAddress
-            {
-                ID = (string)reader[uadresID],
-                UserID = (string)reader[uadresUsID],
-                Details = (string)reader[uadDetail]
-            };
+            throw new NotImplementedException();
         }
     }
 }

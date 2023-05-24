@@ -33,7 +33,30 @@ namespace SmartShop.Database
             return rowsAffected > 0;
         }
 
-        public object? GetSingleObject<T>(string sqlStr, SqlParameter[] paras, Func<SqlDataReader, T> converter)
+        public DataTable GetTableUseFunction(string fnCmd, SqlParameter[] paras)
+        {
+            DataTable table = new DataTable();
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(fnCmd, conn);
+                cmd.Parameters.AddRange(paras);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(table);
+                cmd.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally 
+            { 
+                conn.Close(); 
+            }
+            return table; 
+        }
+
+        public T GetSingleObject<T>(string sqlStr, SqlParameter[] paras, Func<SqlDataReader, T> converter) where T : class
         {
             var list = GetEnumerable(sqlStr, paras, converter).ToList();
             return list.Count > 0 ? list[0] : null;
@@ -65,7 +88,7 @@ namespace SmartShop.Database
             return list;
         }
        
-        public object? GetSingleObject<T>(string sqlStr, Func<SqlDataReader, T> converter)
+        public T GetSingleObject<T>(string sqlStr, Func<SqlDataReader, T> converter) where T : class
         {
             var list = GetEnumerable(sqlStr, converter).ToList();
             return list.Count > 0 ? list[0] : null;

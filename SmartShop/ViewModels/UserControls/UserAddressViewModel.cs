@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SmartShop.Models;
+using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
 
 namespace SmartShop.ViewModels.UserControls
@@ -11,8 +12,16 @@ namespace SmartShop.ViewModels.UserControls
         
         public List<UserAddress> Addresses { get; set; }
 
-        public UserAddressViewModel()
+        private readonly UserAddressRepository addressRepos;
+
+        public UserAddressViewModel(UserAddressRepository addressRepos)
         {
+            this.addressRepos = addressRepos;
+        }
+
+        private void LoadAddresses()
+        {
+            Addresses = addressRepos.SearchByUserID(CurUser.ID);
         }
     }
 }

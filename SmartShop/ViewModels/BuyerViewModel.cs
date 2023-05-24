@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using SmartShop.ConvertToModel;
 using SmartShop.Database;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
@@ -30,10 +31,14 @@ namespace SmartShop.ViewModels
         private void InitComponentsView()
         {
             var dbConn = new DbConnection();
-            var prodRepos = new ProductRepository(dbConn);
-            var orderRepos = new OrderRepository(dbConn);
+            var convModelFactory = new ConvModelFactory();
+            var dbConv = new DbConverter(convModelFactory);
+            
+            var prodRepos = new ProductRepository(dbConn, dbConv);
+            var orderRepos = new OrderRepository(dbConn, dbConv);
+            var addressRepos = new UserAddressRepository(dbConn, dbConv);
 
-            var userAddressVM = new UserAddressViewModel();
+            var userAddressVM = new UserAddressViewModel(addressRepos);
             var orderItemsVM = new OrderItemsViewModel(orderRepos);
             var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM);
             var cartVM = new CartViewModel(paymentVM, this);

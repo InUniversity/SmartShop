@@ -7,9 +7,8 @@ namespace SmartShop.Repositories
 {
     public class OrderRepository : BaseRepository
     {
-        public OrderRepository(DbConnection dbConn) : base(dbConn)
+        public OrderRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-
         }
 
         public bool Add(Order order)
@@ -55,7 +54,7 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter("@ID", id),
             };
-            return (Order)dbConn.GetSingleObject(spCmd, paras, Converter);
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<Order>);
         }
 
         public decimal GetTotalPrice(string orderID)
@@ -66,17 +65,6 @@ namespace SmartShop.Repositories
                 new SqlParameter("@OrderID", orderID)
             };
             return dbConn.GetTotalDecimal<decimal>(fnCmd, paras);
-        }
-
-        private Order Converter(SqlDataReader reader)
-        {
-            return new Order
-            {
-                ID = (string)reader[ordID],
-                UserID = (string)reader[orduID],
-                StatusID = (string)reader[ordSttusID],
-                Date = (DateTime)reader[ordDate]
-            };
         }
     }
 }

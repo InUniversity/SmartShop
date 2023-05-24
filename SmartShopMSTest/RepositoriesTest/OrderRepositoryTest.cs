@@ -3,6 +3,7 @@ using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
 using System;
+using SmartShop.ConvertToModel;
 
 namespace SmartShopMSTest.RepositoriesTest
 {
@@ -16,7 +17,9 @@ namespace SmartShopMSTest.RepositoriesTest
         public void SetUp()
         {
             dbConn = new DbConnection();
-            myRepo = new OrderRepository(dbConn);
+            var convModelFactory = new ConvModelFactory();
+            var dbConv = new DbConverter(convModelFactory);
+            myRepo = new OrderRepository(dbConn, dbConv);
         }
 
         [TestMethod]

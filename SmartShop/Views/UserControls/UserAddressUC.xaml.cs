@@ -1,14 +1,15 @@
 ﻿using System.Windows.Controls;
 
-namespace SmartShop.Views.UserControls;
-
-/// <summary>
-///     Interaction logic for UserAddressUC.xaml
-/// </summary>
-public partial class UserAddressUC : UserControl
+namespace SmartShop.Views.UserControls
 {
-    public UserAddressUC()
+    /// <summary>
+    ///     Interaction logic for UserAddressUC.xaml
+    /// </summary>
+    public partial class UserAddressUC : UserControl
     {
-        InitializeComponent();
+        public UserAddressUC()
+        {
+            InitializeComponent();
+        }
     }
 }

@@ -1,19 +1,13 @@
 ﻿using SmartShop.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartShop.Database;
 
 namespace SmartShop.Repositories
 {
     public class CartItemRepository : BaseRepository
     {
-        public CartItemRepository(DbConnection dbConn) : base(dbConn)
+        public CartItemRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-
         }
 
         public bool Add(CartItem item)
@@ -59,18 +53,7 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter($"@ID", id),
             };
-            return (CartItem)dbConn.GetSingleObject(spCmd, paras, Converter);
-        }
-
-        private CartItem Converter(SqlDataReader reader)
-        {
-            return new CartItem
-            {
-                ID = (string)reader[cartItID],
-                UserID = (string)reader[cartItUserID],
-                ProdID = (string)reader[cartItProdID],
-                Quantity = (int)reader[cartItQty]
-            };
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<CartItem>);
         }
     }
 }

@@ -2,11 +2,7 @@
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SmartShop.ConvertToModel;
 
 namespace SmartShopMSTest.RepositoriesTest
 {
@@ -20,7 +16,9 @@ namespace SmartShopMSTest.RepositoriesTest
         public void SetUp()
         {
             dbConn = new DbConnection();
-            myRepo = new OrderStatusRepository(dbConn);
+            var convModelFactory = new ConvModelFactory();
+            var dbConv = new DbConverter(convModelFactory);
+            myRepo = new OrderStatusRepository(dbConn, dbConv);
         }
 
         [TestMethod]
@@ -28,7 +26,7 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             var addTarget = new OrderStatus
             {
-                ID = "OS1234",
+                ID = "ORS0123",
                 Name = "hoatdong"
             };
             bool isAddSuccess = myRepo.Add(addTarget);
@@ -61,6 +59,7 @@ namespace SmartShopMSTest.RepositoriesTest
 
         private void AssertObj(OrderStatus expected, OrderStatus actual)
         {
+            Assert.IsNotNull(actual);
             Assert.AreEqual(expected.ID, actual.ID);
             Assert.AreEqual(expected.Name, actual.Name);
         }
