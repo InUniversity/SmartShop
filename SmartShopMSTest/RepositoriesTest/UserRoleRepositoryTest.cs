@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartShop.ConvertToModel;
 
 namespace SmartShopMSTest.RepositoriesTest
 {
@@ -20,7 +21,9 @@ namespace SmartShopMSTest.RepositoriesTest
         public void SetUp()
         {
             dbConn = new DbConnection();
-            myRepo = new UserRoleRepository(dbConn);
+            var convModelFactory = new ConvModelFactory();
+            var dbConv = new DbConverter(convModelFactory);
+            myRepo = new UserRoleRepository(dbConn, dbConv);
         }
 
         [TestMethod]
@@ -43,7 +46,8 @@ namespace SmartShopMSTest.RepositoriesTest
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
 
-            myRepo.Delete(addTarget.ID);
+            if (isAddSuccess)
+                myRepo.Delete(addTarget.ID);
             var deleteResult = myRepo.SearchByID(addTarget.ID);
 
             // test add

@@ -24,12 +24,12 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <StackPanel Width="Auto">
-                        <TextBlock Text="Tên" Style="{StaticResource NormalTxtStyle}" />
-                        <TextBlock Text="SĐT" Style="{StaticResource NormalTxtStyle}" />
+                        <TextBlock Text="{Binding CurUser.FullName}" Style="{StaticResource NormalTxtStyle}" />
+                        <TextBlock Text="{Binding CurUser.Phone}" Style="{StaticResource NormalTxtStyle}" />
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Column="1">
-                    <TextBlock Text="Địa chỉ chi tiết" Style="{StaticResource NormalTxtStyle}" />
+                    <TextBlock Text="{Binding CurAddress.Details}" Style="{StaticResource NormalTxtStyle}" />
                 </Grid>
                 <Grid Grid.Column="2">
                     <Button Command="{Binding ElementName=userAddressUC, Path=DataContext.ChangeAddressCommand}"

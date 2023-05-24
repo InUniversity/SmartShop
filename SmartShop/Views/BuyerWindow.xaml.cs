@@ -1,14 +1,15 @@
 ﻿using System.Windows;
 
-namespace SmartShop.View;
-
-/// <summary>
-///     Interaction logic for BuyerWindow.xaml
-/// </summary>
-public partial class BuyerWindow : Window
+namespace SmartShop.View
 {
-    public BuyerWindow()
+    /// <summary>
+    ///     Interaction logic for BuyerWindow.xaml
+    /// </summary>
+    public partial class BuyerWindow : Window
     {
-        InitializeComponent();
+        public BuyerWindow()
+        {
+            InitializeComponent();
+        }
     }
 }

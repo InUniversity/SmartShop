@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartShop.Database;
 using SmartShop.Models;
 
 namespace SmartShop.Repositories
 {
-    public class UserAddressRepository :BaseRepository
+    public class UserAddressRepository : BaseRepository
     {
-        public UserAddressRepository(DbConnection dbConn) : base(dbConn)
+        public UserAddressRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-
         }
 
-        public bool Add(UserAddress uaddress)
+        public bool Add(UserAddress address)
         {
             string spCmd = $"sp_AddUserAddress";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter("@AddressID", uaddress.ID),
-                new SqlParameter("@UserID",uaddress.UserID),
-                new SqlParameter("@AddressDetails", uaddress.Details)
+                new SqlParameter("@AddressID", address.ID),
+                new SqlParameter("@UserID", address.UserID),
+                new SqlParameter("@AddressDetails", address.Details)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -38,14 +34,14 @@ namespace SmartShop.Repositories
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
 
-        public bool Update(UserAddress uaddress)
+        public bool Update(UserAddress address)
         {
             string spCmd = $"sp_UpdateUserAddress";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter("@AddressID", uaddress.ID),
-                new SqlParameter("@NewUserID",uaddress.UserID),
-                new SqlParameter("@NewAddressDetails", uaddress.Details)
+                new SqlParameter("@AddressID", address.ID),
+                new SqlParameter("@NewUserID",address.UserID),
+                new SqlParameter("@NewAddressDetails", address.Details)
             };
             return dbConn.ExecuteNonQuery(spCmd, paras);
         }
@@ -55,19 +51,14 @@ namespace SmartShop.Repositories
             string spCmd = $"sp_Ser_UserA_By_ID";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter($"@{uadresID}", id),
+                new SqlParameter($"@ID", id),
             };
-            return (UserAddress)dbConn.GetSingleObject(spCmd, paras, Converter);
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<UserAddress>);
         }
 
-        private UserAddress Converter(SqlDataReader reader)
+        public List<UserAddress> SearchByUserID(string userID)
         {
-            return new UserAddress
-            {
-                ID = (string)reader[uadresID],
-                UserID = (string)reader[uadresUsID],
-                Details = (string)reader[uadDetail],
-            };
+            throw new NotImplementedException();
         }
     }
 }

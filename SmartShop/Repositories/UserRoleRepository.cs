@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using SmartShop.Database;
+
 namespace SmartShop.Repositories
 {
     public class UserRoleRepository : BaseRepository
     {
-        public UserRoleRepository(DbConnection dbConn) : base(dbConn)
+        public UserRoleRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-
         }
 
         public bool Add(UserRole urole)
@@ -51,18 +46,9 @@ namespace SmartShop.Repositories
             string spCmd = $"sp_Ser_UserR_By_ID";
             SqlParameter[] paras = new[]
             {
-                new SqlParameter($"@{uroleID}", id),
+                new SqlParameter($"@ID", id),
             };
-            return (UserRole)dbConn.GetSingleObject(spCmd, paras, Converter);
-        }
-
-        private UserRole Converter(SqlDataReader reader)
-        {
-            return new UserRole
-            {
-                ID = (string)reader[uroleID],
-                Name = (string)reader[uroleRname],
-            };
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<UserRole>);
         }
     }
 }

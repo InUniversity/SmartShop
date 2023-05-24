@@ -8,9 +8,8 @@ namespace SmartShop.Repositories
 {
     public class ProductRepository : BaseRepository
     {
-        public ProductRepository(DbConnection dbConn) : base(dbConn)
+        public ProductRepository(DbConnection dbConn, DbConverter dbConv) : base(dbConn, dbConv)
         {
-            
         }
 
         public bool Add(Product prod)
@@ -62,27 +61,14 @@ namespace SmartShop.Repositories
             {
                 new SqlParameter($"@ID", id),
             };
-            return (Product)dbConn.GetSingleObject(spCmd, paras, Converter); 
+            return dbConn.GetSingleObject(spCmd, paras, dbConv.ToModel<Product>); 
         }
         
         public List<Product> GetAll()
         {
-            string sqlStr = $"SELECT * FROM {prodTbl}";
-            return dbConn.GetEnumerable(sqlStr, Converter).ToList();
-        }
-
-        private Product Converter(SqlDataReader reader)
-        {
-            return new Product
-            {
-                ID = (string)reader[prodID],
-                CategoryID = (string)reader[prodCtgID],
-                ImgUrl = (string)reader[prodImgUrl],
-                Name = (string)reader[prodName],
-                Price = reader.GetDecimal(reader.GetOrdinal(prodPrice)),
-                Quantity = (int)reader[prodQty],
-                Desc = (string)reader[prodDescription],
-            };
+            // Call function ?
+            string sqlStr = $"SELECT * FROM Products";
+            return dbConn.GetEnumerable(sqlStr, dbConv.ToModel<Product>).ToList();
         }
     }
 }

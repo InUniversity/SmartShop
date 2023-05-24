@@ -7,10 +7,8 @@ namespace SmartShop.Models
     {
         public string ID { get; set; }
         public string UserID { get; set; }
-        public string ProdID { get; set; }
         public string StatusID { get; set; }
         public DateTime Date { get; set; }
-        public decimal TotalPrice { get; set; }
 
         public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
         public OrderStatus Status { get; set; } = new OrderStatus();

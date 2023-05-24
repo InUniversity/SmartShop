@@ -5,7 +5,7 @@ namespace SmartShop.Models
         private static CurrentUser ins;
         private User user = new User();
 
-        public CurrentUser Ins
+        public static CurrentUser Ins
         {
             get
             {

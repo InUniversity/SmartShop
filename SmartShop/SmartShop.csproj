@@ -16,7 +16,7 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -77,8 +77,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ConvertToModel\ConvModelFactory.cs" />
+    <Compile Include="ConvertToModel\BaseConvModel.cs" />
+    <Compile Include="ConvertToModel\ToCartItem.cs" />
+    <Compile Include="ConvertToModel\ToCategory.cs" />
+    <Compile Include="ConvertToModel\ToOrder.cs" />
+    <Compile Include="ConvertToModel\ToOrderItem.cs" />
+    <Compile Include="ConvertToModel\ToOrderStatus.cs" />
+    <Compile Include="ConvertToModel\ToProduct.cs" />
+    <Compile Include="ConvertToModel\ToUser.cs" />
+    <Compile Include="ConvertToModel\ToUserAddress.cs" />
+    <Compile Include="ConvertToModel\ToUserRole.cs" />
     <Compile Include="Database\DbConnection.cs" />
-    <Compile Include="Models\Cart.cs" />
+    <Compile Include="Database\DbConverter.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CurrentUser.cs" />
@@ -91,7 +102,6 @@
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CartItemRepository.cs" />
-    <Compile Include="Repositories\CartRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\OrderStatusRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />

@@ -2,11 +2,7 @@
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SmartShop.ConvertToModel;
 
 namespace SmartShopMSTest.RepositoriesTest
 {
@@ -20,7 +16,9 @@ namespace SmartShopMSTest.RepositoriesTest
         public void SetUp()
         {
             dbConn = new DbConnection();
-            myRepo = new UserAddressRepository(dbConn);
+            var convModelFactory = new ConvModelFactory();
+            var dbConv = new DbConverter(convModelFactory);
+            myRepo = new UserAddressRepository(dbConn, dbConv);
         }
 
         [TestMethod]
@@ -28,8 +26,8 @@ namespace SmartShopMSTest.RepositoriesTest
         {
             var addTarget = new UserAddress
             {
-                ID = "USERA0007",
-                UserID = "USER0003",
+                ID = "URA0123",
+                UserID = "USR0001",
                 Details = "tra vinh xom A"
             };
             bool isAddSuccess = myRepo.Add(addTarget);
@@ -39,13 +37,14 @@ namespace SmartShopMSTest.RepositoriesTest
             var updateTarget = new UserAddress
             {
                 ID = addTarget.ID,
-                UserID = "USER0002",
-                Details = "tra vinh xom A"
+                UserID = "USR0002",
+                Details = "tra vinh xom B"
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
 
-            myRepo.Delete(addTarget.ID);
+            if (isAddSuccess)
+                myRepo.Delete(addTarget.ID);
             var deleteResult = myRepo.SearchByID(addTarget.ID);
 
             // test add
@@ -62,6 +61,7 @@ namespace SmartShopMSTest.RepositoriesTest
 
         private void AssertObj(UserAddress expected, UserAddress actual)
         {
+            Assert.IsNotNull(actual);
             Assert.AreEqual(expected.ID, actual.ID);
             Assert.AreEqual(expected.UserID, actual.UserID);
             Assert.AreEqual(expected.Details, actual.Details);
