@@ -28,8 +28,7 @@ CREATE TABLE UserRole (
 GO
 CREATE TABLE Users (
     ID VARCHAR(20) PRIMARY KEY,
-    FirstName NVARCHAR(50) NOT NULL,
-    LastName NVARCHAR(50) NOT NULL,
+    FullName NVARCHAR(50) NOT NULL,
     Username VARCHAR(50) NOT NULL,
     PasswordHash VARCHAR(50) NOT NULL,
     Email VARCHAR(100) NOT NULL,
@@ -112,12 +111,12 @@ VALUES ('ROLE0001', 'Admin'),
 ('ROLE0002', 'Customer');
 
 -- Add data to Users table
-INSERT INTO Users (ID, FirstName, LastName, Username, PasswordHash, Email, Phone, WalletBalance, RoleID)
-VALUES ('USR0001', 'John', 'Doe', 'johndoe', 'hash123', 'johndoe@example.com', '1234567890', 500.00, 'ROLE0002'),
-('USR0002', 'Jane', 'Doe', 'janedoe', 'hash456', 'janedoe@example.com', '0987654321', 200.00, 'ROLE0002'),
-('USR0003','Bob',' Johnson', 'bobjohnson','789','bob.johnson@example.com', '0111111111',300.00,'ROLE0002' ),
-('USR0004','Sarah','Lee','sarahlee','987','sarah.lee@example.com','0222222222',400.00,'ROLE0002'),
-('USR0005','Michael','Jordan','michaeljordan','654','mjordan23@example.com','0333333333',700.00,'ROLE0002');
+INSERT INTO Users (ID, FullName, Username, PasswordHash, Email, Phone, WalletBalance, RoleID)
+VALUES ('USR0001', 'John Doe', 'johndoe', 'hash123', 'johndoe@example.com', '1234567890', 500.00, 'ROLE0002'),
+('USR0002', 'Jane Doe', 'janedoe', 'hash456', 'janedoe@example.com', '0987654321', 200.00, 'ROLE0002'),
+('USR0003','Bob Johnson', 'bobjohnson','789','bob.johnson@example.com', '0111111111',300.00,'ROLE0002' ),
+('USR0004','Sarah Lee','sarahlee','987','sarah.lee@example.com','0222222222',400.00,'ROLE0002'),
+('USR0005','Michael Jordan','michaeljordan','654','mjordan23@example.com','0333333333',700.00,'ROLE0002');
 
 -- Add data to UserAddress table
 INSERT INTO UserAddress (ID, UserID, AddressDetails)
@@ -356,8 +355,7 @@ GO
 
 CREATE PROCEDURE sp_AddUser
     @UserID VARCHAR(20),
-    @FirstName NVARCHAR(50),
-    @LastName NVARCHAR(50),
+    @FullName NVARCHAR(50),
     @Username VARCHAR(50),
     @PasswordHash VARCHAR(50),
     @Email VARCHAR(100),
@@ -366,8 +364,8 @@ CREATE PROCEDURE sp_AddUser
     @RoleID VARCHAR(20)
 AS
 BEGIN
-    INSERT INTO Users (ID, FirstName, LastName, Username, PasswordHash, Email, Phone, WalletBalance, RoleID)
-    VALUES (@UserID, @FirstName, @LastName, @Username, @PasswordHash, @Email, @Phone, @WalletBalance, @RoleID)
+    INSERT INTO Users (ID, FullName, Username, PasswordHash, Email, Phone, WalletBalance, RoleID)
+    VALUES (@UserID, @FullName, @Username, @PasswordHash, @Email, @Phone, @WalletBalance, @RoleID)
 END
 GO
 
@@ -375,8 +373,7 @@ GO
 
 CREATE PROCEDURE sp_UpdateUser
     @UserID VARCHAR(20),
-    @NewFirstName NVARCHAR(50),
-    @NewLastName NVARCHAR(50),
+    @NewFullName NVARCHAR(50),
     @NewUsername VARCHAR(50),
     @NewPasswordHash VARCHAR(50),
     @NewEmail VARCHAR(100),
@@ -386,8 +383,7 @@ CREATE PROCEDURE sp_UpdateUser
 AS
 BEGIN
     UPDATE Users
-    SET FirstName = @NewFirstName,
-        LastName = @NewLastName,
+    SET FullName = @NewFullName,
         Username = @NewUsername,
         PasswordHash = @NewPasswordHash,
         Email = @NewEmail,
@@ -487,13 +483,13 @@ GO
 
 CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
-    @New@UserID VARCHAR(20),
+    @NewUserID VARCHAR(20),
     @NewProductID VARCHAR(20),
     @NewQuantity INT
 AS
 BEGIN
     UPDATE CartItems
-    SET UserID = @New@UserID,
+    SET UserID = @NewUserID,
         ProductID = @NewProductID,
         Quantity = @NewQuantity
     WHERE ID = @CartItemID
