@@ -23,7 +23,7 @@
                             <TextBlock Text="Tôi" Margin="47 0" />
                         </StackPanel>
                     </RadioButton>
-                    
+
                     <RadioButton
                         Height="50"
                         Margin="4"
@@ -38,71 +38,62 @@
                 </StackPanel>
             </Border>
         </materialDesign:DrawerHost.LeftDrawerContent>
-        
-        <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Border Background="#006064">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <Button
-                        Height="60"
-                        Width="60"
-                        ToolTip=" Nhà"
-                        Style="{StaticResource MaterialDesignIconButton}"
-                        Command="{Binding ShowProductsCommand}">
-                        <materialDesign:PackIcon Kind="FormatListBulleted" Foreground="White" />
-                    </Button>
-                    <Button
-                        Height="60"
-                        Width="60"
-                        ToolTip=" Nhà"
-                        Style="{StaticResource MaterialDesignIconButton}"
-                        Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToProductsViewCommand}">
-                        <materialDesign:PackIcon Kind="HomeOutline" Foreground="White" />
-                    </Button>
-                </StackPanel>
 
-                <Grid Grid.Column="1" Height="50" Margin="100 10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="55" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border Background="#006064" CornerRadius="16">
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="4*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Ellipse >
-                    </Ellipse>
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Height="60"
+                            Width="60"
+                            ToolTip=" Nhà"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Command="{Binding ShowProductsCommand}">
+                            <materialDesign:PackIcon Kind="FormatListBulleted" Foreground="White" />
+                        </Button>
+                        <Button
+                            Height="60"
+                            Width="60"
+                            ToolTip=" Nhà"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToProductsViewCommand}">
+                            <materialDesign:PackIcon Kind="HomeOutline" Foreground="White" />
+                        </Button>
+                    </StackPanel>
+
                     <Button
-                            Style="{StaticResource MaterialDesignIconButton}">
-                        <materialDesign:PackIcon Kind="Magnify" />
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        Margin="10,0,10,0"
+                        Height="60"
+                        Width="60"
+                        ToolTip="Giỏ hàng"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToCartViewCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CartOutline" Foreground="White" />
+                            <materialDesign:Badged
+                                Badge="100"
+                                Margin="10 0"
+                                BadgeForeground="#f3e5f5"
+                                BadgeBackground="#4a148c"
+                                VerticalAlignment="Top" />
+                        </StackPanel>
                     </Button>
-                    <TextBox Grid.Column="1"
-                             FontSize="12"
-                             Background="White"
-                             Foreground="Black"
-                             materialDesign:HintAssist.Hint="Tên sản phẩm cần tìm"
-                             Text="{Binding ElementName=projectInputUC, Path=DataContext.TextToSearch, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+                    <!--Badge="{Binding ElementName=dgvOngoingTasks,Path=Items.Count,UpdateSourceTrigger=PropertyChanged}"-->
                 </Grid>
-                <Button
-                    Grid.Column="2"
-                    HorizontalAlignment="Right"
-                    Height="60"
-                    Width="60"
-                    ToolTip="Giỏ hàng"
-                    Style="{StaticResource MaterialDesignIconButton}"
-                    Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToCartViewCommand}"
-                    BorderThickness="0">
-                    <materialDesign:PackIcon Kind="CartOutline" Foreground="White" />
-                </Button>
-            </Grid>
-        </Border>
-        <ContentControl Grid.Row="1" Content="{Binding ElementName=buyerWindow, Path=DataContext.CurrentChildView}" />
-    </Grid>
+            </Border>
+            <ContentControl Grid.Row="1" Content="{Binding ElementName=buyerWindow, Path=DataContext.CurrentChildView}" />
+        </Grid>
     </materialDesign:DrawerHost>
 </Window>

@@ -8,13 +8,15 @@ namespace SmartShop.ViewModels.UserControls
 {
     public class ProductsViewModel : BaseViewModel
     {
-        private List<CartItem> cartItems;
-        public List<CartItem> CartItems { get => cartItems; set { cartItems = value; OnPropertyChanged(); } }
+        private List<Product> prods;
+        public List<Product> Prods { get => prods; set { prods = value; OnPropertyChanged(); } }
         
         public ICommand AddToCartCommand { get; private set; }
 
         private readonly ProductRepository prodRepos;
         private IReceiveCartItem cartIns;
+
+        private User curUser = CurrentUser.Ins.Usr;
 
         public ProductsViewModel(ProductRepository prodRepos, IReceiveCartItem cartIns)
         {
@@ -27,7 +29,6 @@ namespace SmartShop.ViewModels.UserControls
         private void LoadProducts()
         {
             var products = prodRepos.GetAll();
-            // Init cart item from product items 
         }
 
         private void SetCommands()
