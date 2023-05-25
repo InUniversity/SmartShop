@@ -1,3 +1,4 @@
+using System;
 using SmartShop.Models;
 using SmartShop.ViewModels.UserControls;
 
@@ -25,6 +26,7 @@ namespace SmartShop.Adapters
 
         private CartItem ConvertToCartItem(Product product)
         {
+            throw new NotImplementedException();
             return new CartItem();
         }
     }
