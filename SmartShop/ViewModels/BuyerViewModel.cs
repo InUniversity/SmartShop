@@ -17,7 +17,7 @@ namespace SmartShop.ViewModels
         private ContentControl currentChildView;
         public ContentControl CurrentChildView { get => currentChildView; set { currentChildView = value; OnPropertyChanged(); } }
 
-        public int CartQuantity => cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID);
+        public int CartQuantity => cartItemRepos?.GetTotalQuantity(CurrentUser.Ins.Usr.ID) ?? 0;
         
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }

@@ -53,7 +53,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
                         <Button
-                            Height="60"
+                            Height="50"
                             Width="60"
                             ToolTip=" Nhà"
                             Style="{StaticResource MaterialDesignIconButton}"
@@ -61,7 +61,7 @@
                             <materialDesign:PackIcon Kind="FormatListBulleted" Foreground="White" />
                         </Button>
                         <Button
-                            Height="60"
+                            Height="50"
                             Width="60"
                             ToolTip=" Nhà"
                             Style="{StaticResource MaterialDesignIconButton}"
@@ -74,7 +74,7 @@
                         Grid.Column="2"
                         HorizontalAlignment="Right"
                         Margin="10,0,10,0"
-                        Height="60"
+                        Height="50"
                         Width="60"
                         ToolTip="Giỏ hàng"
                         Style="{StaticResource MaterialDesignIconButton}"
