@@ -39,9 +39,10 @@ namespace SmartShop.Repositories
             return dbConv.ToSingleObject<CartItem>(reader);
         }
 
-        public int GetTotalQuantity(string iD)
+        public int GetTotalQuantity(string userID)
         {
-            throw new NotImplementedException();
+            var qry = query.GetTotalQuantity(userID);
+            return dbConn.ExecuteScalar<int>(qry);
         }
     }
 }

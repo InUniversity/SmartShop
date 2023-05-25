@@ -9,7 +9,7 @@ namespace SmartShop.Models
         public decimal Price { get; set; }
         public int RemainQuantity { get; set; }
         public string Desc { get; set; }
-        public int SelectedQuantity { get; set; }
+        public int SelectedQuantity { get; set; } = 1;
 
         public Category Category { get; set; } = new Category();
     }

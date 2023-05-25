@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using SmartShop.Models;
@@ -49,6 +50,16 @@ namespace SmartShop.Queries
             query.Paras = new[]
             {
                 new SqlParameter("@ID", id)
+            };
+            return query;
+        }
+
+        public QueryService GetTotalQuantity(string userID)
+        {
+            var query = new QueryService("EXEC fn_GetQuantityProductInCart", CommandType.StoredProcedure);
+            query.Paras = new[]
+            {
+                new SqlParameter("@UserID", userID)
             };
             return query;
         }
