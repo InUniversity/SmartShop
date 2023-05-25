@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SmartShop.Models;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
 
@@ -19,9 +20,9 @@ namespace SmartShop.ViewModels.UserControls
             this.orderRepos = orderRepos;
         }
 
-        public void Receive(List<OrderItem> items)
+        public void Receive(Order order)
         {
-            OrderItems = items;
+            OrderItems = order.Items;
         }
     }
 }

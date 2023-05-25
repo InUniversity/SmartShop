@@ -10,7 +10,7 @@ namespace SmartShop.Models
         public string StatusID { get; set; }
         public DateTime Date { get; set; }
 
-        public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
         public OrderStatus Status { get; set; } = new OrderStatus();
         public User User { get; set; } = new User();
     }
