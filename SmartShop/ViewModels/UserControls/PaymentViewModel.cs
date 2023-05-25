@@ -13,7 +13,7 @@ namespace SmartShop.ViewModels.UserControls
     
     public interface IReceiveOrder
     {
-        void Receive(List<OrderItem> items);
+        void Receive(Order order);
     }
     
     public class PaymentViewModel : BaseViewModel, IReceiveOrder
@@ -40,9 +40,9 @@ namespace SmartShop.ViewModels.UserControls
             throw new NotImplementedException();
         }
 
-        public void Receive(List<OrderItem> items)
+        public void Receive(Order order)
         {
-            OrderItemsVM.Receive(items);
+            OrderItemsVM.Receive(order);
         }
     }
 }
