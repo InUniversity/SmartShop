@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace SmartShop.Models
 {
     public class Product
@@ -9,11 +7,10 @@ namespace SmartShop.Models
         public string ImgUrl { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int RemainQuantity { get; set; }
         public string Desc { get; set; }
+        public int SelectedQuantity { get; set; }
 
-        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
         public Category Category { get; set; } = new Category();
-        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

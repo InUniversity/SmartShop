@@ -82,7 +82,7 @@
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="CartOutline" Foreground="White" />
                             <materialDesign:Badged
-                                Badge="100"
+                                Badge="{Binding ElementName=buyerWindow, Path=DataContext.CartQuantity, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="10 0"
                                 BadgeForeground="#f3e5f5"
                                 BadgeBackground="#4a148c"
@@ -90,7 +90,6 @@
                         </StackPanel>
                     </Button>
 
-                    <!--Badge="{Binding ElementName=dgvOngoingTasks,Path=Items.Count,UpdateSourceTrigger=PropertyChanged}"-->
                 </Grid>
             </Border>
             <ContentControl Grid.Row="1" Content="{Binding ElementName=buyerWindow, Path=DataContext.CurrentChildView}" />

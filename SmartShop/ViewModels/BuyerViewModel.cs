@@ -1,7 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using SmartShop.Adapters;
 using SmartShop.ConvertToModel;
 using SmartShop.Database;
+using SmartShop.Models;
 using SmartShop.Queries;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
@@ -15,12 +17,16 @@ namespace SmartShop.ViewModels
         private ContentControl currentChildView;
         public ContentControl CurrentChildView { get => currentChildView; set { currentChildView = value; OnPropertyChanged(); } }
 
-        private ProductsUC prodsView;
-        private CartUC cartView;
-        private PaymentUC paymentView;
+        public int CartQuantity => cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID);
         
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }
+
+        private CartItemRepository cartItemRepos;
+
+        private ProductsUC prodsView;
+        private CartUC cartView;
+        private PaymentUC paymentView;
 
         public BuyerViewModel()
         {
@@ -38,16 +44,22 @@ namespace SmartShop.ViewModels
             var prodQuery = new ProductQuery();
             var orderQuery = new OrderQuery();
             var addressQuery = new UserAddressQuery();
+            var cartItemQuery = new CartItemQuery();
             
             var prodRepos = new ProductRepository(dbConn, dbConv, prodQuery);
             var orderRepos = new OrderRepository(dbConn, dbConv, orderQuery);
             var addressRepos = new UserAddressRepository(dbConn, dbConv, addressQuery);
+            cartItemRepos = new CartItemRepository(dbConn, dbConv, cartItemQuery);
 
             var userAddressVM = new UserAddressViewModel(addressRepos);
             var orderItemsVM = new OrderItemsViewModel(orderRepos);
             var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM);
-            var cartVM = new CartViewModel(paymentVM, this);
-            var prodVM = new ProductsViewModel(prodRepos, cartVM);
+
+            var cartItemsReceiver = new CartItemsReceiverAdapter(paymentVM);
+            var cartVM = new CartViewModel(cartItemRepos, cartItemsReceiver, this);
+
+            var productReceiver = new ProductReceiverAdapter(cartVM);
+            var prodVM = new ProductsViewModel(prodRepos, productReceiver);
             
             paymentView = new PaymentUC { DataContext = paymentVM };
             cartView = new CartUC { DataContext = cartVM };

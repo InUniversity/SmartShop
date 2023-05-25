@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using SmartShop.Models;
 using SmartShop.ViewModels.Base;
 
 namespace SmartShop.ViewModels.UserControls
 {
+    public interface IReceiveCartItems
+    {
+        void Receive(List<CartItem> items);
+    }
+    
     public interface IReceiveOrder
     {
         void Receive(List<OrderItem> items);

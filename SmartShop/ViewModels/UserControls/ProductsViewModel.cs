@@ -1,6 +1,7 @@
 ﻿using SmartShop.ViewModels.Base;
 using System.Collections.Generic;
 using System.Windows.Input;
+using SmartShop.Adapters;
 using SmartShop.Models;
 using SmartShop.Repositories;
 
@@ -14,11 +15,11 @@ namespace SmartShop.ViewModels.UserControls
         public ICommand AddToCartCommand { get; private set; }
 
         private readonly ProductRepository prodRepos;
-        private IReceiveCartItem cartIns;
+        private IReceiveProduct cartIns;
 
         private User curUser = CurrentUser.Ins.Usr;
 
-        public ProductsViewModel(ProductRepository prodRepos, IReceiveCartItem cartIns)
+        public ProductsViewModel(ProductRepository prodRepos, IReceiveProduct cartIns)
         {
             this.prodRepos = prodRepos;
             this.cartIns = cartIns; 
@@ -28,17 +29,17 @@ namespace SmartShop.ViewModels.UserControls
 
         private void LoadProducts()
         {
-            var products = prodRepos.GetAll();
+            Prods = prodRepos.GetAll();
         }
 
         private void SetCommands()
         {
-            AddToCartCommand = new RelayCommand<CartItem>(ExecuteAddToCard);
+            AddToCartCommand = new RelayCommand<Product>(ExecuteAddToCard);
         }
 
-        private void ExecuteAddToCard(CartItem item)
+        private void ExecuteAddToCard(Product prod)
         {
-            cartIns.Receive(item);
+            cartIns.Receive(prod);
         }
     }
 }

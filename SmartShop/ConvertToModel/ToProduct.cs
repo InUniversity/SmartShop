@@ -18,7 +18,7 @@ namespace SmartShop.ConvertToModel
                     ImgUrl = (string)reader[prodImgUrl],
                     Name = (string)reader[prodName],
                     Price = reader.GetDecimal(reader.GetOrdinal(prodPrice)),
-                    Quantity = (int)reader[prodQty],
+                    RemainQuantity = (int)reader[prodQty],
                     Desc = (string)reader[prodDescription],
                 };
             }
