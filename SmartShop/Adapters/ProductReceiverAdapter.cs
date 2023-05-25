@@ -4,11 +4,6 @@ using SmartShop.ViewModels.UserControls;
 
 namespace SmartShop.Adapters
 {
-    public interface IReceiveProduct
-    {
-        void Receive(Product prod);
-    }
-    
     public class ProductReceiverAdapter : IReceiveProduct
     {
         private readonly IReceiveCartItem receiver;
