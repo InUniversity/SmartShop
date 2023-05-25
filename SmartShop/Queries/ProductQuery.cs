@@ -17,7 +17,7 @@ namespace SmartShop.Queries
                 new SqlParameter("@ImageUrl", prod.ImgUrl),
                 new SqlParameter("@ProductName", prod.Name),
                 new SqlParameter("@Price", prod.Price),
-                new SqlParameter("@Quantity", prod.Quantity),
+                new SqlParameter("@Quantity", prod.RemainQuantity),
                 new SqlParameter("@ProductDescription", prod.Desc)
             };
             return query;
@@ -43,7 +43,7 @@ namespace SmartShop.Queries
                 new SqlParameter("@NewImageUrl", prod.ImgUrl),
                 new SqlParameter("@NewProductName", prod.Name),
                 new SqlParameter("@NewPrice", prod.Price),
-                new SqlParameter("@NewQuantity", prod.Quantity),
+                new SqlParameter("@NewQuantity", prod.RemainQuantity),
                 new SqlParameter("@NewProductDescription", prod.Desc)
             };
             return query;

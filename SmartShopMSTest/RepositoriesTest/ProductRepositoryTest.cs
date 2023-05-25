@@ -27,13 +27,13 @@ namespace SmartShop.Test.RepositoriesTest
         public void Add_Delete_Update_Success()
         {
             var addTarget = new Product { ID = "PRO1234", CategoryID = "CTG0001", ImgUrl = "", 
-                Name = "ip xxx", Price = (decimal)101230.12, Quantity = 10, Desc = "Kha ổn"};
+                Name = "ip xxx", Price = (decimal)101230.12, RemainQuantity = 10, Desc = "Kha ổn"};
             bool isAddSuccess = myRepo.Add(addTarget);
             var addResult = myRepo.SearchByID(addTarget.ID);
 
             // Do not modify the ID
             var updateTarget = new Product { ID = addTarget.ID, CategoryID = "CTG0002", ImgUrl =  addTarget.ImgUrl + ".",
-                Name = "ip xsmax", Price = (decimal)111111.12, Quantity = 44, Desc = "Qua ổn" };
+                Name = "ip xsmax", Price = (decimal)111111.12, RemainQuantity = 44, Desc = "Qua ổn" };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
             
@@ -60,7 +60,7 @@ namespace SmartShop.Test.RepositoriesTest
             Assert.AreEqual(expected.ImgUrl, actual.ImgUrl);
             Assert.AreEqual(expected.Name, actual.Name);
             Assert.AreEqual(expected.Price, actual.Price);
-            Assert.AreEqual(expected.Quantity, actual.Quantity);
+            Assert.AreEqual(expected.RemainQuantity, actual.RemainQuantity);
             Assert.AreEqual(expected.Desc, actual.Desc);
         }
     }

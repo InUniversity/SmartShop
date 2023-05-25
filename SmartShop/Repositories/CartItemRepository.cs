@@ -1,6 +1,7 @@
 ﻿using SmartShop.Models;
 using SmartShop.Database;
 using SmartShop.Queries;
+using System;
 
 namespace SmartShop.Repositories
 {
@@ -36,6 +37,11 @@ namespace SmartShop.Repositories
             var qry = query.SearchByID(id);
             using var reader = dbConn.ExecuteReader(qry);
             return dbConv.ToSingleObject<CartItem>(reader);
+        }
+
+        public int GetTotalQuantity(string iD)
+        {
+            throw new NotImplementedException();
         }
     }
 }
