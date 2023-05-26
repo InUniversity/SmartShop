@@ -1,51 +1,91 @@
 ﻿using SmartShop.ViewModels.Base;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using SmartShop.Models;
 using SmartShop.Repositories;
+using System.Collections.Generic;
 
 namespace SmartShop.ViewModels.UserControls
 {
-    
+
     public interface IReceiveCartItem
     {
-        void Receive(CartItem items);
+        void Receive(CartItemView itemView);
     }
     
-    public class CartViewModel : BaseViewModel, IReceiveCartItem
+    public class CartViewModel : BaseViewModel, IReceiveCartItem, ILoadView
     {
-        private ObservableCollection<CartItem> items;
-        public ObservableCollection<CartItem> Items { get => items; set { items = value; OnPropertyChanged(); } }
+        private List<CartItemView> items;
+        public List<CartItemView> Items { get => items; set { items = value; OnPropertyChanged(); } }
 
-        private int quantity;
-        public int Quantity { get => quantity; private set { quantity = value; OnPropertyChanged(); } }
+        private int totalQuantity;
+        public int TotalQuantity { get => totalQuantity; set { totalQuantity = value; OnPropertyChanged(); } }
+
+        private decimal curWalletBalance;
+        public decimal CurWalletBalance { get => curWalletBalance; set { curWalletBalance = value; OnPropertyChanged(); } }
+
+        private decimal totalPrice;
+        public decimal TotalPrice { get => totalPrice; set { totalPrice = value; OnPropertyChanged(); } }
         
+        public ICommand PlusSelQtyProdCommand { get; private set; }
+        public ICommand MinusSelQtyProdCommand { get; private set; }
         public ICommand PayCommand { get; private set; }
-
-        private string cartID = "";
 
         private readonly CartItemRepository cartItemRepos;
         private IReceiveCartItems paymentIns;
         private INavigateView navView;
+
+        private User user = CurrentUser.Ins.Usr;
 
         public CartViewModel(CartItemRepository cartItemRepos, IReceiveCartItems paymentIns, INavigateView navView)
         {
             this.cartItemRepos = cartItemRepos;
             this.paymentIns = paymentIns;
             this.navView = navView;
-            LoadQuantity();
+            Load();
             SetCommands();
         }
 
-        private void LoadQuantity()
+        public void Load()
         {
-            Quantity = cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID);
+            LoadCartItems();
+        }
+
+        private void LoadCartItems()
+        {
+            Items = cartItemRepos.SearchByUserID(user.ID);
+            TotalQuantity = cartItemRepos.GetTotalQuantity(user.ID);
+            CurWalletBalance = user.WalletBalance;
+            TotalPrice = cartItemRepos.GetTotalPrice(user.ID);
         }
 
         private void SetCommands()
         {
+            PlusSelQtyProdCommand = new RelayCommand<CartItemView>(ExecutePlusSelQtyProd);
+            MinusSelQtyProdCommand = new RelayCommand<CartItemView>(ExecuteMinusSelQtyProd);
             PayCommand = new RelayCommand<object>(ExecutePay);
+        }
+
+        private void ExecutePlusSelQtyProd(CartItemView item)
+        {
+            // check condition into database ?
+            if (item == null || item.Quantity >= item.RemainQuantity) return;
+            item.Quantity += 1;
+            Update(item);
+        }
+
+        private void ExecuteMinusSelQtyProd(CartItemView item)
+        {
+            // check condition into database ?
+            if (item == null || item.Quantity <= 1) return;
+            item.Quantity -= 1;
+            Update(item);
+        }
+
+        private void Update(CartItem item)
+        {
+            cartItemRepos.Update(item);
+            Load();
         }
 
         private void ExecutePay(object obj)
@@ -54,10 +94,10 @@ namespace SmartShop.ViewModels.UserControls
             navView.MoveToPaymentView();
         }
 
-        public void Receive(CartItem item)
+        public void Receive(CartItemView itemView)
         {
-            Items.Add(item);
-            LoadQuantity();
+            cartItemRepos.Add(itemView);
+            Load();
         }
     }
 }

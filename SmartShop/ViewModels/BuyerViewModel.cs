@@ -12,12 +12,13 @@ using SmartShop.Views.UserControls;
 
 namespace SmartShop.ViewModels
 {
-    public class BuyerViewModel : BaseViewModel, INavigateView
+    public class BuyerViewModel : BaseViewModel, INavigateView, ILoadView
     {
         private ContentControl currentChildView;
         public ContentControl CurrentChildView { get => currentChildView; set { currentChildView = value; OnPropertyChanged(); } }
 
-        public int CartQuantity => cartItemRepos?.GetTotalQuantity(CurrentUser.Ins.Usr.ID) ?? 0;
+        public int cartQuantity;
+        public int CartQuantity { get => cartQuantity; set { cartQuantity = value; OnPropertyChanged(); } }
         
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }
@@ -31,7 +32,10 @@ namespace SmartShop.ViewModels
 
         public BuyerViewModel()
         {
+            CurrentUser.Ins.Usr.ID = "USR0001";
+            
             InitComponentsView();
+            Load();
             MoveToProductsView();
             SetCommands();
         }
@@ -68,6 +72,11 @@ namespace SmartShop.ViewModels
             cartView = new CartUC { DataContext = cartVM };
             prodsView = new ProductsUC { DataContext = prodVM };
             prodDetailView = new ProdDetailUC { DataContext = prodDetailVM };
+        }
+
+        public void Load()
+        {
+            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID); 
         }
 
         private void SetCommands()

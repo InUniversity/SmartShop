@@ -1,4 +1,3 @@
-using System.Data;
 using System.Data.SqlClient;
 
 namespace SmartShop.ConvertToModel
@@ -11,7 +10,7 @@ namespace SmartShop.ConvertToModel
         protected const string prodImgUrl = "ImageUrl";
         protected const string prodName = "ProductName";
         protected const string prodPrice = "Price";
-        protected const string prodQty = "Quantity";
+        protected const string prodQty = "RemainQuantity";
         protected const string prodDescription = "ProductDescription";
         //cartItem
         protected const string cartItTbl = "CartItems";

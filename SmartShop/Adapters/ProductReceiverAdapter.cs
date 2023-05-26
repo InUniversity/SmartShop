@@ -19,10 +19,10 @@ namespace SmartShop.Adapters
             receiver.Receive(item);
         }
 
-        private CartItem ConvertToCartItem(ProductView prodView)
+        private CartItemView ConvertToCartItem(ProductView prodView)
         {
             throw new NotImplementedException();
-            return new CartItem();
+            return new CartItemView();
         }
     }
 }

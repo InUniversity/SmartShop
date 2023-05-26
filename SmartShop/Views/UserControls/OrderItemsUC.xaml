@@ -20,30 +20,51 @@
                 <TextBlock Text="Sản phẩm" Style="{StaticResource TitleTxtStyle}"></TextBlock>
             </StackPanel>
 
-            <Grid Grid.Row="1">
-                <DataGrid
-                    CanUserAddRows="False"
-                    AutoGenerateColumns="False"
-                    Background="White"
-                    Margin="5"
-                    ItemsSource="{Binding OrderItems}"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Hình ảnh" Width="150" IsReadOnly="True" Binding="{Binding Prod.ImgUrl}" />
-                        <DataGridTextColumn Header="Tên sản phẩm" Width="200" IsReadOnly="True" Binding="{Binding Prod.Name}" />
-                        <DataGridTextColumn Header="Đơn giá (VNĐ)" Width="150" IsReadOnly="True" Binding="{Binding Prod.Price, StringFormat='##,#'}" />
-                        <DataGridTextColumn Header="Số lượng" IsReadOnly="True" Binding="{Binding Quantity}" />
-                        <DataGridTextColumn Header="Thành tiền (VNĐ)" Width="150" IsReadOnly="True" Binding="{Binding Price, StringFormat='##,#'}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-            
-            <Grid Grid.Row="2">
-                <TextBlock Text="{Binding ElementName=orderItemsUC, Path=DataContext.TotalPrice, StringFormat=Tổng tiền hàng: {0} (VNĐ)}" 
-                           TextAlignment="Left"
-                           Style="{StaticResource NormalTxtStyle}"></TextBlock>
-            </Grid>
+            <materialDesign:Card Grid.Row="1" Height="530">
+                <ListView ItemsSource="{Binding OrderItems}"
+                          Height="530"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Width="Auto" Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card Width="500" Height="250" Margin="5">
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="150" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="{Binding ImgUrl}" Height="100" Grid.Row="0" Stretch="Uniform"
+                                           HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding Name}" Grid.Row="1" FontWeight="Bold" TextWrapping="Wrap"
+                                               Margin="5" />
+                                    <TextBlock Text="{Binding Price, StringFormat='Giá: {0:#,#} (VNĐ)'}" Grid.Row="2"
+                                               Margin="5" />
+                                    <TextBlock Text="{Binding RemainQuantity, StringFormat='Tồn kho: {0}'}" Grid.Row="3"
+                                               Margin="5" />
+                                </Grid>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </materialDesign:Card>
+
         </Grid>
     </materialDesign:Card>
 </UserControl>
