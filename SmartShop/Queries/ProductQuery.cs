@@ -61,8 +61,7 @@ namespace SmartShop.Queries
         
         public QueryService GetAll()
         {
-            // Call function ?
-            var query = new QueryService("SELECT * FROM Products", CommandType.Text);
+            var query = new QueryService("SELECT * FROM dbo.vw_Products", CommandType.Text);
             return query;
         }
     }

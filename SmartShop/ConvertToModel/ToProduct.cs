@@ -19,7 +19,7 @@ namespace SmartShop.ConvertToModel
                     Name = (string)reader[prodName],
                     Price = reader.GetDecimal(reader.GetOrdinal(prodPrice)),
                     RemainQuantity = (int)reader[prodQty],
-                    Desc = (string)reader[prodDescription],
+                    Desc = (string)reader[prodDescription]
                 };
             }
             catch (Exception e)

@@ -33,6 +33,9 @@ namespace SmartShop.Database
             return rowsAffected > 0;
         }
 
+        /// <summary>
+        /// Call the Close() method of the SqlDataReader instance after use
+        /// </summary>
         public SqlDataReader ExecuteReader(QueryService query)
         {
             SqlDataReader reader = null;

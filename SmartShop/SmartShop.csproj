@@ -87,6 +87,7 @@
     <Compile Include="ConvertToModel\ToOrderItem.cs" />
     <Compile Include="ConvertToModel\ToOrderStatus.cs" />
     <Compile Include="ConvertToModel\ToProduct.cs" />
+    <Compile Include="ConvertToModel\ToProductView.cs" />
     <Compile Include="ConvertToModel\ToUser.cs" />
     <Compile Include="ConvertToModel\ToUserAddress.cs" />
     <Compile Include="ConvertToModel\ToUserRole.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductView.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserAddress.cs" />
     <Compile Include="Models\UserRole.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="ViewModels\UserControls\CartViewModel.cs" />
     <Compile Include="ViewModels\UserControls\OrderItemsViewModel.cs" />
     <Compile Include="ViewModels\UserControls\PaymentViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ProdDetailViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ProductsViewModel.cs" />
     <Compile Include="ViewModels\UserControls\UserAddressViewModel.cs" />
     <Compile Include="Views\BuyerWindow.xaml.cs">
@@ -137,6 +140,9 @@
     </Compile>
     <Compile Include="Views\UserControls\PaymentUC.xaml.cs">
       <DependentUpon>PaymentUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\ProdDetailUC.xaml.cs">
+      <DependentUpon>ProdDetailUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ProductsUC.xaml.cs">
       <DependentUpon>ProductsUC.xaml</DependentUpon>
@@ -186,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\PaymentUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\ProdDetailUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -155,6 +155,14 @@ VALUES
 GO
 ------------------------------------------------------
 
+-- view tables
+CREATE VIEW dbo.vw_Products
+AS
+SELECT P.*, C.CategoryName
+FROM Products P JOIN Categories C on C.ID = P.CategoryID
+GO
+------------------------------------------------------
+
 --function: calculate total each order item
 CREATE FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
     RETURNS DECIMAL(18, 2)

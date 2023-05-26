@@ -25,6 +25,7 @@ namespace SmartShop.ViewModels
         private CartItemRepository cartItemRepos;
 
         private ProductsUC prodsView;
+        private ProdDetailUC prodDetailView;
         private CartUC cartView;
         private PaymentUC paymentView;
 
@@ -59,11 +60,14 @@ namespace SmartShop.ViewModels
             var cartVM = new CartViewModel(cartItemRepos, cartItemsReceiver, this);
 
             var productReceiver = new ProductReceiverAdapter(cartVM);
-            var prodVM = new ProductsViewModel(prodRepos, productReceiver);
+            var prodDetailVM = new ProdDetailViewModel(productReceiver);
+            
+            var prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);
             
             paymentView = new PaymentUC { DataContext = paymentVM };
             cartView = new CartUC { DataContext = cartVM };
             prodsView = new ProductsUC { DataContext = prodVM };
+            prodDetailView = new ProdDetailUC { DataContext = prodDetailVM };
         }
 
         private void SetCommands()
@@ -85,6 +89,11 @@ namespace SmartShop.ViewModels
         public void MoveToPaymentView()
         {
             CurrentChildView = paymentView;
+        }
+
+        public void MoveToProdDetailView()
+        {
+            CurrentChildView = prodDetailView;
         }
     }
 }
