@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SmartShop.Views.UserControls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:localConverters="clr-namespace:SmartShop.Converters"
              mc:Ignorable="d" 
              Name="prodDetailVM"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <localConverters:Base64Converter x:Key="base64Converter" />
+    </UserControl.Resources>
     <materialDesign:Card UniformCornerRadius="16">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -19,11 +23,14 @@
                     <RowDefinition Height="3*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Image Grid.Row="0" 
-                       Source="{Binding ElementName=prodDetailVM,Path=DataContext.ImgUrl, UpdateSourceTrigger=PropertyChanged}" 
+                <Image Grid.Row="0"                     
                        Height="500" 
                        Stretch="Uniform" 
-                       HorizontalAlignment="Center"/>
+                       HorizontalAlignment="Center">
+                    <Image.Source>
+                        <Binding Path="ImgUrl" Converter="{StaticResource base64Converter}"/>
+                    </Image.Source>
+                </Image>
                 <ScrollViewer Grid.Row="1">
                     <TextBlock Style="{StaticResource NormalTxtStyle}"
                                Text="{Binding ElementName=prodDetailVM,Path=DataContext.Desc, StringFormat='Mô tả chi tiết: {0}', UpdateSourceTrigger=PropertyChanged}" />
