@@ -79,6 +79,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\Base64Converter.cs" />
     <Compile Include="ConvertToModel\ConvModelFactory.cs" />
     <Compile Include="ConvertToModel\BaseConvModel.cs" />
     <Compile Include="ConvertToModel\ToCartItem.cs" />
