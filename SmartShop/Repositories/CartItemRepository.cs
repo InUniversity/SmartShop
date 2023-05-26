@@ -2,6 +2,8 @@
 using SmartShop.Database;
 using SmartShop.Queries;
 using System;
+using System.Windows.Documents;
+using System.Collections.Generic;
 
 namespace SmartShop.Repositories
 {
@@ -32,17 +34,30 @@ namespace SmartShop.Repositories
             return dbConn.ExecuteNonQuery(qry);
         }
 
-        public CartItem SearchByID(string id)
+        public CartItemView SearchByID(string id)
         {
             var qry = query.SearchByID(id);
             using var reader = dbConn.ExecuteReader(qry);
-            return dbConv.ToSingleObject<CartItem>(reader);
+            return dbConv.ToSingleObject<CartItemView>(reader);
+        }
+
+        public List<CartItemView> SearchByUserID(string userID)
+        {
+            var qry = query.SearchByUserID(userID);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToList<CartItemView>(reader);
         }
 
         public int GetTotalQuantity(string userID)
         {
             var qry = query.GetTotalQuantity(userID);
             return dbConn.ExecuteScalar<int>(qry);
+        }
+
+        public decimal GetTotalPrice(string userID)
+        {
+            var qry = query.GetTotalPrice(userID);
+            return dbConn.ExecuteScalar<decimal>(qry);
         }
     }
 }

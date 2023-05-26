@@ -8,7 +8,7 @@ namespace SmartShop.ViewModels.UserControls
 {
     public interface IReceiveCartItems
     {
-        void Receive(List<CartItem> items);
+        void Receive(List<CartItemView> itemsView);
     }
     
     public interface IReceiveOrder

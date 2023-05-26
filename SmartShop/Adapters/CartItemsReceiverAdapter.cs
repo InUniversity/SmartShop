@@ -14,13 +14,13 @@ namespace SmartShop.Adapters
             this.receiver = receiver;
         }
 
-        public void Receive(List<CartItem> items)
+        public void Receive(List<CartItemView> itemsView)
         {
-            var order = convertToOrderItems(items);
+            var order = convertToOrderItems(itemsView);
             receiver.Receive(order);
         }
 
-        private Order convertToOrderItems(List<CartItem> items)
+        private Order convertToOrderItems(List<CartItemView> items)
         {
             throw new NotImplementedException();
             return new Order();

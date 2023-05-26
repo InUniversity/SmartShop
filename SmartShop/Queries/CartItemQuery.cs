@@ -54,13 +54,21 @@ namespace SmartShop.Queries
             return query;
         }
 
+        public QueryService SearchByUserID(string userID)
+        {
+            var query = new QueryService($"SELECT * FROM dbo.fn_SerCartItemsByUserID('{userID}')", CommandType.Text);
+            return query;
+        }
+
         public QueryService GetTotalQuantity(string userID)
         {
-            var query = new QueryService("EXEC fn_GetQuantityProductInCart", CommandType.StoredProcedure);
-            query.Paras = new[]
-            {
-                new SqlParameter("@UserID", userID)
-            };
+            var query = new QueryService($"SELECT dbo.fn_GetQuantityProdInCart('{userID}')", CommandType.Text);
+            return query;
+        }
+
+        public QueryService GetTotalPrice(string userID)
+        {
+            var query = new QueryService($"SELECT dbo.fn_GetPriceQuantityProdInCart('{userID}')", CommandType.Text);
             return query;
         }
     }

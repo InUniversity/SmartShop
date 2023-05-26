@@ -19,6 +19,7 @@ namespace SmartShop.ConvertToModel
                 nameof(UserAddress) => new ToUserAddress(),
                 nameof(UserRole) => new ToUserRole(),
                 nameof(ProductView) => new ToProductView(),
+                nameof(CartItemView) => new ToCartItemView(),
                 _ => throw new NotSupportedException("ConvModelFactory: Can't implement type")
             };
         }

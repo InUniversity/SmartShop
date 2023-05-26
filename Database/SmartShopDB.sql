@@ -14,7 +14,7 @@ CREATE TABLE Products (
     ImageUrl VARCHAR(MAX) NOT NULL,
     ProductName NVARCHAR(50) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
-    Quantity INT NOT NULL,
+    RemainQuantity INT NOT NULL,
     ProductDescription NVARCHAR(256),
     CONSTRAINT fk_products_category_id FOREIGN KEY (CategoryID) REFERENCES Categories(ID)
 );
@@ -162,6 +162,15 @@ FROM Products P JOIN Categories C on C.ID = P.CategoryID
 GO
 ------------------------------------------------------
 
+CREATE VIEW vw_CartItems
+AS
+SELECT CartItems.*, ImageUrl, ProductName, Price, Products.RemainQuantity, ProductDescription, CategoryName
+FROM CartItems
+JOIN Products on Products.ID = CartItems.ProductID
+JOIN Categories on Products.CategoryID = Categories.ID
+GO
+------------------------------------------------------
+
 --function: calculate total each order item
 CREATE FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
     RETURNS DECIMAL(18, 2)
@@ -201,6 +210,49 @@ BEGIN
 END;
 GO
 ----------------------------------------------------------
+
+
+CREATE FUNCTION fn_GetQuantityProdInCart(@UserID nvarchar(20))
+RETURNS INT
+BEGIN
+    DECLARE @Total INT = 0;
+
+    SELECT @Total = SUM(Quantity)
+    FROM CartItems
+    WHERE UserID = @UserID;
+
+    RETURN @Total;
+END
+GO
+----------------------------------------------------------
+
+CREATE FUNCTION fn_GetPriceQuantityProdInCart(@UserID nvarchar(20))
+    RETURNS DECIMAL(18, 2)
+BEGIN
+    DECLARE @Total DECIMAL(18, 2) = 0;
+
+    SELECT @Total = SUM(Quantity * Price)
+    FROM vw_CartItems
+    WHERE UserID = @UserID;
+
+    RETURN @Total;
+END
+GO
+----------------------------------------------------------
+
+
+CREATE FUNCTION fn_SerCartItemsByUserID(@UserID nvarchar(20))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT *
+    FROM vw_CartItems
+    WHERE UserID = @UserID
+)
+GO
+----------------------------------------------------------
+
 
 --Stored Procedure: get order date
 CREATE PROCEDURE sp_GetOrdersByDateRange
@@ -265,7 +317,7 @@ CREATE PROCEDURE sp_AddProduct
     @ProductDescription NVARCHAR(256)
 AS
 BEGIN
-    INSERT INTO Products (ID, CategoryID, ImageUrl, ProductName, Price, Quantity, ProductDescription)
+    INSERT INTO Products (ID, CategoryID, ImageUrl, ProductName, Price, RemainQuantity, ProductDescription)
     VALUES (@ProductID, @CategoryID, @ImageUrl, @ProductName, @Price, @Quantity, @ProductDescription)
 END
 GO
@@ -286,7 +338,7 @@ BEGIN
         ImageUrl = @NewImageUrl,
         ProductName = @NewProductName,
         Price = @NewPrice,
-        Quantity = @NewQuantity,
+        RemainQuantity = @NewQuantity,
         ProductDescription = @NewProductDescription
     WHERE ID = @ProductID
 END

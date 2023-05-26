@@ -6,199 +6,129 @@
              xmlns:local="clr-namespace:SmartShop.Views.UserControls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="300" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0" Background="Black"/>
-        <Grid Grid.Row="0" Grid.Column="1" Background="Black"/>
-        <Grid Grid.Row="1" Grid.Column="0" Background="White" >
+             Name="cartUC"
+             d:DesignHeight="700" d:DesignWidth="1200">
+    <materialDesign:Card UniformCornerRadius="20">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Margin="0 20 0 30">
-                <TextBlock Text="Welcome" FontSize="40" FontWeight="SemiBold" VerticalAlignment="Center" Margin="70 0 0 0" Foreground="Red" Panel.ZIndex="1"/>
-                <Rectangle VerticalAlignment="Stretch" Fill="#808082" Width="0.7" Margin="10 5 20 5"  Panel.ZIndex="1"/>
-                <TextBlock Text="Your Shopping Card" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10 0 0 0" Foreground="Red" Panel.ZIndex="1"/>
-            </StackPanel>
 
-            <StackPanel Grid.Row="1">
-                <Grid Background="#FCEECA" Margin="0 15 0 0" HorizontalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="27"/>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="110"/>
-                        <ColumnDefinition Width="50"/>
-                    </Grid.ColumnDefinitions>
-                    <Ellipse Height="80" Width="80" Margin="15 10 0 10" HorizontalAlignment="Left">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="/Image/Shirt.jpg"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock Grid.Column="1" Text="T-Shirt" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="ref:123" VerticalAlignment="Bottom"/>
-                    <TextBlock Grid.Column="2" Text="Black" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="3" Text="1" VerticalAlignment="Center"/>
-                    <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <Ellipse Height="20" Width="20" Margin="0 0 0 10">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Image/add.jpg"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <Ellipse Height="7" Width="25" Margin="0 10 0 0">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Image/less.jpg" Stretch="Uniform"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                    </StackPanel>
-                    <TextBlock Grid.Column="5" Text="Price" VerticalAlignment="Center"/>
-                    <Image Grid.Column="6" VerticalAlignment="Center" Source="/Image/Delete.jpg"/>
-                </Grid>
+            <Grid Grid.Row="1" Grid.Column="0" Background="White" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 
-                <!--sdfdsf-->
-                <Grid Background="#FCEECA" Margin="0 15 0 0" HorizontalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="27"/>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="110"/>
-                        <ColumnDefinition Width="50"/>
-                    </Grid.ColumnDefinitions>
-                    <Ellipse Height="80" Width="80" Margin="15 10 0 10" HorizontalAlignment="Left">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="/Image/trousers.jpg"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock Grid.Column="1" Text="T-Shirt" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="ref:123" VerticalAlignment="Bottom"/>
-                    <TextBlock Grid.Column="2" Text="Black" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="3" Text="1" VerticalAlignment="Center"/>
-                    <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <Ellipse Height="20" Width="20" Margin="0 0 0 10">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Image/add.jpg"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <Ellipse Height="7" Width="25" Margin="0 10 0 0">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Image/less.jpg" Stretch="Uniform"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                    </StackPanel>
-                    <TextBlock Grid.Column="5" Text="Price" VerticalAlignment="Center"/>
-                    <Image Grid.Column="6" VerticalAlignment="Center" Source="/Image/Delete.jpg"/>
-                </Grid>
-                <!--sdfasdf-->
-                <Grid Background="#FCEECA" Margin="0 15 0 0" HorizontalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="27"/>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="110"/>
-                        <ColumnDefinition Width="50"/>
-                    </Grid.ColumnDefinitions>
-                    <Ellipse Height="80" Width="80" Margin="15 10 0 10" HorizontalAlignment="Left">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="/Image/sneaker.jpg"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                    <TextBlock Grid.Column="1" Text="T-Shirt" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="ref:123" VerticalAlignment="Bottom"/>
-                    <TextBlock Grid.Column="2" Text="Black" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="3" Text="1" VerticalAlignment="Center"/>
-                    <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <Ellipse Height="20" Width="20" Margin="0 0 0 10">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Image/add.jpg"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <Ellipse Height="7" Width="25" Margin="0 10 0 0">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Image/less.jpg" Stretch="Uniform"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                    </StackPanel>
-                    <TextBlock Grid.Column="5" Text="Price" VerticalAlignment="Center"/>
-                    <Image Grid.Column="6" VerticalAlignment="Center" Source="/Image/Delete.jpg"/>
-                </Grid>
-            </StackPanel>
-            <Grid Grid.Row="2" Margin="70 40 150 40">
-                <Button  HorizontalAlignment="Left" Background="White">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Image/back.jpg" Width="20"/>
-                        <TextBlock Text="back to shop" VerticalAlignment="Center" Margin="15 0 0 0"  Foreground="Black"/>
-                    </StackPanel>
-                </Button>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Background="White">
-                    <TextBlock Text="Subtotal" FontSize="16" />
-                    <TextBlock Text="190 USD" FontSize="16" FontWeight="SemiBold" Margin="30 0 0 0"/>
+                <TextBlock Text="Giỏ hàng của bạn"
+                           FontSize="30" 
+                           VerticalAlignment="Center" 
+                           Margin="70,20,0,20" 
+                           Panel.ZIndex="1"
+                           Style="{StaticResource TitleTxtStyle}"/>
+
+                <materialDesign:Card Grid.Row="1" Height="530">
+                    <ListView ItemsSource="{Binding ElementName=cartUC,Path=DataContext.Items}"
+                          Height="530"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Width="Auto" Orientation="Vertical" HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card Width="700" Height="150" Margin="5">
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding ImgUrl}" Height="100" Grid.Column="0" Stretch="Uniform"
+                                           HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding Name}" Grid.Column="1" FontWeight="Bold" TextWrapping="Wrap"
+                                               Margin="5" />
+                                        <TextBlock Text="{Binding Price, StringFormat='Giá: {0:#,#} (VNĐ)'}" Grid.Column="2"
+                                               Margin="5" />
+                                        <TextBlock Text="{Binding RemainQuantity, StringFormat='Tồn kho: {0}'}" Grid.Column="3"
+                                               Margin="5" />
+                                    </Grid>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </materialDesign:Card>
+
+                <!--<StackPanel Grid.Row="1">
+                    <materialDesign:Card Background="#FCEECA" Margin="0 15 0 0" HorizontalAlignment="Center" UniformCornerRadius="16">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="27"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Ellipse Height="80" Width="80" Margin="15 10 0 10" HorizontalAlignment="Left">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="/Image/Shirt.jpg"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <TextBlock Grid.Column="1" Text="T-Shirt" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="ref:123" VerticalAlignment="Bottom"/>
+                            <TextBlock Grid.Column="2" Text="Black" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="1" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Ellipse Height="20" Width="20" Margin="0 0 0 10">
+                                    <Ellipse.Fill>
+                                        <ImageBrush ImageSource="/Image/add.jpg"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <Ellipse Height="7" Width="25" Margin="0 10 0 0">
+                                    <Ellipse.Fill>
+                                        <ImageBrush ImageSource="/Image/less.jpg" Stretch="Uniform"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                            </StackPanel>
+                            <TextBlock Grid.Column="5" Text="Price" VerticalAlignment="Center"/>
+                            <Image Grid.Column="6" VerticalAlignment="Center" Source="/Image/Delete.jpg"/>
+                        </Grid>
+                    </materialDesign:Card>
+                    
+                </StackPanel>-->
+            </Grid>
+
+            <Grid Grid.Column="1" Grid.Row="1">
+                <StackPanel>
+                    <TextBlock Text="Thông tin chi tiết" 
+                               FontSize="24" 
+                               FontWeight="SemiBold" 
+                               Margin="10,50,0,50" 
+                               Style="{StaticResource TitleTxtStyle}"/>
+                    <Button Content="Thanh toán"
+                            Command="{Binding PayCommand}"/>
                 </StackPanel>
             </Grid>
         </Grid>
-
-        <Grid  Grid.Column="1" Grid.Row="1" Background="#4b4643">
-            <Grid.Effect>
-                <DropShadowEffect ShadowDepth="10" BlurRadius="50"/>
-            </Grid.Effect>
-
-            <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" Height="130" Margin="-30 50 0 0" Background="#4b4643" CornerRadius="10 0 0 10" Padding="10 20 5 20">
-                <Grid VerticalAlignment="Stretch">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Ellipse Height="7" Width="7" Fill="#8b8a89" Grid.Row="0"/>
-                    <Ellipse Height="7" Width="7" Fill="#FAE116" Grid.Row="1"/>
-                    <Ellipse Height="7" Width="7" Fill="#8b8a89" Grid.Row="2"/>
-                </Grid>
-            </Border>
-            <StackPanel>
-                <TextBlock Text="Card Detail" FontSize="24" FontWeight="SemiBold" Margin="0 0 0 70" Foreground="#f1c40f" />
-                <TextBlock Text="Select Card Type "/>
-                <Grid Margin="0 15 0 30">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" HorizontalAlignment="Left" Source="/Image/bankcard.jpg"/>
-                    <Image Grid.Column="1" HorizontalAlignment="Center" Source="/Image/creditcard.png"/>
-                    <Image Grid.Column="2" HorizontalAlignment="Right" Source="/Image/momo.png"/>
-                </Grid>
-                <TextBlock Text="Card Number"/>
-                <TextBox Margin="0 5 0 30"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel>
-                        <TextBlock Text="Expire Date "/>
-                        <TextBox Margin="0 5 0 5"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Margin="30 0 0 0" Width="50">
-                        <TextBlock Text="CVV"/>
-                        <TextBox Margin="0 5 0 5"/>
-                    </StackPanel>
-                </Grid>
-                <Button Content="Checkout" Background="#FAE116"/>
-            </StackPanel>
-        </Grid>
-    </Grid>
+    </materialDesign:Card>
 </UserControl>
