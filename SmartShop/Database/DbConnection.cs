@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows;
 using SmartShop.Services;
 
 namespace SmartShop.Database
@@ -18,8 +19,12 @@ namespace SmartShop.Database
                 using var cmd = new SqlCommand(query.CmdStr, conn);
                 cmd.CommandType = query.CmdType;
                 cmd.Parameters.AddRange(query.Paras);
-                
+
                 rowsAffected = cmd.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message);
             }
             catch (Exception e)
             {
@@ -48,6 +53,10 @@ namespace SmartShop.Database
 
                 reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -70,6 +79,10 @@ namespace SmartShop.Database
                 {
                     total = tResult;
                 }
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message);
             }
             catch (Exception e)
             {
