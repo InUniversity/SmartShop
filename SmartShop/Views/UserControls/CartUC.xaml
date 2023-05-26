@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:localConverters="clr-namespace:SmartShop.Converters"
              mc:Ignorable="d"
              Name="cartUC"
              d:DesignHeight="630" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <localConverters:Base64Converter x:Key="base64Converter" />
+    </UserControl.Resources>
     <materialDesign:Card UniformCornerRadius="20">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -55,7 +59,7 @@
                         </ListView.ItemsPanel>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <materialDesign:Card Width="900" Height="100" Margin="5">
+                                <materialDesign:Card Width="900" Height="110" Margin="5">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
@@ -65,11 +69,14 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Ellipse Grid.Column="0" Height="100" Width="100" Margin="15 10 0 10" HorizontalAlignment="Left">
-                                            <Ellipse.Fill>
-                                                <ImageBrush ImageSource="{Binding ImgUrl}"/>
-                                            </Ellipse.Fill>
-                                        </Ellipse>
+                                        <Border Grid.Column="0" Height="100" Width="100" Margin="15 5 0 5" HorizontalAlignment="Left"
+                                                CornerRadius="10">
+                                            <Ellipse>
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding ImgUrl, Converter={StaticResource base64Converter}}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                        </Border>
 
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Text="{Binding Name}"
