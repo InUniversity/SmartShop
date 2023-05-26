@@ -67,7 +67,7 @@ namespace SmartShop.ViewModels
             paymentView = new PaymentUC { DataContext = paymentVM };
             cartView = new CartUC { DataContext = cartVM };
             prodsView = new ProductsUC { DataContext = prodVM };
-            prodDetailView = new ProdDetailUC() { DataContext = prodDetailVM };
+            prodDetailView = new ProdDetailUC { DataContext = prodDetailVM };
         }
 
         private void SetCommands()

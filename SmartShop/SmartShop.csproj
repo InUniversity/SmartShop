@@ -87,6 +87,7 @@
     <Compile Include="ConvertToModel\ToOrderItem.cs" />
     <Compile Include="ConvertToModel\ToOrderStatus.cs" />
     <Compile Include="ConvertToModel\ToProduct.cs" />
+    <Compile Include="ConvertToModel\ToProductView.cs" />
     <Compile Include="ConvertToModel\ToUser.cs" />
     <Compile Include="ConvertToModel\ToUserAddress.cs" />
     <Compile Include="ConvertToModel\ToUserRole.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductView.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserAddress.cs" />
     <Compile Include="Models\UserRole.cs" />

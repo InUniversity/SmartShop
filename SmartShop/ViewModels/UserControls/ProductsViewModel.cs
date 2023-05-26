@@ -8,11 +8,11 @@ namespace SmartShop.ViewModels.UserControls
 {
     public class ProductsViewModel : BaseViewModel
     {
-        private List<Product> prods;
-        public List<Product> Prods { get => prods; set { prods = value; OnPropertyChanged(); } }
+        private List<ProductView> prods;
+        public List<ProductView> Prods { get => prods; set { prods = value; OnPropertyChanged(); } }
 
-        private Product selectedProduct;
-        public Product SelectedProduct { get => selectedProduct; set { selectedProduct = value; OnPropertyChanged(); } }
+        private ProductView selectedProduct;
+        public ProductView SelectedProduct { get => selectedProduct; set { selectedProduct = value; OnPropertyChanged(); } }
 
         public ICommand MoveProdDetailCommand { get; private set; }
 

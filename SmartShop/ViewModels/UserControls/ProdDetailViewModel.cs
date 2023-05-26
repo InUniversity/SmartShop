@@ -6,21 +6,32 @@ namespace SmartShop.ViewModels.UserControls
 {
     public interface IReceiveProduct
     {
-        void Receive(Product prod);
+        void Receive(ProductView prodView);
     }
     
     public class ProdDetailViewModel : BaseViewModel, IReceiveProduct
     {
-        private Product prod = new Product();
-
-        public string ID { get => prod.ID; set { prod.ID = value; OnPropertyChanged(); } }
-        public string ImgUrl { get => prod.ImgUrl; set { prod.ImgUrl = value; OnPropertyChanged(); } }
-        public string Name { get => prod.Name; set { prod.Name = value; OnPropertyChanged(); } }
-        public decimal Price { get => prod.Price; set { prod.Price = value; OnPropertyChanged(); } }
-        public int RemainQuantity { get => prod.RemainQuantity; set { prod.RemainQuantity = value; OnPropertyChanged(); } }
-        public string Desc { get => prod.Desc; set { prod.Desc = value; OnPropertyChanged(); } }
-        public int SelectedQuantity { get => prod.SelectedQuantity; set { prod.SelectedQuantity = value; OnPropertyChanged(); } }
-        public string CategoryName { get => prod.Category.Name; set { prod.Category.Name = value; OnPropertyChanged(); } }
+        private ProductView prodView = new ProductView();
+        
+        public string ID { get => prodView.ID; set { prodView.ID = value; OnPropertyChanged(); } }
+        public string ImgUrl { get => prodView.ImgUrl; set { prodView.ImgUrl = value; OnPropertyChanged(); } }
+        public string Name { get => prodView.Name; set { prodView.Name = value; OnPropertyChanged(); } }
+        public decimal Price { get => prodView.Price; set { prodView.Price = value; OnPropertyChanged(); } }
+        public int RemainQuantity { get => prodView.RemainQuantity; set { prodView.RemainQuantity = value; OnPropertyChanged(); } }
+        public string Desc { get => prodView.Desc; set { prodView.Desc = value; OnPropertyChanged(); } }
+        
+        public int SelectedQuantity 
+        { 
+            get => prodView.SelectedQuantity;
+            set
+            {
+                var maxQty = prodView.RemainQuantity;
+                prodView.SelectedQuantity = value > maxQty ? maxQty : value;
+                OnPropertyChanged();
+            } 
+        }
+        
+        public string CategoryName { get => prodView.CategoryName; set { prodView.CategoryName = value; OnPropertyChanged(); } }
 
         public ICommand PlusSelQtyProdCommand { get; private set; }
         public ICommand MinusSelQtyProdCommand { get; private set; }
@@ -43,24 +54,31 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePlusSelQtyProd(object obj)
         {
-            if (RemainQuantity > RemainQuantity) return;
-            RemainQuantity += 1;
+            if (SelectedQuantity > RemainQuantity) return;
+            SelectedQuantity += 1;
         }
 
         private void ExecuteMinusSelQtyProd(object obj)
         {
-            if (RemainQuantity < 1) return;
-            RemainQuantity -= 1;
+            if (SelectedQuantity <= 1) return;
+            SelectedQuantity -= 1;
         }
 
         private void ExecuteAddToCard(object obj)
         {
-            cartIns.Receive(prod);
+            cartIns.Receive(prodView);
         }
 
-        public void Receive(Product prod)
+        public void Receive(ProductView prodView)
         {
-            this.prod = prod;
+            ID = prodView.ID;
+            ImgUrl = prodView.ImgUrl;
+            Name = prodView.Name; 
+            Price = prodView.Price; 
+            RemainQuantity = prodView.RemainQuantity; 
+            Desc = prodView.Desc; 
+            SelectedQuantity = prodView.SelectedQuantity; 
+            CategoryName = prodView.CategoryName;
         }
     }
 }

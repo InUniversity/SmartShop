@@ -1,7 +1,7 @@
 namespace SmartShop.Models
 {
-    public class ProductView
+    public class ProductView : Product
     {
-        
+        public string CategoryName { get; set; }
     }
 }

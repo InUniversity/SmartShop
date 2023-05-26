@@ -32,19 +32,18 @@ namespace SmartShop.Repositories
             return dbConn.ExecuteNonQuery(qry);
         }
 
-        public Product SearchByID(string id)
+        public ProductView SearchByID(string id)
         {
             var qry = query.SearchByID(id);
             using var reader = dbConn.ExecuteReader(qry);
-            return dbConv.ToSingleObject<Product>(reader); 
+            return dbConv.ToSingleObject<ProductView>(reader); 
         }
         
-        public List<Product> GetAll()
+        public List<ProductView> GetAll()
         {
-            // Call function ?
             var qry = query.GetAll();
             using var reader = dbConn.ExecuteReader(qry);
-            return dbConv.ToList<Product>(reader);
+            return dbConv.ToList<ProductView>(reader);
         }
     }
 }

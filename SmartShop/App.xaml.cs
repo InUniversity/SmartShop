@@ -1,10 +1,6 @@
 ﻿using System.Windows;
-using SmartShop.Database;
-using SmartShop.Repositories;
 using SmartShop.View;
 using SmartShop.ViewModels;
-using SmartShop.ViewModels.UserControls;
-using SmartShop.Views.UserControls;
 
 namespace SmartShop
 {
