@@ -21,9 +21,14 @@ namespace SmartShop.ViewModels.UserControls
         private int totalQuantity;
         public int TotalQuantity { get => totalQuantity; set { totalQuantity = value; OnPropertyChanged(); } }
 
+        private decimal curWalletBalance;
+        public decimal CurWalletBalance { get => curWalletBalance; set { curWalletBalance = value; OnPropertyChanged(); } }
+
         private decimal totalPrice;
         public decimal TotalPrice { get => totalPrice; set { totalPrice = value; OnPropertyChanged(); } }
         
+        public ICommand PlusSelQtyProdCommand { get; private set; }
+        public ICommand MinusSelQtyProdCommand { get; private set; }
         public ICommand PayCommand { get; private set; }
 
         private readonly CartItemRepository cartItemRepos;
@@ -50,12 +55,37 @@ namespace SmartShop.ViewModels.UserControls
         {
             Items = cartItemRepos.SearchByUserID(user.ID);
             TotalQuantity = cartItemRepos.GetTotalQuantity(user.ID);
+            CurWalletBalance = user.WalletBalance;
             TotalPrice = cartItemRepos.GetTotalPrice(user.ID);
         }
 
         private void SetCommands()
         {
+            PlusSelQtyProdCommand = new RelayCommand<CartItemView>(ExecutePlusSelQtyProd);
+            MinusSelQtyProdCommand = new RelayCommand<CartItemView>(ExecuteMinusSelQtyProd);
             PayCommand = new RelayCommand<object>(ExecutePay);
+        }
+
+        private void ExecutePlusSelQtyProd(CartItemView item)
+        {
+            // check condition into database ?
+            if (item == null || item.Quantity >= item.RemainQuantity) return;
+            item.Quantity += 1;
+            Update(item);
+        }
+
+        private void ExecuteMinusSelQtyProd(CartItemView item)
+        {
+            // check condition into database ?
+            if (item == null || item.Quantity <= 1) return;
+            item.Quantity -= 1;
+            Update(item);
+        }
+
+        private void Update(CartItem item)
+        {
+            cartItemRepos.Update(item);
+            Load();
         }
 
         private void ExecutePay(object obj)

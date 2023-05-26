@@ -8,5 +8,6 @@ namespace SmartShop.Models
         public int RemainQuantity { get; set; }
         public string Desc { get; set; }
         public string CategoryName { get; set; }
+        public decimal ItemPrice => Quantity * Price; 
     }
 }
