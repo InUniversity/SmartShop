@@ -2,6 +2,58 @@ CREATE DATABASE SmartShop
 go
 USE SmartShop
 GO
+
+------------
+-- Create and set permissions for Admin
+use master
+go 
+create login Admin
+		With PassWord ='123',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user Admin
+	for login Admin
+	
+USE SmartShop;
+GO
+ALTER ROLE db_owner ADD MEMBER [Admin];
+
+--Create and set permissions for User1
+-- Cho Phep User1 doc du lieu
+use master
+go 
+create login User1
+		With PassWord ='123',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user User1
+	for login User1
+
+ALTER ROLE db_datareader ADD MEMBER [User1];
+
+--Create and set permissions for User2
+-- Cho Phep User2 doc du lieu
+use master
+go 
+create login User2
+		With PassWord ='123',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user User2
+	for login User2
+ALTER ROLE db_datareader ADD MEMBER [User2];
+GRANT INSERT ON dbo.UserAddress TO User2;
+
+
 -- Product
 CREATE TABLE Categories (
     ID VARCHAR(20) PRIMARY KEY,
