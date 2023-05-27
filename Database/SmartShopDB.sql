@@ -777,3 +777,12 @@ BEGIN
 END
 GO
 ----------------------------------------------------------
+-- Create Index: OrderItems
+
+CREATE INDEX idx_order_items_order_id ON OrderItems (OrderID);
+GO
+CREATE INDEX idx_order_items_product_id ON OrderItems (ProductID);
+GO
+
+----------------------------------------------------------
+----------------------------------------------------------
