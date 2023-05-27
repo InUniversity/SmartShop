@@ -74,11 +74,6 @@ namespace SmartShop.ViewModels
             prodDetailView = new ProdDetailUC { DataContext = prodDetailVM };
         }
 
-        public void Load()
-        {
-            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID); 
-        }
-
         private void SetCommands()
         {
             MoveToProductsViewCommand = new RelayCommand<object>(_ => MoveToProductsView());
@@ -103,6 +98,11 @@ namespace SmartShop.ViewModels
         public void MoveToProdDetailView()
         {
             CurrentChildView = prodDetailView;
+        }
+
+        public void Load()
+        {
+            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID); 
         }
     }
 }

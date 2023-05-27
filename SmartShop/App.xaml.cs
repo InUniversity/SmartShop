@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using SmartShop.View;
 using SmartShop.ViewModels;
+using SmartShop.Views;
 
 namespace SmartShop
 {
@@ -11,14 +12,22 @@ namespace SmartShop
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Init();
+            // InitBuyer();
+            InitSeller();
             base.OnStartup(e);
         }
 
-        private void Init()
+        private void InitBuyer()
         {
             var viewModel = new BuyerViewModel();
             var window = new BuyerWindow { DataContext = viewModel };
+            window.Show();
+        }
+
+        private void InitSeller()
+        {
+            var viewModel = new SellerViewModel();
+            var window = new SellerWindow { DataContext = viewModel };
             window.Show();
         }
     }

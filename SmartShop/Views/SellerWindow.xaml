@@ -1,13 +1,13 @@
-﻿<Window x:Class="SmartShop.View.BuyerWindow"
+﻿<Window x:Class="SmartShop.Views.SellerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:SmartShop.Views"
         mc:Ignorable="d"
-        Name="buyerWindow"
-        WindowStartupLocation="CenterScreen"
-        Title="BuyerWindow" Height="700" Width="1200">
+        Name="sellerWindow"
+        Title="SellerWindow" Height="700" Width="1200">
     <Grid>
         <materialDesign:DrawerHost>
             <materialDesign:DrawerHost.LeftDrawerContent>
@@ -35,7 +35,7 @@
                         <RadioButton
                             Height="50"
                             Margin="5"
-                            Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToProductsViewCommand}"
+                            Command="{Binding ElementName=sellerWindow, Path=DataContext.MoveToProductsViewCommand}"
                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                             Style="{StaticResource MaterialDesignTabRadioButtonRight}">
                             <StackPanel Orientation="Horizontal">
@@ -75,37 +75,17 @@
                                 Width="60"
                                 ToolTip=" Nhà"
                                 Style="{StaticResource MaterialDesignIconButton}"
-                                Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToProductsViewCommand}">
+                                Command="{Binding ElementName=sellerWindow, Path=DataContext.MoveToEditProdsViewCommand}">
                                 <materialDesign:PackIcon Kind="HomeOutline" Foreground="White" />
                             </Button>
                         </StackPanel>
-
-                        <Button
-                            Grid.Column="2"
-                            HorizontalAlignment="Right"
-                            Margin="10,0,10,0"
-                            Height="50"
-                            Width="60"
-                            ToolTip="Giỏ hàng"
-                            Style="{StaticResource MaterialDesignIconButton}"
-                            Command="{Binding ElementName=buyerWindow, Path=DataContext.MoveToCartViewCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="CartOutline" Foreground="White" />
-                                <materialDesign:Badged
-                                    Badge="{Binding ElementName=buyerWindow, Path=DataContext.CartQuantity, UpdateSourceTrigger=PropertyChanged}"
-                                    Margin="10 0"
-                                    BadgeForeground="#f3e5f5"
-                                    BadgeBackground="#4a148c"
-                                    VerticalAlignment="Top" />
-                            </StackPanel>
-                        </Button>
 
                     </Grid>
                 </Border>
 
                 <Grid Grid.Row="1">
                     <Border BorderThickness="1">
-                        <ContentControl Content="{Binding ElementName=buyerWindow, Path=DataContext.CurrentChildView}" />
+                        <ContentControl Content="{Binding ElementName=sellerWindow, Path=DataContext.CurrentChildView}" />
                     </Border>
                 </Grid>
             </Grid>

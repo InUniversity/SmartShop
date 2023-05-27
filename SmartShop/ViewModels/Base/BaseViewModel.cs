@@ -24,11 +24,17 @@ namespace SmartShop.ViewModels.Base
 
         private readonly Action<T> exeAction;
         private readonly Predicate<T> canExeAction;
+        private Action<string> executeDeleteProd;
 
         public RelayCommand(Action<T> exeAction)
         {
             this.exeAction = exeAction;
             canExeAction = null;
+        }
+
+        public RelayCommand(Action<string> executeDeleteProd)
+        {
+            this.executeDeleteProd = executeDeleteProd;
         }
 
         public RelayCommand(Action<T> exeAction, Predicate<T> canExeAction)
