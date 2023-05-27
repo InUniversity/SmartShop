@@ -108,6 +108,7 @@
     <Compile Include="Models\UserAddress.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Queries\CartItemQuery.cs" />
+    <Compile Include="Queries\CategoryQuery.cs" />
     <Compile Include="Queries\OrderQuery.cs" />
     <Compile Include="Queries\OrderStatusQuery.cs" />
     <Compile Include="Queries\ProductQuery.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Queries\UserRoleQuery.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CartItemRepository.cs" />
+    <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\OrderStatusRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
@@ -126,7 +128,9 @@
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\BuyerViewModel.cs" />
     <Compile Include="ViewModels\ILoadView.cs" />
+    <Compile Include="ViewModels\SellerViewModel.cs" />
     <Compile Include="ViewModels\UserControls\CartViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\EditProdsViewModel.cs" />
     <Compile Include="ViewModels\UserControls\OrderItemsViewModel.cs" />
     <Compile Include="ViewModels\UserControls\PaymentViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ProdDetailViewModel.cs" />
@@ -136,8 +140,14 @@
       <DependentUpon>BuyerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\INavigateView.cs" />
+    <Compile Include="Views\SellerWindow.xaml.cs">
+      <DependentUpon>SellerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\CartUC.xaml.cs">
       <DependentUpon>CartUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\EditProdsUC.xaml.cs">
+      <DependentUpon>EditProdsUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\OrderItemsUC.xaml.cs">
       <DependentUpon>OrderItemsUC.xaml</DependentUpon>
@@ -187,7 +197,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SellerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\UserControls\CartUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\EditProdsUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
