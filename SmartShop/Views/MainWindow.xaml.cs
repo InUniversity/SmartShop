@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace SmartShop.Views
 {
     /// <summary>
-    /// Interaction logic for SellerWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class SellerWindow : Window
+    public partial class MainWindow : Window
     {
-        public SellerWindow()
+        public MainWindow()
         {
             InitializeComponent();
         }
