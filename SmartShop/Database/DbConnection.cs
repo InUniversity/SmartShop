@@ -8,7 +8,12 @@ namespace SmartShop.Database
 {
     public class DbConnection
     {
-        private readonly SqlConnection conn = new SqlConnection(Properties.Settings.Default.connStr);
+        private readonly SqlConnection conn;
+
+        public DbConnection(SqlConnection conn)
+        {
+            this.conn = conn;
+        }
 
         public bool ExecuteNonQuery(QueryService query)
         {

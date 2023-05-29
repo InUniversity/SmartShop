@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Data.SqlClient;
+using System.Windows.Controls;
 using System.Windows.Input;
 using SmartShop.ConvertToModel;
 using SmartShop.Database;
@@ -29,7 +30,8 @@ namespace SmartShop.ViewModels
 
         private void InitComponentsView()
         {
-            var dbConn = new DbConnection();
+            var conn = new SqlConnection(Properties.Settings.Default.connStr);
+            var dbConn = new DbConnection(conn);
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
 

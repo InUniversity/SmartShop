@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Data.SqlClient;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
@@ -16,7 +17,8 @@ namespace SmartShopMSTest.RepositoriesTest
         [TestInitialize]
         public void SetUp()
         {
-            dbConn = new DbConnection();
+            var conn = new SqlConnection("");
+            var dbConn = new DbConnection(conn);
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
             var userQuery = new UserQuery();
