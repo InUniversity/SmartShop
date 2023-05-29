@@ -45,5 +45,12 @@ namespace SmartShop.Repositories
             using var reader = dbConn.ExecuteReader(qry);
             return dbConv.ToList<ProductView>(reader);
         }
+
+        public List<ProductView> SearchByName(string prodName)
+        {
+            var qry = query.SearchByName(prodName);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToList<ProductView>(reader);
+        }
     }
 }

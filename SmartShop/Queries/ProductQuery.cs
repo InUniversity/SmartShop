@@ -64,5 +64,10 @@ namespace SmartShop.Queries
             var query = new QueryService("SELECT * FROM dbo.vw_Products", CommandType.Text);
             return query;
         }
+
+        public QueryService SearchByName(string prodName)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
