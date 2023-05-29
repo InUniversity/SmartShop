@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Input;
 using Microsoft.Win32;
 using SmartShop.Models;
@@ -13,15 +14,26 @@ namespace SmartShop.ViewModels.UserControls
         private List<ProductView> prods;
         public List<ProductView> Prods { get => prods; set { prods = value; OnPropertyChanged(); } }
         
-        private ProductView selProd;
+        private ProductView selProd = new ProductView();
         public ProductView SelProd { get => selProd; set { selProd = value; OnPropertyChanged(); } }
 
         public List<Category> Categories { get; set; }
 
+        private bool canAdd = false;
+        public bool CanAdd { get => canAdd; set { canAdd = value; OnPropertyChanged(); } }
+
+        private bool canUpdate = false;
+        public bool CanUpdate { get => canUpdate; set { canUpdate = value; OnPropertyChanged(); } }
+
+        private string textToSearch;
+        public string TextToSearch { get => textToSearch; set { textToSearch = value; SearchByName(); OnPropertyChanged(); } }
+            
         public ICommand ChooseImgCommand { get; private set; }
         public ICommand AddProdCommand { get; private set; }
         public ICommand UpdateProdCommand { get; private set; }
         public ICommand DeleteProdCommand { get; private set; }
+        public ICommand OnAddModeCommand { get; private set; }
+        public ICommand OnUpdateModeCommand { get; private set; }
         
         private readonly ProductRepository prodRepos;
         private readonly CategoryRepository ctgRepos;
@@ -41,17 +53,28 @@ namespace SmartShop.ViewModels.UserControls
             AddProdCommand = new RelayCommand<object>(ExecuteAddProd);
             UpdateProdCommand = new RelayCommand<object>(ExecuteUpdateProd);
             DeleteProdCommand = new RelayCommand<string>(ExecuteDeleteProd);
+            OnAddModeCommand = new RelayCommand<object>(_ => OnAddMode());
+            OnUpdateModeCommand = new RelayCommand<object>(_ => OnUpdateMode());
         }
 
         private void ExecuteChooseImg(object obj)
         {
-            throw new NotImplementedException();
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files (*.jpg; *.jpeg; *.png; *.gif)|*.jpg; *.jpeg; *.png; *.gif";
-
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                var selectedImagePath = openFileDialog.FileName;
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Image Files (*.jpg; *.jpeg; *.png; *.gif)|*.jpg; *.jpeg; *.png; *.gif";
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    var selectedImagePath = openFileDialog.FileName;
+                    byte[] imageBytes = File.ReadAllBytes(selectedImagePath);
+                    SelProd.ImgUrl = Convert.ToBase64String(imageBytes);
+                    OnPropertyChanged(nameof(SelProd));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -76,6 +99,24 @@ namespace SmartShop.ViewModels.UserControls
         private void LoadProducts()
         {
             Prods = prodRepos.GetAll();
+        }
+
+        private void OnAddMode()
+        {
+            CanAdd = true;
+            CanUpdate = false;
+            SelProd = new ProductView { ID = "" };
+        }
+
+        private void OnUpdateMode()
+        {
+            CanAdd = false;
+            CanUpdate = true;
+        }
+
+        private void SearchByName()
+        {
+            Prods = prodRepos.SearchByName(TextToSearch);
         }
 
         private void SetComboBox()
