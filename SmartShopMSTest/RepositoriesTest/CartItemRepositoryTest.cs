@@ -4,6 +4,7 @@ using SmartShop.Models;
 using SmartShop.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace SmartShopMSTest.RepositoriesTest
         [TestInitialize]
         public void SetUp()
         {
-            dbConn = new DbConnection();
+            var conn = new SqlConnection("");
+            var dbConn = new DbConnection(conn);
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
             var query = new CartItemQuery();

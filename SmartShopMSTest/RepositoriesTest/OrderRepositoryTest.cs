@@ -3,6 +3,7 @@ using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
 using System;
+using System.Data.SqlClient;
 using SmartShop.ConvertToModel;
 using SmartShop.Queries;
 
@@ -17,7 +18,8 @@ namespace SmartShopMSTest.RepositoriesTest
         [TestInitialize]
         public void SetUp()
         {
-            dbConn = new DbConnection();
+            var conn = new SqlConnection("");
+            var dbConn = new DbConnection(conn);
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
             var orderQuery = new OrderQuery();
