@@ -1,4 +1,3 @@
-using System.Data.SqlClient;
 using System.Windows.Controls;
 using System.Windows.Input;
 using SmartShop.Adapters;
@@ -24,7 +23,8 @@ namespace SmartShop.ViewModels
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }
         public ICommand MoveToEditProdsViewCommand { get; private set; }
-        
+
+        private readonly DbConnection dbConn;
         private CartItemRepository cartItemRepos;
 
         private ProductsUC prodsView;
@@ -33,20 +33,17 @@ namespace SmartShop.ViewModels
         private PaymentUC paymentView;
         private EditProdsUC editProdsUC;
 
-        public MainViewModel()
+        public MainViewModel(DbConnection dbConn)
         {
-            CurrentUser.Ins.Usr.ID = "USR0001";
-            
-            InitComponentsView();
+            this.dbConn = dbConn;
+            ConfigDependencies();
             Load();
             MoveToProductsView();
             SetCommands();
         }
 
-        private void InitComponentsView()
+        private void ConfigDependencies()
         {
-            var conn = new SqlConnection(Properties.Settings.Default.connStr);
-            var dbConn = new DbConnection(conn);
             var convModelFactory = new ConvModelFactory();
             var dbConv = new DbConverter(convModelFactory);
 
@@ -76,6 +73,16 @@ namespace SmartShop.ViewModels
             
             var editProdVM = new EditProdsViewModel(prodRepos, ctgRepos);
             
+            InitViewComponents(paymentVM, cartVM, prodVM, prodDetailVM, editProdVM);
+        }
+
+        private void InitViewComponents(
+            PaymentViewModel paymentVM, 
+            CartViewModel cartVM, 
+            ProductsViewModel prodVM, 
+            ProdDetailViewModel prodDetailVM,
+            EditProdsViewModel editProdVM)
+        {
             paymentView = new PaymentUC { DataContext = paymentVM };
             cartView = new CartUC { DataContext = cartVM };
             prodsView = new ProductsUC { DataContext = prodVM };
