@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using SmartShop.Models;
+using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
 
 namespace SmartShop.ViewModels.UserControls
@@ -11,22 +12,27 @@ namespace SmartShop.ViewModels.UserControls
         void Receive(List<CartItemView> itemsView);
     }
     
-    public interface IReceiveOrder
+    public interface IReceiveOrderItems
     {
-        void Receive(Order order);
+        void Receive(List<OrderItem> orderItems);
     }
     
-    public class PaymentViewModel : BaseViewModel, IReceiveOrder
+    public class PaymentViewModel : BaseViewModel, IReceiveOrderItems
     {
         public ICommand PayCommand { get; private set; }
 
         public UserAddressViewModel UserAddressVM { get; }
-        public OrderItemsViewModel OrderItemsVM { get; }
+        public OrderItemsItemsViewModel OrderItemsVM { get; }
 
-        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderItemsViewModel orderItemsVM)
+        private readonly OrderRepository orderRepos;
+
+        private string curOrderID;
+
+        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderItemsItemsViewModel orderItemsVM, OrderRepository orderRepos)
         {
             UserAddressVM = userAddressVM;
             OrderItemsVM = orderItemsVM;
+            this.orderRepos = orderRepos;
             SetCommands();
         }
 
@@ -37,12 +43,16 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePay(object obj)
         {
-            throw new NotImplementedException();
+            orderRepos.Pay(curOrderID, out var notification);
+            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
         }
 
-        public void Receive(Order order)
+        public void Receive(List<OrderItem> orderItems)
         {
-            OrderItemsVM.Receive(order);
+            var order = orderRepos.GetNewOrder(CurrentUser.Ins.Usr.ID);
+            curOrderID = order.ID;
+            orderItems.ForEach(ordItem => ordItem.OrderID = curOrderID);
+            OrderItemsVM.Receive(orderItems);
         }
     }
 }

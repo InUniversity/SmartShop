@@ -6,7 +6,7 @@ using SmartShop.Repositories;
 
 namespace SmartShop.ViewModels.UserControls
 {
-    public class ProductsViewModel : BaseViewModel
+    public class ProductsViewModel : BaseViewModel, ILoadView
     {
         private List<ProductView> prods;
         public List<ProductView> Prods { get => prods; set { prods = value; OnPropertyChanged(); } }
@@ -46,6 +46,11 @@ namespace SmartShop.ViewModels.UserControls
         private void LoadProducts()
         {
             Prods = prodRepos.GetAll();
+        }
+
+        public void Load()
+        {
+            LoadProducts();
         }
     }
 }

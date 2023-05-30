@@ -1,4 +1,4 @@
-﻿using SmartShop.Database;
+using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Queries;
 
@@ -42,6 +42,21 @@ namespace SmartShop.Repositories
         {
             var qry = query.GetTotalPrice(orderID);
             return dbConn.ExecuteScalar<decimal>(qry);
+        }
+
+        public Order GetNewOrder(string userID)
+        {
+            var qry = query.GetNewOrder(userID);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToSingleObject<Order>(reader);
+        }
+
+        public bool Pay(string orderID, out string notification)
+        {
+            var qry = query.Pay(orderID, out var notificationParameter);
+            var result = dbConn.ExecuteNonQuery(qry);
+            notification = notificationParameter?.Value?.ToString();
+            return result;
         }
     }
 }

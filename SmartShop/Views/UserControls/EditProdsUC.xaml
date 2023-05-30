@@ -96,7 +96,7 @@
                         <TextBox
                             Margin="0 0 10 0"
                             materialDesign:HintAssist.Hint="Số lượng còn lại"
-                            Text="{Binding ElementName=editProdsUC,Path=DataContext.SelProd.Price, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding ElementName=editProdsUC,Path=DataContext.SelProd.RemainQuantity, UpdateSourceTrigger=PropertyChanged}"
                             AcceptsReturn="False"
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 

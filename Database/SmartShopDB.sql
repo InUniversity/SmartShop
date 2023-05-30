@@ -1,4 +1,5 @@
-CREATE DATABASE SmartShop
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'SmartShop')
+    CREATE DATABASE SmartShop;
 go
 USE SmartShop
 GO
@@ -224,7 +225,7 @@ GO
 ------------------------------------------------------
 
 --function: calculate total each order item
-CREATE FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
+CREATE OR ALTER FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @ItemPrice DECIMAL(18, 2) = 0
@@ -249,7 +250,7 @@ GO
 ----------------------------------------------------------
 
 --function: Calculate total price of order
-CREATE FUNCTION fn_CalculateTotalOrder(@OrderID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_CalculateTotalOrder(@OrderID varchar(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @Total DECIMAL(18, 2) = 0;
@@ -264,7 +265,7 @@ GO
 ----------------------------------------------------------
 
 
-CREATE FUNCTION fn_GetQuantityProdInCart(@UserID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_GetQuantityProdInCart(@UserID varchar(20))
 RETURNS INT
 BEGIN
     DECLARE @Total INT = 0;
@@ -278,7 +279,7 @@ END
 GO
 ----------------------------------------------------------
 
-CREATE FUNCTION fn_GetPriceQuantityProdInCart(@UserID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_GetPriceQuantityProdInCart(@UserID varchar(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @Total DECIMAL(18, 2) = 0;
@@ -293,7 +294,7 @@ GO
 ----------------------------------------------------------
 
 
-CREATE FUNCTION fn_SerCartItemsByUserID(@UserID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_SerCartItemsByUserID(@UserID varchar(20))
 RETURNS TABLE
 AS
 RETURN
@@ -302,6 +303,134 @@ RETURN
     FROM vw_CartItems
     WHERE UserID = @UserID
 )
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION fn_SerProdsByName(@Name varchar(20))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT *
+    FROM vw_Products
+    WHERE ProductName LIKE '%' + @Name + '%'
+)
+GO
+----------------------------------------------------------
+
+-- auto generate primary key
+CREATE OR ALTER FUNCTION dbo.fn_GenerateCartItemID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM CartItems;
+    SET @NewID = CONCAT('CAI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM CartItems WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('CAI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateOrderID()
+RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID, 3, LEN(ID) - 2) AS INT)), 0) + 1 FROM Orders;
+    SET @NewID = CONCAT('OR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM Orders WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('OR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateOrderItemID()
+RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM OrderItems;
+    SET @NewID = CONCAT('ORI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+
+    WHILE EXISTS (SELECT 1 FROM OrderItems WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('ORI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateProdID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM Products;
+    SET @NewID = CONCAT('PRO', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM Products WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('PRO', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateUsrAddressID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM UserAddress;
+    SET @NewID = CONCAT('URA', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM UserAddress WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('URA', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateUsrID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM Users;
+    SET @NewID = CONCAT('USR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM Users WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('USR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
 GO
 ----------------------------------------------------------
 
@@ -579,24 +708,68 @@ GO
 ----------------------------------------------------------
 
 --Stored Procedure: Add CartItem
-CREATE PROCEDURE sp_AddCartItem
+CREATE PROCEDURE sp_AddOrUpdateCartItem
     @CartItemID VARCHAR(20),
     @UserID VARCHAR(20),
     @ProductID VARCHAR(20),
-    @Quantity INT
+    @Quantity INT,
+    @Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
-    INSERT INTO CartItems (ID, UserID, ProductID, Quantity)
-    VALUES (@CartItemID, @UserID, @ProductID, @Quantity)
+    DECLARE @MaxQty INT;
+    BEGIN TRAN
+    BEGIN TRY
+        SELECT @MaxQty = RemainQuantity FROM Products WHERE ID = @ProductID;
+
+        IF (@Quantity <= 0) OR (@Quantity > @MaxQty)
+            BEGIN
+                SET @Notification = N'Số lượng phải lớn hơn 0 và nhỏ hơn hoặc bằng số lượng sản phẩm hiện có';
+                ROLLBACK TRAN;
+                RETURN;
+            END
+
+        IF EXISTS (SELECT 1 FROM CartItems WHERE ProductID = @ProductID AND UserID = @UserID)
+            BEGIN
+                DECLARE @CurQty INT = 0, @NewQty INT = 0;
+                SELECT @CurQty = Quantity FROM CartItems WHERE ProductID = @ProductID
+
+                SET @NewQty = @CurQty + @Quantity;
+                if (@NewQty > @MaxQty)
+                BEGIN
+                    SET @Notification = N'Tổng số lượng trong giỏ hàng quá lớn';
+                    ROLLBACK TRAN;
+                    RETURN;
+                END
+                    
+                UPDATE CartItems
+                SET Quantity = @NewQty 
+                WHERE ProductID = @ProductID AND UserID = @UserID;
+                SET @Notification = N'Cập nhật thành công.';
+            END
+        ELSE
+            BEGIN
+                INSERT INTO CartItems (ID, UserID, ProductID, Quantity)
+                VALUES (@CartItemID, @UserID, @ProductID, @Quantity);
+                SET @Notification = N'Thêm thành công.';
+            END
+
+        COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRAN;
+        SET @Notification = ERROR_MESSAGE();
+        THROW;
+    END CATCH
 END
 GO
---Stored Procedure: Update CartItem
 
+--Stored Procedure: Update CartItem
 CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
     @NewUserID VARCHAR(20),
     @NewProductID VARCHAR(20),
-    @NewQuantity INT
+    @NewQuantity INT,
+    @Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
     UPDATE CartItems
@@ -606,8 +779,8 @@ BEGIN
     WHERE ID = @CartItemID
 END
 GO
---Stored Procedure: Delete CartItem
 
+--Stored Procedure: Delete CartItem
 CREATE PROCEDURE sp_DeleteCartItem
     @CartItemID VARCHAR(20)
 AS
@@ -739,41 +912,41 @@ BEGIN
     VALUES (@OrderItemID, @OrderID, @ProductID, @Quantity)
 END
 GO
---Stored Procedure: Update OrderItem
-
-CREATE PROCEDURE sp_UpdateOrderItem
-    @OrderItemID VARCHAR(20),
-    @NewOrderID VARCHAR(20),
-    @NewProductID VARCHAR(20),
-    @NewQuantity INT
-AS
-BEGIN
-    UPDATE OrderItems
-    SET OrderID = @NewOrderID,
-        ProductID = @NewProductID,
-        Quantity = @NewQuantity
-    WHERE ID = @OrderItemID
-END
-GO
---Stored Procedure: Delete OrderItem
-
-CREATE PROCEDURE sp_DeleteOrderItem
-    @OrderItemID VARCHAR(20)
-AS
-BEGIN
-    DELETE FROM OrderItems
-    WHERE ID = @OrderItemID
-END
-GO
---Stored Procedure: Search OrderItems
-
-CREATE PROCEDURE sp_Ser_OrderItem_By_ID
-    @ID varchar(20)
-AS
-BEGIN
-    SELECT * 
-    FROM OrderItems
-    WHERE ID = @ID
-END
-GO
 ----------------------------------------------------------
+
+CREATE PROCEDURE sp_Pay
+    @OrderID VARCHAR(20),
+    @Notification NVARCHAR(1000) OUTPUT
+AS
+BEGIN
+    BEGIN TRAN
+    BEGIN TRY
+	   DECLARE @TotalPrice DECIMAL(18, 2) = 0;
+	   DECLARE @UserID VARCHAR(20) = '';
+	   DECLARE @WalletBalance DECIMAL(18, 2) = 0;
+	   
+	   SET @TotalPrice = dbo.fn_CalculateTotalOrder(@OrderID);
+	   SELECT @UserID = UserID FROM Orders WHERE ID = @OrderID;
+	   SELECT @WalletBalance = WalletBalance FROM Users WHERE ID = @UserID;
+	   
+	   IF (@TotalPrice > @WalletBalance)
+	   BEGIN
+		  SET @Notification = N'Tiền trong ví không đủ';
+		  ROLLBACK TRAN;
+		  RETURN;
+	   END 
+												
+	   UPDATE Users
+	   SET WalletBalance = @TotalPrice - @WalletBalance
+	   WHERE ID = @UserID;
+		  
+	   COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+	   EXEC sp_DeleteOrder @OrderID
+	   ROLLBACK TRAN;
+	   SET @Notification = ERROR_MESSAGE();
+	   THROW;
+    END CATCH
+END
+

@@ -19,18 +19,7 @@ namespace SmartShop.ViewModels.UserControls
         public decimal Price { get => prodView.Price; set { prodView.Price = value; OnPropertyChanged(); } }
         public int RemainQuantity { get => prodView.RemainQuantity; set { prodView.RemainQuantity = value; OnPropertyChanged(); } }
         public string Desc { get => prodView.Desc; set { prodView.Desc = value; OnPropertyChanged(); } }
-        
-        public int SelectedQuantity 
-        { 
-            get => prodView.SelectedQuantity;
-            set
-            {
-                var maxQty = prodView.RemainQuantity;
-                prodView.SelectedQuantity = value > maxQty ? maxQty : value;
-                OnPropertyChanged();
-            } 
-        }
-        
+        public int SelectedQuantity { get => prodView.SelectedQuantity; set { prodView.SelectedQuantity = value; OnPropertyChanged(); } }
         public string CategoryName { get => prodView.CategoryName; set { prodView.CategoryName = value; OnPropertyChanged(); } }
 
         public ICommand PlusSelQtyProdCommand { get; private set; }
@@ -38,10 +27,12 @@ namespace SmartShop.ViewModels.UserControls
         public ICommand AddToCartCommand { get; private set; }
         
         private readonly IReceiveProduct cartIns;
+        private readonly ILoadView mainIns;
 
-        public ProdDetailViewModel(IReceiveProduct cartIns)
+        public ProdDetailViewModel(IReceiveProduct cartIns, ILoadView mainIns)
         {
             this.cartIns = cartIns;
+            this.mainIns = mainIns;
             SetCommands();
         }
         
@@ -54,19 +45,19 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePlusSelQtyProd(object obj)
         {
-            if (SelectedQuantity > RemainQuantity) return;
             SelectedQuantity += 1;
         }
 
         private void ExecuteMinusSelQtyProd(object obj)
         {
-            if (SelectedQuantity <= 1) return;
             SelectedQuantity -= 1;
         }
 
         private void ExecuteAddToCard(object obj)
         {
             cartIns.Receive(prodView);
+            SelectedQuantity = 1;
+            mainIns.Load();
         }
 
         public void Receive(ProductView prodView)

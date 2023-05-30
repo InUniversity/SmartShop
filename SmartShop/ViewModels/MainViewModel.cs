@@ -60,14 +60,14 @@ namespace SmartShop.ViewModels
             var ctgRepos = new CategoryRepository(dbConn, dbConv, ctgQuery);
 
             var userAddressVM = new UserAddressViewModel(addressRepos);
-            var orderItemsVM = new OrderItemsViewModel(orderRepos);
-            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM);
+            var orderItemsVM = new OrderItemsItemsViewModel(orderRepos);
+            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos);
 
-            var cartItemsReceiver = new CartItemsReceiverAdapter(paymentVM);
+            var cartItemsReceiver = new CartItemsReceiverAdapter(paymentVM, orderRepos);
             var cartVM = new CartViewModel(cartItemRepos, cartItemsReceiver, this);
 
-            var productReceiver = new ProductReceiverAdapter(cartVM);
-            var prodDetailVM = new ProdDetailViewModel(productReceiver);
+            var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
+            var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
             
             var prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);
             
@@ -124,7 +124,18 @@ namespace SmartShop.ViewModels
 
         public void Load()
         {
+            
             CartQuantity = cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID); 
+        }
+
+        private void Refresh(
+            CartViewModel cartVM, 
+            ProductsViewModel prodVM, 
+            EditProdsViewModel editProdVM)
+        {
+            cartVM.Load();
+            prodVM.Load();
+            editProdVM.Load();
         }
     }
 }

@@ -1,5 +1,5 @@
-using System;
 using SmartShop.Models;
+using SmartShop.Repositories;
 using SmartShop.ViewModels.UserControls;
 
 namespace SmartShop.Adapters
@@ -7,10 +7,12 @@ namespace SmartShop.Adapters
     public class ProductReceiverAdapter : IReceiveProduct
     {
         private readonly IReceiveCartItem receiver;
+        private readonly CartItemRepository cartItemRepos;
 
-        public ProductReceiverAdapter(IReceiveCartItem receiver)
+        public ProductReceiverAdapter(IReceiveCartItem receiver, CartItemRepository cartItemRepos)
         {
             this.receiver = receiver;
+            this.cartItemRepos = cartItemRepos;
         }
 
         public void Receive(ProductView prodView)
@@ -21,8 +23,14 @@ namespace SmartShop.Adapters
 
         private CartItemView ConvertToCartItem(ProductView prodView)
         {
-            throw new NotImplementedException();
-            return new CartItemView();
+            var itemView = new CartItemView
+            {
+                ID = cartItemRepos.GenerateNewID(),
+                UserID = CurrentUser.Ins.Usr.ID,
+                ProdID = prodView.ID,
+                Quantity = prodView.SelectedQuantity
+            };
+            return itemView;
         }
     }
 }
