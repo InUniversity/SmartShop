@@ -109,6 +109,7 @@
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Queries\CartItemQuery.cs" />
     <Compile Include="Queries\CategoryQuery.cs" />
+    <Compile Include="Queries\OrderItemQuery.cs" />
     <Compile Include="Queries\OrderQuery.cs" />
     <Compile Include="Queries\OrderStatusQuery.cs" />
     <Compile Include="Queries\ProductQuery.cs" />
