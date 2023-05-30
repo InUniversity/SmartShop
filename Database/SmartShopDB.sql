@@ -784,5 +784,17 @@ GO
 CREATE INDEX idx_order_items_product_id ON OrderItems (ProductID);
 GO
 
+--Stored Procedure: Search OrderItems with Index
+
+CREATE PROCEDURE sp_Ser_OrderItem_By_ID_Index
+    @ID varchar(20)
+AS
+BEGIN
+    SELECT * 
+    FROM OrderItems WITH(INDEX(idx_order_items_order_id))
+    WHERE ID = @ID
+
+END
+GO
 ----------------------------------------------------------
 ----------------------------------------------------------
