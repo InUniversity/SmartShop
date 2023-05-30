@@ -57,7 +57,14 @@ namespace SmartShop.ConvertToModel
         protected const string uadresID = "ID";
         protected const string uadresUsID = "UserID";
         protected const string uadDetail = "AddressDetails";
-        
+        //userAccount
+        protected const string UserAccTbl = "UserAccount";
+        protected const string urAcID = "UserID";
+        protected const string urAcName = "UserName";
+        protected const string urAcPassHash = "Password";
+        protected const string urAcEmail = "Email";
+        protected const string urAcRole = "Role";
+
         public abstract object Conv(SqlDataReader reader);
     }
 }

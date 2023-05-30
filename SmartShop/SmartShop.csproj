@@ -91,6 +91,7 @@
     <Compile Include="ConvertToModel\ToProduct.cs" />
     <Compile Include="ConvertToModel\ToProductView.cs" />
     <Compile Include="ConvertToModel\ToUser.cs" />
+    <Compile Include="ConvertToModel\ToUserAccount.cs" />
     <Compile Include="ConvertToModel\ToUserAddress.cs" />
     <Compile Include="ConvertToModel\ToUserRole.cs" />
     <Compile Include="Database\DbConnection.cs" />
@@ -106,10 +107,12 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductView.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Models\UserAddress.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Queries\CartItemQuery.cs" />
     <Compile Include="Queries\CategoryQuery.cs" />
+    <Compile Include="Queries\LoginQuery.cs" />
     <Compile Include="Queries\OrderQuery.cs" />
     <Compile Include="Queries\OrderStatusQuery.cs" />
     <Compile Include="Queries\ProductQuery.cs" />
@@ -119,6 +122,7 @@
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CartItemRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
+    <Compile Include="Repositories\LoginRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\OrderStatusRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
@@ -128,6 +132,7 @@
     <Compile Include="Services\QueryService.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\ILoadView.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\UserControls\CartViewModel.cs" />
     <Compile Include="ViewModels\UserControls\EditProdsViewModel.cs" />
@@ -137,6 +142,9 @@
     <Compile Include="ViewModels\UserControls\ProductsViewModel.cs" />
     <Compile Include="ViewModels\UserControls\UserAddressViewModel.cs" />
     <Compile Include="ViewModels\INavigateView.cs" />
+    <Compile Include="Views\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -190,6 +198,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Login.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

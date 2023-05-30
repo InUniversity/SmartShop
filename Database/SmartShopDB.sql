@@ -5,57 +5,126 @@ USE SmartShop
 GO
 
 ------------
--- Create and set permissions for Admin
+-- Create and set permissions for JohnDoe
 use master
 go 
-create login Admin
-		With PassWord ='123',
+create login JohnDoe
+		With PassWord ='password123',
 		Check_Expiration = off,
 		check_policy =off
 		
 use SmartShop
 go
-create user Admin
-	for login Admin
+create user JohnDoe
+	for login JohnDoe
 	
 USE SmartShop;
 GO
-ALTER ROLE db_owner ADD MEMBER [Admin];
+ALTER ROLE db_owner ADD MEMBER [JohnDoe];
 
---Create and set permissions for User1
--- Cho Phep User1 doc du lieu
+-- Create and set permissions for JaneSmith
 use master
 go 
-create login User1
-		With PassWord ='123',
+create login JaneSmith
+		With PassWord ='secret456',
 		Check_Expiration = off,
 		check_policy =off
 		
 use SmartShop
 go
-create user User1
-	for login User1
+create user JaneSmith
+	for login JaneSmith
+	
+USE SmartShop;
+GO
+ALTER ROLE db_owner ADD MEMBER [JaneSmith];
 
-ALTER ROLE db_datareader ADD MEMBER [User1];
-
---Create and set permissions for User2
--- Cho Phep User2 doc du lieu
+--Create and set permissions for MikeJohnson
+-- Cho Phep MikeJohnson doc du lieu
 use master
 go 
-create login User2
-		With PassWord ='123',
+create login MikeJohnson
+		With PassWord ='qwerty789',
 		Check_Expiration = off,
 		check_policy =off
 		
 use SmartShop
 go
-create user User2
-	for login User2
-ALTER ROLE db_datareader ADD MEMBER [User2];
-GRANT INSERT ON dbo.UserAddress TO User2;
+create user MikeJohnson
+	for login MikeJohnson
+
+ALTER ROLE db_datareader ADD MEMBER [MikeJohnson];
+
+--Create and set permissions for EmilyDavis
+-- Cho Phep EmilyDavis doc du lieu
+use master
+go 
+create login EmilyDavis
+		With PassWord ='abcxyz123',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user EmilyDavis
+	for login EmilyDavis
+ALTER ROLE db_datareader ADD MEMBER [EmilyDavis];
+
+--Create and set permissions for DavidWilson
+-- Cho Phep DavidWilson doc du lieu
+use master
+go 
+create login DavidWilson
+		With PassWord ='pass1234',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user DavidWilson
+	for login DavidWilson
+ALTER ROLE db_datareader ADD MEMBER [DavidWilson];
+
+CREATE TABLE UserAccount (
+    UserID INT PRIMARY KEY,
+    UserName VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Role NVARCHAR(50) NOT NULL
+);
+go
+
+INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
+VALUES (1, 'JohnDoe', 'password123', 'Seller', 'johndoe@example.com'); 
+
+INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
+VALUES (2, 'JaneSmith', 'secret456', 'Seller', 'janesmith@example.com');
+
+INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
+VALUES (3, 'MikeJohnson', 'qwerty789', 'Buyer', 'mikejohnson@example.com');
+
+INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
+VALUES (4, 'EmilyDavis', 'abcxyz123', 'Buyer', 'emilydavis@example.com');
+
+INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
+VALUES (5, 'DavidWilson', 'pass1234', 'Buyer', 'davidwilson@example.com');
+
+go
+CREATE PROCEDURE sp_GetAccountUser
+    @UserName VARCHAR(50),
+    @Password VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT *
+    FROM UserAccount
+    WHERE UserName = @UserName AND Password = @Password;
+END
 
 
 -- Product
+go
 CREATE TABLE Categories (
     ID VARCHAR(20) PRIMARY KEY,
     CategoryName NVARCHAR(50) NOT NULL

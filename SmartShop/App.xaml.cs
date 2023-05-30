@@ -14,8 +14,10 @@ namespace SmartShop
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            CurrentUser.Ins.Usr.ID = "USR0001";
-            InitMainWindow();
+            //CurrentUser.Ins.Usr.ID = "USR0001";
+            //InitMainWindow();
+            //base.OnStartup(e);
+            InitLogin();
             base.OnStartup(e);
         }
 
@@ -26,6 +28,13 @@ namespace SmartShop
             var dbConn = new DbConnection(con);
             var viewModel = new MainViewModel(dbConn);
             var window = new MainWindow { DataContext = viewModel };
+            window.Show();
+        }
+
+        private void InitLogin()
+        {
+            var viewModel = new LoginViewModel();
+            var window = new Login { DataContext = viewModel };
             window.Show();
         }
     }
