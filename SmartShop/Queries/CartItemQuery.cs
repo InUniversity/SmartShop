@@ -70,5 +70,11 @@ namespace SmartShop.Queries
             var query = new QueryService($"SELECT dbo.fn_GetPriceQuantityProdInCart('{userID}')", CommandType.Text);
             return query;
         }
+
+        public QueryService GenerateNewID()
+        {
+            var query = new QueryService("SELECT dbo.fn_GenerateCartItemID()", CommandType.Text);
+            return query;
+        }
     }
 }

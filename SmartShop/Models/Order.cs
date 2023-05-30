@@ -11,7 +11,5 @@ namespace SmartShop.Models
         public DateTime Date { get; set; }
 
         public List<OrderItem> Items { get; set; } = new List<OrderItem>();
-        public OrderStatus Status { get; set; } = new OrderStatus();
-        public User User { get; set; } = new User();
     }
 }

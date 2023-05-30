@@ -16,6 +16,5 @@ namespace SmartShop.Models
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
-        public UserRole UserRole { get; set; } = new UserRole();
     }
 }

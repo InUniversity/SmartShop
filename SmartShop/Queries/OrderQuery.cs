@@ -55,12 +55,14 @@ namespace SmartShop.Queries
 
         public QueryService GetTotalPrice(string orderID)
         {
-            var query = new QueryService("SELECT dbo.fn_CalculateTotalOrder(@OrderID)", CommandType.Text);
-            query.Paras = new[]
-            {
-                new SqlParameter("@OrderID", orderID)
-            };
+            var query = new QueryService($"SELECT dbo.fn_CalculateTotalOrder('{orderID}')", CommandType.Text);
             return query;
-        } 
+        }
+
+        public QueryService GetNewOrder(string userID)
+        {
+            var query = new QueryService($"SELECT dbo.fn_GenerateOrderID('{userID}')", CommandType.Text);
+            return query;
+        }
     }
 }

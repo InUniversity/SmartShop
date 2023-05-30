@@ -5,7 +5,7 @@ using SmartShop.ViewModels.Base;
 
 namespace SmartShop.ViewModels.UserControls
 {
-    public class OrderItemsViewModel : BaseViewModel, IReceiveOrder
+    public class OrderItemsItemsViewModel : BaseViewModel, IReceiveOrderItems
     {
         private List<OrderItem> orderItems = new List<OrderItem>(); 
         public List<OrderItem> OrderItems { get => orderItems; set { orderItems = value; OnPropertyChanged(); } }
@@ -15,14 +15,14 @@ namespace SmartShop.ViewModels.UserControls
         private readonly OrderRepository orderRepos;
         private string curOrderID;
 
-        public OrderItemsViewModel(OrderRepository orderRepos)
+        public OrderItemsItemsViewModel(OrderRepository orderRepos)
         {
             this.orderRepos = orderRepos;
         }
 
-        public void Receive(Order order)
+        public void Receive(List<OrderItem> orderItems)
         {
-            OrderItems = order.Items;
+            OrderItems = orderItems;
         }
     }
 }

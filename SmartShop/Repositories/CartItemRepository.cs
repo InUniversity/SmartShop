@@ -59,5 +59,11 @@ namespace SmartShop.Repositories
             var qry = query.GetTotalPrice(userID);
             return dbConn.ExecuteScalar<decimal>(qry);
         }
+
+        public string GenerateNewID()
+        {
+            var qry = query.GenerateNewID();
+            return dbConn.ExecuteScalar<string>(qry);
+        }
     }
 }

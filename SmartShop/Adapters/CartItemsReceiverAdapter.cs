@@ -1,29 +1,36 @@
 using System;
 using System.Collections.Generic;
 using SmartShop.Models;
+using SmartShop.Repositories;
 using SmartShop.ViewModels.UserControls;
 
 namespace SmartShop.Adapters
 {
     public class CartItemsReceiverAdapter : IReceiveCartItems
     {
-        private readonly IReceiveOrder receiver;
+        private readonly IReceiveOrderItems receiver;
+        private readonly OrderRepository orderRepos;
 
-        public CartItemsReceiverAdapter(IReceiveOrder receiver)
+        public CartItemsReceiverAdapter(IReceiveOrderItems receiver, OrderRepository orderRepos)
         {
             this.receiver = receiver;
+            this.orderRepos = orderRepos;
         }
 
         public void Receive(List<CartItemView> itemsView)
         {
-            var order = convertToOrderItems(itemsView);
+            var order = ConvertToOrderItems(itemsView);
             receiver.Receive(order);
         }
 
-        private Order convertToOrderItems(List<CartItemView> items)
+        private List<OrderItem> ConvertToOrderItems(List<CartItemView> items)
         {
-            throw new NotImplementedException();
-            return new Order();
+            List<OrderItem> orderItems = new List<OrderItem>();
+            foreach (var item in items)
+            {
+                throw new NotImplementedException();
+            }
+            return orderItems;
         }
     }
 }

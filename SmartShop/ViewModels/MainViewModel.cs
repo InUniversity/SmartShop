@@ -60,13 +60,13 @@ namespace SmartShop.ViewModels
             var ctgRepos = new CategoryRepository(dbConn, dbConv, ctgQuery);
 
             var userAddressVM = new UserAddressViewModel(addressRepos);
-            var orderItemsVM = new OrderItemsViewModel(orderRepos);
-            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM);
+            var orderItemsVM = new OrderItemsItemsViewModel(orderRepos);
+            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos);
 
-            var cartItemsReceiver = new CartItemsReceiverAdapter(paymentVM);
+            var cartItemsReceiver = new CartItemsReceiverAdapter(paymentVM, orderRepos);
             var cartVM = new CartViewModel(cartItemRepos, cartItemsReceiver, this);
 
-            var productReceiver = new ProductReceiverAdapter(cartVM);
+            var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             var prodDetailVM = new ProdDetailViewModel(productReceiver);
             
             var prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);

@@ -1,4 +1,5 @@
-CREATE DATABASE SmartShop
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'SmartShop')
+    CREATE DATABASE SmartShop;
 go
 USE SmartShop
 GO
@@ -224,7 +225,7 @@ GO
 ------------------------------------------------------
 
 --function: calculate total each order item
-CREATE FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
+CREATE OR ALTER FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @ItemPrice DECIMAL(18, 2) = 0
@@ -249,7 +250,7 @@ GO
 ----------------------------------------------------------
 
 --function: Calculate total price of order
-CREATE FUNCTION fn_CalculateTotalOrder(@OrderID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_CalculateTotalOrder(@OrderID varchar(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @Total DECIMAL(18, 2) = 0;
@@ -264,7 +265,7 @@ GO
 ----------------------------------------------------------
 
 
-CREATE FUNCTION fn_GetQuantityProdInCart(@UserID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_GetQuantityProdInCart(@UserID varchar(20))
 RETURNS INT
 BEGIN
     DECLARE @Total INT = 0;
@@ -278,7 +279,7 @@ END
 GO
 ----------------------------------------------------------
 
-CREATE FUNCTION fn_GetPriceQuantityProdInCart(@UserID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_GetPriceQuantityProdInCart(@UserID varchar(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @Total DECIMAL(18, 2) = 0;
@@ -293,7 +294,7 @@ GO
 ----------------------------------------------------------
 
 
-CREATE FUNCTION fn_SerCartItemsByUserID(@UserID nvarchar(20))
+CREATE OR ALTER FUNCTION fn_SerCartItemsByUserID(@UserID varchar(20))
 RETURNS TABLE
 AS
 RETURN
@@ -302,6 +303,134 @@ RETURN
     FROM vw_CartItems
     WHERE UserID = @UserID
 )
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION fn_SerProdsByName(@Name varchar(20))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT *
+    FROM vw_Products
+    WHERE ProductName LIKE '%' + @Name + '%'
+)
+GO
+----------------------------------------------------------
+
+-- auto generate primary key
+CREATE OR ALTER FUNCTION dbo.fn_GenerateCartItemID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM CartItems;
+    SET @NewID = CONCAT('CAI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM CartItems WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('CAI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateOrderID()
+RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID, 3, LEN(ID) - 2) AS INT)), 0) + 1 FROM Orders;
+    SET @NewID = CONCAT('OR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM Orders WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('OR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateOrderItemID()
+RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM OrderItems;
+    SET @NewID = CONCAT('ORI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+
+    WHILE EXISTS (SELECT 1 FROM OrderItems WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('ORI', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateProdID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM Products;
+    SET @NewID = CONCAT('PRO', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM Products WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('PRO', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateUsrAddressID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM UserAddress;
+    SET @NewID = CONCAT('URA', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM UserAddress WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('URA', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
+GO
+----------------------------------------------------------
+
+CREATE OR ALTER FUNCTION dbo.fn_GenerateUsrID()
+    RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(20);
+    DECLARE @MaxNumericPortion INT;
+    SELECT @MaxNumericPortion = COALESCE(MAX(CAST(SUBSTRING(ID,4, LEN(ID) - 3) AS INT)), 0) + 1 FROM Users;
+    SET @NewID = CONCAT('USR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+    WHILE EXISTS (SELECT 1 FROM Users WHERE ID = @NewID)
+        BEGIN
+            SET @MaxNumericPortion += 1;
+            SET @NewID = CONCAT('USR', RIGHT('0000000' + CAST(@MaxNumericPortion AS VARCHAR(10)), 7));
+        END
+
+    RETURN @NewID;
+END;
 GO
 ----------------------------------------------------------
 

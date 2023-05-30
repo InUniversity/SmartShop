@@ -67,7 +67,8 @@ namespace SmartShop.Queries
 
         public QueryService SearchByName(string prodName)
         {
-            throw new System.NotImplementedException();
+            var query = new QueryService($"SELECT * FROM dbo.fn_SerProdsByName('{prodName}')", CommandType.Text);
+            return query;
         }
     }
 }
