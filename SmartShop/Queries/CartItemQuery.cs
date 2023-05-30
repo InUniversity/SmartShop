@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using SmartShop.Models;
 using SmartShop.Services;
 
@@ -7,15 +8,18 @@ namespace SmartShop.Queries
 {
     public class CartItemQuery
     {
-        public QueryService Add(CartItem item)
+        public QueryService AddOrUpdate(CartItem item, out SqlParameter notificationParameter)
         {
-            var query = new QueryService("sp_AddCartItem", CommandType.StoredProcedure);
+            notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
+            notificationParameter.Direction = ParameterDirection.Output;
+            var query = new QueryService("sp_AddOrUpdateCartItem", CommandType.StoredProcedure);
             query.Paras = new[]
             {
                 new SqlParameter("@CartItemID", item.ID),
                 new SqlParameter("@UserID",item.UserID),
                 new SqlParameter("@ProductID", item.ProdID),
-                new SqlParameter("@Quantity", item.Quantity)
+                new SqlParameter("@Quantity", item.Quantity),
+                notificationParameter
             };
             return query;
         }
@@ -26,19 +30,6 @@ namespace SmartShop.Queries
             query.Paras = new[]
             {
                 new SqlParameter("@CartItemID", id)
-            };
-            return query;
-        }
-
-        public QueryService Update(CartItem item)
-        {
-            var query = new QueryService("sp_UpdateCartItem", CommandType.StoredProcedure);
-            query.Paras = new[]
-            {
-                new SqlParameter("@CartItemID", item.ID),
-                new SqlParameter("@NewUserID",item.UserID),
-                new SqlParameter("@NewProductID", item.ProdID),
-                new SqlParameter("@NewQuantity", item.Quantity)
             };
             return query;
         }

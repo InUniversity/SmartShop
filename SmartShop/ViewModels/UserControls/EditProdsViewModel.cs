@@ -9,7 +9,7 @@ using SmartShop.ViewModels.Base;
 
 namespace SmartShop.ViewModels.UserControls
 {
-    public class EditProdsViewModel : BaseViewModel
+    public class EditProdsViewModel : BaseViewModel, ILoadView
     {
         private List<ProductView> prods;
         public List<ProductView> Prods { get => prods; set { prods = value; OnPropertyChanged(); } }
@@ -105,7 +105,7 @@ namespace SmartShop.ViewModels.UserControls
         {
             CanAdd = true;
             CanUpdate = false;
-            SelProd = new ProductView { ID = "" };
+            SelProd = new ProductView { ID = prodRepos.GetNewID() };
         }
 
         private void OnUpdateMode()
@@ -122,6 +122,11 @@ namespace SmartShop.ViewModels.UserControls
         private void SetComboBox()
         {
             Categories = ctgRepos.GetAll();
+        }
+
+        public void Load()
+        {
+            LoadProducts();
         }
     }
 }

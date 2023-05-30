@@ -708,19 +708,62 @@ GO
 ----------------------------------------------------------
 
 --Stored Procedure: Add CartItem
-CREATE PROCEDURE sp_AddCartItem
+CREATE PROCEDURE sp_AddOrUpdateCartItem
     @CartItemID VARCHAR(20),
     @UserID VARCHAR(20),
     @ProductID VARCHAR(20),
-    @Quantity INT
+    @Quantity INT,
+    @Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
-    INSERT INTO CartItems (ID, UserID, ProductID, Quantity)
-    VALUES (@CartItemID, @UserID, @ProductID, @Quantity)
+    DECLARE @MaxQty INT;
+    BEGIN TRAN
+    BEGIN TRY
+        SELECT @MaxQty = RemainQuantity FROM Products WHERE ID = @ProductID;
+
+        IF (@Quantity <= 0) OR (@Quantity > @MaxQty)
+            BEGIN
+                SET @Notification = N'Số lượng phải lớn hơn 0 và nhỏ hơn hoặc bằng số lượng sản phẩm hiện có';
+                ROLLBACK TRAN;
+                RETURN;
+            END
+
+        IF EXISTS (SELECT 1 FROM CartItems WHERE ProductID = @ProductID AND UserID = @UserID)
+            BEGIN
+                DECLARE @CurQty INT = 0, @NewQty INT = 0;
+                SELECT @CurQty = Quantity FROM CartItems WHERE ProductID = @ProductID
+
+                SET @NewQty = @CurQty + @Quantity;
+                if (@NewQty > @MaxQty)
+                BEGIN
+                    SET @Notification = N'Tổng số lượng trong giỏ hàng quá lớn';
+                    ROLLBACK TRAN;
+                    RETURN;
+                END
+                    
+                UPDATE CartItems
+                SET Quantity = @NewQty 
+                WHERE ProductID = @ProductID AND UserID = @UserID;
+                SET @Notification = N'Cập nhật thành công.';
+            END
+        ELSE
+            BEGIN
+                INSERT INTO CartItems (ID, UserID, ProductID, Quantity)
+                VALUES (@CartItemID, @UserID, @ProductID, @Quantity);
+                SET @Notification = N'Thêm thành công.';
+            END
+
+        COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRAN;
+        SET @Notification = ERROR_MESSAGE();
+        THROW;
+    END CATCH
 END
 GO
---Stored Procedure: Update CartItem
 
+--Stored Procedure: Update CartItem
 CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
     @NewUserID VARCHAR(20),
@@ -735,8 +778,8 @@ BEGIN
     WHERE ID = @CartItemID
 END
 GO
---Stored Procedure: Delete CartItem
 
+--Stored Procedure: Delete CartItem
 CREATE PROCEDURE sp_DeleteCartItem
     @CartItemID VARCHAR(20)
 AS

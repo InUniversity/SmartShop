@@ -67,7 +67,7 @@ namespace SmartShop.ViewModels
             var cartVM = new CartViewModel(cartItemRepos, cartItemsReceiver, this);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
-            var prodDetailVM = new ProdDetailViewModel(productReceiver);
+            var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
             
             var prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);
             
@@ -124,7 +124,18 @@ namespace SmartShop.ViewModels
 
         public void Load()
         {
+            
             CartQuantity = cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID); 
+        }
+
+        private void Refresh(
+            CartViewModel cartVM, 
+            ProductsViewModel prodVM, 
+            EditProdsViewModel editProdVM)
+        {
+            cartVM.Load();
+            prodVM.Load();
+            editProdVM.Load();
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using SmartShop.Models;
 using SmartShop.Database;
 using SmartShop.Queries;
-using System;
-using System.Windows.Documents;
 using System.Collections.Generic;
 
 namespace SmartShop.Repositories
@@ -16,21 +14,17 @@ namespace SmartShop.Repositories
             this.query = query;
         }
 
-        public bool Add(CartItem item)
+        public bool AddOrUpdate(CartItem item, out string notification)
         {
-            var qry = query.Add(item);
-            return dbConn.ExecuteNonQuery(qry);
+            var qry = query.AddOrUpdate(item, out var notificationParameter);
+            var result = dbConn.ExecuteNonQuery(qry);
+            notification = notificationParameter?.Value?.ToString();
+            return result;
         }
 
         public bool Delete(string id)
         {
             var qry = query.Delete(id);
-            return dbConn.ExecuteNonQuery(qry);
-        }
-
-        public bool Update(CartItem item)
-        {
-            var qry = query.Update(item);
             return dbConn.ExecuteNonQuery(qry);
         }
 

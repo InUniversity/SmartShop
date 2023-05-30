@@ -4,10 +4,10 @@ using System.Windows.Input;
 using SmartShop.Models;
 using SmartShop.Repositories;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace SmartShop.ViewModels.UserControls
 {
-
     public interface IReceiveCartItem
     {
         void Receive(CartItemView itemView);
@@ -68,23 +68,20 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePlusSelQtyProd(CartItemView item)
         {
-            // check condition into database ?
-            if (item == null || item.Quantity >= item.RemainQuantity) return;
             item.Quantity += 1;
             Update(item);
         }
 
         private void ExecuteMinusSelQtyProd(CartItemView item)
         {
-            // check condition into database ?
-            if (item == null || item.Quantity <= 1) return;
             item.Quantity -= 1;
             Update(item);
         }
 
         private void Update(CartItem item)
         {
-            cartItemRepos.Update(item);
+            cartItemRepos.AddOrUpdate(item, out var notification);
+            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
             Load();
         }
 
@@ -96,7 +93,8 @@ namespace SmartShop.ViewModels.UserControls
 
         public void Receive(CartItemView itemView)
         {
-            cartItemRepos.Add(itemView);
+            cartItemRepos.AddOrUpdate(itemView, out var notification);
+            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
             Load();
         }
     }
