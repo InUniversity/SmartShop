@@ -1,4 +1,3 @@
-﻿using System.Collections.Generic;
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Queries;
@@ -52,9 +51,12 @@ namespace SmartShop.Repositories
             return dbConv.ToSingleObject<Order>(reader);
         }
 
-        public void Pay(string orderID)
+        public bool Pay(string orderID, out string notification)
         {
-            throw new System.NotImplementedException();
+            var qry = query.Pay(orderID, out var notificationParameter);
+            var result = dbConn.ExecuteNonQuery(qry);
+            notification = notificationParameter?.Value?.ToString();
+            return result;
         }
     }
 }

@@ -64,5 +64,18 @@ namespace SmartShop.Queries
             var query = new QueryService($"SELECT dbo.fn_GenerateOrderID('{userID}')", CommandType.Text);
             return query;
         }
+
+        public QueryService Pay(string orderID, out SqlParameter notificationParameter)
+        {
+            notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
+            notificationParameter.Direction = ParameterDirection.Output;
+            var query = new QueryService("sp_AddOrder", CommandType.StoredProcedure);
+            query.Paras = new[]
+            {
+                new SqlParameter("@OrderID", orderID),
+                notificationParameter
+            };
+            return query;
+        }
     }
 }

@@ -34,6 +34,22 @@ namespace SmartShop.Queries
             return query;
         }
 
+        public QueryService Update(CartItem item, out SqlParameter notificationParameter)
+        {
+            notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
+            notificationParameter.Direction = ParameterDirection.Output;
+            var query = new QueryService("sp_UpdateCartItem", CommandType.StoredProcedure);
+            query.Paras = new[]
+            {
+                new SqlParameter("@CartItemID", item.ID),
+                new SqlParameter("@UserID",item.UserID),
+                new SqlParameter("@ProductID", item.ProdID),
+                new SqlParameter("@Quantity", item.Quantity),
+                notificationParameter
+            };
+            return query;
+        }
+
         public QueryService SearchByID(string id)
         {
             var query = new QueryService("sp_Ser_CartItems_By_ID", CommandType.StoredProcedure);

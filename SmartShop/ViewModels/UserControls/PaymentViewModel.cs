@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using SmartShop.Models;
 using SmartShop.Repositories;
@@ -42,18 +43,16 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePay(object obj)
         {
-            orderRepos.Pay(curOrderID);
+            orderRepos.Pay(curOrderID, out var notification);
+            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
         }
 
         public void Receive(List<OrderItem> orderItems)
         {
             var order = orderRepos.GetNewOrder(CurrentUser.Ins.Usr.ID);
             curOrderID = order.ID;
+            orderItems.ForEach(ordItem => ordItem.OrderID = curOrderID);
             OrderItemsVM.Receive(orderItems);
-            foreach (var item in OrderItemsVM.OrderItems)
-            {
-                item.OrderID = curOrderID;
-            }
         }
     }
 }

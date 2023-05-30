@@ -768,7 +768,8 @@ CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
     @NewUserID VARCHAR(20),
     @NewProductID VARCHAR(20),
-    @NewQuantity INT
+    @NewQuantity INT,
+    @Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
     UPDATE CartItems
@@ -911,41 +912,41 @@ BEGIN
     VALUES (@OrderItemID, @OrderID, @ProductID, @Quantity)
 END
 GO
---Stored Procedure: Update OrderItem
-
-CREATE PROCEDURE sp_UpdateOrderItem
-    @OrderItemID VARCHAR(20),
-    @NewOrderID VARCHAR(20),
-    @NewProductID VARCHAR(20),
-    @NewQuantity INT
-AS
-BEGIN
-    UPDATE OrderItems
-    SET OrderID = @NewOrderID,
-        ProductID = @NewProductID,
-        Quantity = @NewQuantity
-    WHERE ID = @OrderItemID
-END
-GO
---Stored Procedure: Delete OrderItem
-
-CREATE PROCEDURE sp_DeleteOrderItem
-    @OrderItemID VARCHAR(20)
-AS
-BEGIN
-    DELETE FROM OrderItems
-    WHERE ID = @OrderItemID
-END
-GO
---Stored Procedure: Search OrderItems
-
-CREATE PROCEDURE sp_Ser_OrderItem_By_ID
-    @ID varchar(20)
-AS
-BEGIN
-    SELECT * 
-    FROM OrderItems
-    WHERE ID = @ID
-END
-GO
 ----------------------------------------------------------
+
+CREATE PROCEDURE sp_Pay
+    @OrderID VARCHAR(20),
+    @Notification NVARCHAR(1000) OUTPUT
+AS
+BEGIN
+    BEGIN TRAN
+    BEGIN TRY
+	   DECLARE @TotalPrice DECIMAL(18, 2) = 0;
+	   DECLARE @UserID VARCHAR(20) = '';
+	   DECLARE @WalletBalance DECIMAL(18, 2) = 0;
+	   
+	   SET @TotalPrice = dbo.fn_CalculateTotalOrder(@OrderID);
+	   SELECT @UserID = UserID FROM Orders WHERE ID = @OrderID;
+	   SELECT @WalletBalance = WalletBalance FROM Users WHERE ID = @UserID;
+	   
+	   IF (@TotalPrice > @WalletBalance)
+	   BEGIN
+		  SET @Notification = N'Tiền trong ví không đủ';
+		  ROLLBACK TRAN;
+		  RETURN;
+	   END 
+												
+	   UPDATE Users
+	   SET WalletBalance = @TotalPrice - @WalletBalance
+	   WHERE ID = @UserID;
+		  
+	   COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+	   EXEC sp_DeleteOrder @OrderID
+	   ROLLBACK TRAN;
+	   SET @Notification = ERROR_MESSAGE();
+	   THROW;
+    END CATCH
+END
+

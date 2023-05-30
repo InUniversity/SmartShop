@@ -28,6 +28,14 @@ namespace SmartShop.Repositories
             return dbConn.ExecuteNonQuery(qry);
         }
 
+        public bool Update(CartItem item, out string notification)
+        {
+            var qry = query.Update(item, out var notificationParameter);
+            var result =  dbConn.ExecuteNonQuery(qry);
+            notification = notificationParameter?.Value?.ToString();
+            return result;
+        }
+
         public CartItemView SearchByID(string id)
         {
             var qry = query.SearchByID(id);
