@@ -72,6 +72,10 @@ CREATE TABLE Products (
     CONSTRAINT fk_products_category_id FOREIGN KEY (CategoryID) REFERENCES Categories(ID)
 );
 GO
+CREATE INDEX idx_prods_id ON Products (ID);
+GO
+CREATE INDEX idx_prods_name ON Products (ProductName);
+GO
 
 -- User
 CREATE TABLE UserRole (

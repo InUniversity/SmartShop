@@ -95,6 +95,7 @@
     <Compile Include="ConvertToModel\ToUserRole.cs" />
     <Compile Include="Database\DbConnection.cs" />
     <Compile Include="Database\DbConverter.cs" />
+    <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\CartItemView.cs" />
     <Compile Include="Models\Category.cs" />
