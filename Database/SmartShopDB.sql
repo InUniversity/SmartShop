@@ -395,11 +395,20 @@ CREATE PROCEDURE sp_GetOrdersByDateRange
     @endDate DATETIME
 AS
 BEGIN
-    SELECT *
-    FROM Orders
-    WHERE OrderDate BETWEEN @startDate AND @endDate 
-       OR OrderDate = @startDate 
-       OR OrderDate = @endDate
+	BEGIN TRAN
+	BEGIN TRY
+		SELECT *
+		FROM Orders
+		WHERE OrderDate BETWEEN @startDate AND @endDate 
+			OR OrderDate = @startDate 
+			OR OrderDate = @endDate
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --EXEC sp_GetOrdersByDateRange '2023-01-25', '2023-04-27'
@@ -413,8 +422,17 @@ CREATE PROCEDURE sp_AddCategory
     @CategoryName NVARCHAR(50)
 AS
 BEGIN
-    INSERT INTO Categories (ID, CategoryName)
-    VALUES (@CategoryID, @CategoryName)
+	BEGIN TRAN
+	BEGIN TRY
+		INSERT INTO Categories (ID, CategoryName)
+		VALUES (@CategoryID, @CategoryName)
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Update Catagory
@@ -424,9 +442,18 @@ CREATE PROCEDURE sp_UpdateCategory
     @NewCategoryName NVARCHAR(50)
 AS
 BEGIN
-    UPDATE Categories
-    SET CategoryName = @NewCategoryName
-    WHERE ID = @CategoryID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE Categories
+		SET CategoryName = @NewCategoryName
+		WHERE ID = @CategoryID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Delete Catagory
@@ -435,8 +462,17 @@ CREATE PROCEDURE sp_DeleteCategory
     @CategoryID VARCHAR(20)
 AS
 BEGIN
-    DELETE FROM Categories
-    WHERE ID = @CategoryID
+	BEGIN TRAN
+	BEGIN TRY
+		DELETE FROM Categories
+		WHERE ID = @CategoryID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ---------------------------------------------------------
@@ -452,8 +488,17 @@ CREATE PROCEDURE sp_AddProduct
     @ProductDescription NVARCHAR(256)
 AS
 BEGIN
-    INSERT INTO Products (ID, CategoryID, ImageUrl, ProductName, Price, RemainQuantity, ProductDescription)
-    VALUES (@ProductID, @CategoryID, @ImageUrl, @ProductName, @Price, @Quantity, @ProductDescription)
+	BEGIN TRAN 
+	BEGIN TRY
+		INSERT INTO Products (ID, CategoryID, ImageUrl, ProductName, Price, RemainQuantity, ProductDescription)
+		VALUES (@ProductID, @CategoryID, @ImageUrl, @ProductName, @Price, @Quantity, @ProductDescription)
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Update Product
@@ -468,14 +513,23 @@ CREATE PROCEDURE sp_UpdateProduct
     @NewProductDescription NVARCHAR(256)
 AS
 BEGIN
-    UPDATE Products
-    SET CategoryID = @NewCategoryID,
-        ImageUrl = @NewImageUrl,
-        ProductName = @NewProductName,
-        Price = @NewPrice,
-        RemainQuantity = @NewQuantity,
-        ProductDescription = @NewProductDescription
-    WHERE ID = @ProductID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE Products
+		SET CategoryID = @NewCategoryID,
+			ImageUrl = @NewImageUrl,
+	        ProductName = @NewProductName,
+		    Price = @NewPrice,
+		    RemainQuantity = @NewQuantity,
+			ProductDescription = @NewProductDescription
+		WHERE ID = @ProductID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Search Product
@@ -484,9 +538,18 @@ CREATE PROCEDURE sp_Ser_Prod_By_ID
     @ID varchar(20)
 AS
 BEGIN
-    SELECT * 
-    FROM Products
-    WHERE ID = @ID
+	BEGIN TRAN
+	BEGIN TRY
+		SELECT * 
+		FROM Products
+		WHERE ID = @ID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Delete Product
@@ -495,8 +558,17 @@ CREATE PROCEDURE sp_DeleteProduct
     @ProductID VARCHAR(20)
 AS
 BEGIN
-    DELETE FROM Products
-    WHERE ID = @ProductID
+	BEGIN TRAN
+	BEGIN TRY
+		DELETE FROM Products
+		WHERE ID = @ProductID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
@@ -507,8 +579,17 @@ CREATE PROCEDURE sp_AddUserRole
     @RoleName NVARCHAR(20)
 AS
 BEGIN
-    INSERT INTO UserRole (ID, RoleName)
-    VALUES (@RoleID, @RoleName)
+	BEGIN TRAN
+	BEGIN TRY
+		INSERT INTO UserRole (ID, RoleName)
+		VALUES (@RoleID, @RoleName)
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Proceduce: Update UserRole
@@ -518,9 +599,18 @@ CREATE PROCEDURE sp_UpdateUserRole
     @NewRoleName NVARCHAR(20)
 AS
 BEGIN
-    UPDATE UserRole
-    SET RoleName = @NewRoleName
-    WHERE ID = @RoleID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE UserRole
+		SET RoleName = @NewRoleName
+		WHERE ID = @RoleID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Proceduce: Delete UserRole
@@ -529,8 +619,17 @@ CREATE PROCEDURE sp_DeleteUserRole
     @RoleID VARCHAR(20)
 AS
 BEGIN
-    DELETE FROM UserRole
-    WHERE ID = @RoleID
+	BEGIN TRAN
+	BEGIN TRY
+		DELETE FROM UserRole
+		WHERE ID = @RoleID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Search UserRole
@@ -539,9 +638,18 @@ CREATE PROCEDURE sp_Ser_UserR_By_ID
     @ID varchar(20)
 AS
 BEGIN
-    SELECT * 
-    FROM UserRole
-    WHERE ID = @ID
+	BEGIN TRAN
+	BEGIN TRY
+		SELECT * 
+		FROM UserRole
+		WHERE ID = @ID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
@@ -558,8 +666,17 @@ CREATE PROCEDURE sp_AddUser
     @RoleID VARCHAR(20)
 AS
 BEGIN
-    INSERT INTO Users (ID, FullName, Username, PasswordHash, Email, Phone, WalletBalance, RoleID)
-    VALUES (@UserID, @FullName, @Username, @PasswordHash, @Email, @Phone, @WalletBalance, @RoleID)
+	BEGIN TRAN
+	BEGIN TRY
+		INSERT INTO Users (ID, FullName, Username, PasswordHash, Email, Phone, WalletBalance, RoleID)
+		VALUES (@UserID, @FullName, @Username, @PasswordHash, @Email, @Phone, @WalletBalance, @RoleID)
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 
@@ -576,15 +693,24 @@ CREATE PROCEDURE sp_UpdateUser
     @NewRoleID VARCHAR(20)
 AS
 BEGIN
-    UPDATE Users
-    SET FullName = @NewFullName,
-        Username = @NewUsername,
-        PasswordHash = @NewPasswordHash,
-        Email = @NewEmail,
-        Phone = @NewPhone,
-        WalletBalance = @NewWalletBalance,
-        RoleID = @NewRoleID
-    WHERE ID = @UserID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE Users
+		SET FullName = @NewFullName,
+			Username = @NewUsername,
+			PasswordHash = @NewPasswordHash,
+			Email = @NewEmail,
+			Phone = @NewPhone,
+			WalletBalance = @NewWalletBalance,
+			RoleID = @NewRoleID
+		WHERE ID = @UserID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 
@@ -594,10 +720,19 @@ CREATE PROCEDURE sp_DeleteUser
     @UserID VARCHAR(20)
 AS
 BEGIN
-	DELETE FROM UserAddress
-    WHERE UserID = @UserID
-    DELETE FROM Users
-    WHERE ID = @UserID
+	BEGIN TRAN 
+	BEGIN TRY
+		DELETE FROM UserAddress
+		WHERE UserID = @UserID
+		DELETE FROM Users
+		WHERE ID = @UserID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Search UserRole
@@ -606,9 +741,18 @@ CREATE PROCEDURE sp_Ser_User_By_ID
     @ID varchar(20)
 AS
 BEGIN
-    SELECT * 
-    FROM Users
-    WHERE ID = @ID
+	BEGIN TRAN
+	BEGIN TRY
+		SELECT * 
+		FROM Users
+		WHERE ID = @ID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
@@ -620,8 +764,17 @@ CREATE PROCEDURE sp_AddUserAddress
     @AddressDetails NVARCHAR(256)
 AS
 BEGIN
-    INSERT INTO UserAddress (ID, UserID, AddressDetails)
-    VALUES (@AddressID, @UserID, @AddressDetails)
+	BEGIN TRAN
+	BEGIN TRY
+		INSERT INTO UserAddress (ID, UserID, AddressDetails)
+		VALUES (@AddressID, @UserID, @AddressDetails)
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Update UserAddress
@@ -632,10 +785,19 @@ CREATE PROCEDURE sp_UpdateUserAddress
     @NewAddressDetails NVARCHAR(256)
 AS
 BEGIN
-    UPDATE UserAddress
-    SET UserID = @NewUserID,
-        AddressDetails = @NewAddressDetails
-    WHERE ID = @AddressID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE UserAddress
+		SET UserID = @NewUserID,
+			AddressDetails = @NewAddressDetails
+		WHERE ID = @AddressID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Delete UserAddress
@@ -644,8 +806,17 @@ CREATE PROCEDURE sp_DeleteUserAddress
     @AddressID VARCHAR(20)
 AS
 BEGIN
-    DELETE FROM UserAddress
-    WHERE ID = @AddressID
+	BEGIN TRAN
+	BEGIN TRY
+		DELETE FROM UserAddress
+		WHERE ID = @AddressID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Search UserAddress
@@ -654,9 +825,18 @@ CREATE PROCEDURE sp_Ser_UserA_By_ID
     @ID varchar(20)
 AS
 BEGIN
-    SELECT * 
-    FROM UserAddress
-    WHERE ID = @ID
+	BEGIN TRAN
+	BEGIN TRY
+		SELECT * 
+		FROM UserAddress
+		WHERE ID = @ID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
@@ -722,15 +902,23 @@ CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
     @NewUserID VARCHAR(20),
     @NewProductID VARCHAR(20),
-    @NewQuantity INT,
-    @Notification NVARCHAR(1000) OUTPUT
+    @NewQuantity INT
 AS
 BEGIN
-    UPDATE CartItems
-    SET UserID = @NewUserID,
-        ProductID = @NewProductID,
-        Quantity = @NewQuantity
-    WHERE ID = @CartItemID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE CartItems
+		SET UserID = @NewUserID,
+			ProductID = @NewProductID,
+			Quantity = @NewQuantity
+		WHERE ID = @CartItemID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 
@@ -739,8 +927,17 @@ CREATE PROCEDURE sp_DeleteCartItem
     @CartItemID VARCHAR(20)
 AS
 BEGIN
-    DELETE FROM CartItems
-    WHERE ID = @CartItemID
+	BEGIN TRAN
+	BEGIN TRY
+		DELETE FROM CartItems
+		WHERE ID = @CartItemID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Search CartItems
@@ -749,9 +946,18 @@ CREATE PROCEDURE sp_Ser_CartItems_By_ID
     @ID varchar(20)
 AS
 BEGIN
-    SELECT * 
-    FROM CartItems
-    WHERE ID = @ID
+	BEGIN TRAN
+	BEGIN TRY
+		SELECT * 
+		FROM CartItems
+		WHERE ID = @ID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
@@ -762,8 +968,17 @@ CREATE PROCEDURE sp_AddOrderStatus
     @StatusName NVARCHAR(50)
 AS
 BEGIN
-    INSERT INTO OrderStatus (ID, StatusName)
-    VALUES (@StatusID, @StatusName)
+	BEGIN TRAN
+	BEGIN TRY
+		INSERT INTO OrderStatus (ID, StatusName)
+		VALUES (@StatusID, @StatusName)
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Update OrderStatus
@@ -773,9 +988,18 @@ CREATE PROCEDURE sp_UpdateOrderStatus
     @NewStatusName NVARCHAR(50)
 AS
 BEGIN
-    UPDATE OrderStatus
-    SET StatusName = @NewStatusName
-    WHERE ID = @StatusID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE OrderStatus
+		SET StatusName = @NewStatusName
+		WHERE ID = @StatusID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Delete OrderStatus
@@ -784,8 +1008,17 @@ CREATE PROCEDURE sp_DeleteOrderStatus
     @StatusID VARCHAR(20)
 AS
 BEGIN
-    DELETE FROM OrderStatus
-    WHERE ID = @StatusID
+	BEGIN TRAN
+	BEGIN TRY
+		DELETE FROM OrderStatus
+		WHERE ID = @StatusID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Search OrderStatus
@@ -794,9 +1027,18 @@ CREATE PROCEDURE sp_Ser_OrderStatus_By_ID
     @ID varchar(20)
 AS
 BEGIN
-    SELECT * 
-    FROM OrderStatus
-    WHERE ID = @ID
+	BEGIN TRAN 
+	BEGIN TRY
+		SELECT * 
+		FROM OrderStatus
+		WHERE ID = @ID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
@@ -831,11 +1073,20 @@ CREATE PROCEDURE sp_UpdateOrder
     @NewOrderDate DATETIME
 AS
 BEGIN
-    UPDATE Orders
-    SET UserID = @NewUserID,
-        StatusID = @NewStatusID,
-        OrderDate = @NewOrderDate
-    WHERE ID = @OrderID
+	BEGIN TRAN
+	BEGIN TRY
+		UPDATE Orders
+		SET UserID = @NewUserID,
+			StatusID = @NewStatusID,
+			OrderDate = @NewOrderDate
+		WHERE ID = @OrderID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 --Stored Procedure: Delete Order
@@ -844,10 +1095,19 @@ CREATE PROCEDURE sp_DeleteOrder
     @OrderID VARCHAR(20)
 AS
 BEGIN
-	DELETE FROM OrderItems
-    WHERE OrderID = @OrderID
-    DELETE FROM Orders
-    WHERE ID = @OrderID
+	BEGIN TRAN
+	BEGIN TRY
+		DELETE FROM OrderItems
+		WHERE OrderID = @OrderID
+		DELETE FROM Orders
+		WHERE ID = @OrderID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 CREATE TRIGGER tr_OrderItem_Deletion
@@ -865,9 +1125,18 @@ CREATE PROCEDURE sp_Ser_Order_By_ID
     @ID varchar(20)
 AS
 BEGIN
-    SELECT * 
-    FROM Orders
-    WHERE ID = @ID
+	BEGIN TRAN
+	BEGIN TRY
+		SELECT * 
+		FROM Orders
+		WHERE ID = @ID
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
@@ -880,8 +1149,17 @@ CREATE PROCEDURE sp_AddOrderItem
     @Quantity INT
 AS
 BEGIN
-    INSERT INTO OrderItems (ID, OrderID, ProductID, Quantity)
-    VALUES (@OrderItemID, @OrderID, @ProductID, @Quantity)
+	BEGIN TRAN 
+	BEGIN TRY
+		INSERT INTO OrderItems (ID, OrderID, ProductID, Quantity)
+		VALUES (@OrderItemID, @OrderID, @ProductID, @Quantity)
+		COMMIT TRAN;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		THROW 1,@Notification,16;
+	END CATCH
 END
 GO
 ----------------------------------------------------------
