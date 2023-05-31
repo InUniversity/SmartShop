@@ -9,7 +9,7 @@ namespace SmartShop.ConvertToModel
         {
             return type.Name switch
             {
-                nameof(UserAccount) => new ToUserAccount(),
+                nameof(UserView) => new ToUserView(),
                 nameof(CartItem) => new ToCartItem(),
                 nameof(Category) => new ToCategory(),
                 nameof(Order) => new ToOrder(),

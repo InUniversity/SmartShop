@@ -13,8 +13,6 @@ namespace SmartShop.Models
         public decimal WalletBalance { get; set; }
         public string RoleID { get; set; }
 
-        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
     }
 }

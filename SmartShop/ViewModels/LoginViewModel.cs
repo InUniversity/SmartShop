@@ -3,9 +3,8 @@ using System.Windows;
 using SmartShop.ViewModels.Base;
 using System.Data.SqlClient;
 using SmartShop.Repositories;
-using SmartShop.ConvertToModel;
 using SmartShop.Database;
-using SmartShop.Queries;
+using SmartShop.Models;
 using SmartShop.Views;
 
 namespace SmartShop.ViewModels
@@ -21,10 +20,11 @@ namespace SmartShop.ViewModels
         public ICommand LoginCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
 
-        private LoginRepository login;
+        private readonly LoginRepository loginRepos;
 
-        public LoginViewModel()
+        public LoginViewModel(LoginRepository loginRepos)
         {
+            this.loginRepos = loginRepos;
             SetCommands();
         }
 
@@ -41,45 +41,25 @@ namespace SmartShop.ViewModels
 
         private void ExecuteLoginCommand(Window window)
         {
-            MainWindow mainWindow = new MainWindow();
-            string serverName = "(localdb)\\mssqllocaldb";
-            string databaseName = "SmartShop";
-            string connectionString = GetConnStrTemplate(serverName, databaseName, username, password);
-            DbConnection dbConn = new DbConnection(new SqlConnection(connectionString));
-            var mainWin = new MainWindow() { DataContext = new MainViewModel(dbConn) };
-            InitLogin(serverName, databaseName);
-            if (login.GetAuthorizedAccountID(username, password)!=null)
-            {
-
-                mainWin.ShowDialog();
-                RefreshAllText();
-            }
-            else
-            {
-                MessageBox.Show("Fail");
-            }
+            var usr = loginRepos.Login(username, password, out var notification);
+            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
+            if (usr == null) return;
+            CurrentDb.Ins.Usr = usr;
+            ShowMainWindow(CurrentDb.serverName, CurrentDb.dbName, username, password);
+            RefreshAllText();
         }
-        
-        private void InitLogin(string serverName, string databaseName)
-        {
-            var conStr = GetConnStrTemplate(serverName, databaseName);
-            var con = new SqlConnection(conStr);
-            var dbConn = new DbConnection(con);
 
-            var dbConv = new DbConverter(new ConvModelFactory());
-            var loginQuery = new LoginQuery();
-            var loginAccount = new LoginRepository(dbConn, dbConv, loginQuery);
-            this.login = loginAccount;
+        private void ShowMainWindow(string serverName, string databaseName, string username, string password)
+        {
+            var connectionString = GetConnStrTemplate(serverName, databaseName, username, password);
+            var dbConn = new DbConnection(new SqlConnection(connectionString));
+            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn) };
+            mainWin.ShowDialog();
         }
 
         private string GetConnStrTemplate(string serverName, string databaseName, string username, string password)
         {
             return $"Data Source={serverName};Initial Catalog={databaseName};User ID={username};Password={password};";
-        }
-        
-        private string GetConnStrTemplate(string serverName, string databaseName)
-        {
-            return $"Data Source={serverName};Initial Catalog={databaseName};Integrated Security=True;";
         }
 
         private void RefreshAllText()

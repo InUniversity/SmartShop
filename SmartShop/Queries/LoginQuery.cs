@@ -11,13 +11,16 @@ namespace SmartShop.Queries
 {
     public class LoginQuery
     {
-        public QueryService SearchAccountUser(string user, string pass)
+        public QueryService Login(string user, string pass, out SqlParameter notificationParameter)
         {
-            var query = new QueryService("sp_GetAccountUser", CommandType.StoredProcedure);
+            notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
+            notificationParameter.Direction = ParameterDirection.Output;
+            var query = new QueryService("sp_Login", CommandType.StoredProcedure);
             query.Paras = new[]
             {
                 new SqlParameter("@UserName", user),
-                new SqlParameter("@Password", pass)
+                new SqlParameter("@Password", pass),
+                notificationParameter
             };
             return query;
         }

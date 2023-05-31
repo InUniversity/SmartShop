@@ -1,23 +1,28 @@
-namespace SmartShop.Models
+using SmartShop.Models;
+
+namespace SmartShop.Database
 {
-    public class CurrentUser
+    public class CurrentDb
     {
-        private static CurrentUser ins;
+        public const string serverName = "(localdb)\\mssqllocaldb";
+        public const string dbName = "SmartShop";
+        
+        private static CurrentDb ins;
         private User user = new User();
 
-        public static CurrentUser Ins
+        public static CurrentDb Ins
         {
             get
             {
                 if (ins == null)
                 {
-                    ins = new CurrentUser();
+                    ins = new CurrentDb();
                 }
                 return ins;
             }
         }
 
-        private CurrentUser()
+        private CurrentDb()
         {
             user = new User();
         }

@@ -1,7 +1,10 @@
 ﻿using System.Data.SqlClient;
 using System.Windows;
+using SmartShop.ConvertToModel;
 using SmartShop.Database;
 using SmartShop.Models;
+using SmartShop.Queries;
+using SmartShop.Repositories;
 using SmartShop.ViewModels;
 using SmartShop.Views;
 
@@ -14,28 +17,26 @@ namespace SmartShop
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            //CurrentUser.Ins.Usr.ID = "USR0001";
-            //InitMainWindow();
-            //base.OnStartup(e);
             InitLogin();
             base.OnStartup(e);
         }
 
-        private void InitMainWindow()
-        {
-            var conStr = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=SmartShop;Integrated Security=True";
-            var con = new SqlConnection(conStr);
-            var dbConn = new DbConnection(con);
-            var viewModel = new MainViewModel(dbConn);
-            var window = new MainWindow { DataContext = viewModel };
-            window.Show();
-        }
-
         private void InitLogin()
         {
-            var viewModel = new LoginViewModel();
+            var conStr = GetConnStrTemplate(CurrentDb.serverName, CurrentDb.dbName);
+            var con = new SqlConnection(conStr);
+            var dbConn = new DbConnection(con);
+            var dbConv = new DbConverter(new ConvModelFactory());
+            var loginQuery = new LoginQuery();
+            var loginRepos = new LoginRepository(dbConn, dbConv, loginQuery);
+            var viewModel = new LoginViewModel(loginRepos);
             var window = new Login { DataContext = viewModel };
             window.Show();
+        }
+        
+        private string GetConnStrTemplate(string serverName, string databaseName)
+        {
+            return $"Data Source={serverName};Initial Catalog={databaseName};Integrated Security=True;";
         }
     }
 }

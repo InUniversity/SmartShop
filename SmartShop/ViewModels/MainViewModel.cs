@@ -125,7 +125,7 @@ namespace SmartShop.ViewModels
         public void Load()
         {
             
-            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentUser.Ins.Usr.ID); 
+            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentDb.Ins.Usr.ID); 
         }
 
         private void Refresh(

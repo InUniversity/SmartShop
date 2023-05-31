@@ -1,6 +1,7 @@
 ﻿using SmartShop.ViewModels.Base;
 using System.Collections.Generic;
 using System.Windows.Input;
+using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
 
@@ -19,8 +20,6 @@ namespace SmartShop.ViewModels.UserControls
         private readonly ProductRepository prodRepos;
         private readonly IReceiveProduct prodDetailVM;
         private readonly INavigateView navView;
-
-        private User curUser = CurrentUser.Ins.Usr;
 
         public ProductsViewModel(ProductRepository prodRepos, IReceiveProduct prodDetailVM, INavigateView navView)
         {

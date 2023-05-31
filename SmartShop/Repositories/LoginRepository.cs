@@ -1,14 +1,8 @@
-﻿using SmartShop.Database;
+﻿using System.Configuration;
+using System.Data;
+using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Queries;
-using SmartShop.Views;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace SmartShop.Repositories
 {
@@ -21,18 +15,13 @@ namespace SmartShop.Repositories
             this.query = query;
         }
 
-        public UserAccount SearchAccount(string user, string pass)
+        public UserView Login(string user, string pass, out string notification)
         {
-            var qry = query.SearchAccountUser(user, pass);
+            var qry = query.Login(user, pass, out var notificationParameter);
             using var reader = dbConn.ExecuteReader(qry);
-            return dbConv.ToSingleObject<UserAccount>(reader);
-        }
-
-
-        public int? GetAuthorizedAccountID(string username, string pass)
-        {
-            UserAccount decentralization = SearchAccount(username, pass);
-            return decentralization?.ID;
+            var usr = dbConv.ToSingleObject<UserView>(reader);
+            notification = notificationParameter?.Value?.ToString();
+            return usr;
         }
     }
 }
