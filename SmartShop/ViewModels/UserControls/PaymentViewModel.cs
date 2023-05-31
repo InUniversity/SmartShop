@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
+using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
@@ -49,7 +50,7 @@ namespace SmartShop.ViewModels.UserControls
 
         public void Receive(List<OrderItem> orderItems)
         {
-            var order = orderRepos.GetNewOrder(CurrentUser.Ins.Usr.ID);
+            var order = orderRepos.GetNewOrder(CurrentDb.Ins.Usr.ID);
             curOrderID = order.ID;
             orderItems.ForEach(ordItem => ordItem.OrderID = curOrderID);
             OrderItemsVM.Receive(orderItems);

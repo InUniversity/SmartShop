@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using SmartShop.Models;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using System.Windows;
 using SmartShop.ViewModels.Base;
-using SmartShop.ViewModels.UserControls;
 using System.Data.SqlClient;
-using SmartShop.View;
+using SmartShop.Repositories;
+using SmartShop.Database;
+using SmartShop.Models;
+using SmartShop.Views;
 
 namespace SmartShop.ViewModels
 {
@@ -26,12 +20,11 @@ namespace SmartShop.ViewModels
         public ICommand LoginCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
 
-       // private AccountsDao accountsDao = new AccountsDao();
-        //private EmployeesDao employeesDao = new EmployeesDao();
-        //private RolesDao rolesDao = new RolesDao();
+        private readonly LoginRepository loginRepos;
 
-        public LoginViewModel()
+        public LoginViewModel(LoginRepository loginRepos)
         {
+            this.loginRepos = loginRepos;
             SetCommands();
         }
 
@@ -48,33 +41,25 @@ namespace SmartShop.ViewModels
 
         private void ExecuteLoginCommand(Window window)
         {
-            var buyerWindow = new BuyerWindow();
-            string serverName = "(localdb)\\mssqllocaldb";
-            string databaseName = "SmartShop";
-            string userName = Username; 
-            string password = Password;
+            var usr = loginRepos.Login(username, password, out var notification);
+            MessageBox.Show(notification, "", MessageBoxButton.OK);
+            if (usr == null) return;
+            CurrentDb.Ins.Usr = usr;
+            ShowMainWindow(CurrentDb.serverName, CurrentDb.dbName, username, password);
+            RefreshAllText();
+        }
 
-            string connectionString = $"Data Source={serverName};Initial Catalog={databaseName};User ID={userName};Password={password};";
+        private void ShowMainWindow(string serverName, string databaseName, string username, string password)
+        {
+            var connectionString = GetConnStrTemplate(serverName, databaseName, username, password);
+            var dbConn = new DbConnection(new SqlConnection(connectionString));
+            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn) };
+            mainWin.ShowDialog();
+        }
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    MessageBox.Show("Success");
-                    buyerWindow.Show();
-                    RefreshAllText();
-                }
-                catch (SqlException ex)
-                {
-                    Console.WriteLine("Lỗi SQL: " + ex.Message);
-                    MessageBox.Show("Fail");
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
+        private string GetConnStrTemplate(string serverName, string databaseName, string username, string password)
+        {
+            return $"Data Source={serverName};Initial Catalog={databaseName};User ID={username};Password={password};";
         }
 
         private void RefreshAllText()

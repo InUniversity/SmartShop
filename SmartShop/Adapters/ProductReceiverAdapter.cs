@@ -1,3 +1,4 @@
+using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.UserControls;
@@ -26,7 +27,7 @@ namespace SmartShop.Adapters
             var itemView = new CartItemView
             {
                 ID = cartItemRepos.GenerateNewID(),
-                UserID = CurrentUser.Ins.Usr.ID,
+                UserID = CurrentDb.Ins.Usr.ID,
                 ProdID = prodView.ID,
                 Quantity = prodView.SelectedQuantity
             };

@@ -5,6 +5,7 @@ using SmartShop.Models;
 using SmartShop.Repositories;
 using System.Collections.Generic;
 using System.Windows;
+using SmartShop.Database;
 
 namespace SmartShop.ViewModels.UserControls
 {
@@ -35,7 +36,7 @@ namespace SmartShop.ViewModels.UserControls
         private IReceiveCartItems paymentIns;
         private INavigateView navView;
 
-        private User user = CurrentUser.Ins.Usr;
+        private User user = CurrentDb.Ins.Usr;
 
         public CartViewModel(CartItemRepository cartItemRepos, IReceiveCartItems paymentIns, INavigateView navView)
         {

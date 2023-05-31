@@ -4,58 +4,8 @@ go
 USE SmartShop
 GO
 
-------------
--- Create and set permissions for Admin
-use master
-go 
-create login Admin
-		With PassWord ='123',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user Admin
-	for login Admin
-	
-USE SmartShop;
-GO
-ALTER ROLE db_owner ADD MEMBER [Admin];
-
---Create and set permissions for User1
--- Cho Phep User1 doc du lieu
-use master
-go 
-create login User1
-		With PassWord ='123',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user User1
-	for login User1
-
-ALTER ROLE db_datareader ADD MEMBER [User1];
-
---Create and set permissions for User2
--- Cho Phep User2 doc du lieu
-use master
-go 
-create login User2
-		With PassWord ='123',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user User2
-	for login User2
-ALTER ROLE db_datareader ADD MEMBER [User2];
-GRANT INSERT ON dbo.UserAddress TO User2;
-
-
 -- Product
+go
 CREATE TABLE Categories (
     ID VARCHAR(20) PRIMARY KEY,
     CategoryName NVARCHAR(50) NOT NULL
@@ -971,4 +921,155 @@ BEGIN
 	   THROW;
     END CATCH
 END
+<<<<<<< HEAD
 GO
+=======
+
+
+
+-- Create and set permissions for johndoe //seller
+use master
+go 
+create login johndoe
+		With PassWord ='hash123',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user johndoe
+	for login johndoe
+	
+go
+USE SmartShop;
+CREATE ROLE RoleWithoutTableCartItems;
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableCartItems;
+DENY INSERT, UPDATE, DELETE ON dbo.CartItems TO RoleWithoutTableCartItems;
+go
+ALTER ROLE RoleWithoutTableCartItems
+    ADD MEMBER johndoe;
+
+
+
+--Create and set permissions for michaeljordan //buyer
+
+use master
+go 
+create login michaeljordan
+		With PassWord ='654',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user michaeljordan
+	for login michaeljordan
+USE SmartShop;
+CREATE ROLE RoleWithoutTableProduct;
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableProduct;
+DENY INSERT, UPDATE, DELETE ON dbo.Products TO RoleWithoutTableProduct;
+
+
+go
+ALTER ROLE RoleWithoutTableProduct
+    ADD MEMBER michaeljordan;
+
+go
+
+drop proc sp_Login
+CREATE PROCEDURE sp_Login
+    @UserName VARCHAR(50),
+    @Password VARCHAR(50),
+    @Notification NVARCHAR(1000) OUTPUT
+AS
+BEGIN
+    BEGIN TRY
+        DECLARE @UserCount INT;
+        
+        SELECT @UserCount = COUNT(*)
+        FROM Users
+        WHERE Username = @UserName AND PasswordHash = @Password;
+        
+        IF @UserCount >= 1
+        BEGIN
+            SET @Notification = N'Đăng nhập thành công';
+        END
+        ELSE
+        BEGIN
+            SET @Notification = N'Đăng nhập thất bại ';
+        END
+
+        SELECT *
+        FROM Users
+        WHERE Username = @UserName AND PasswordHash = @Password;
+    END TRY
+    BEGIN CATCH
+        SET @Notification = ERROR_MESSAGE();
+        THROW;
+    END CATCH
+END
+
+DECLARE @Notification NVARCHAR(1000);
+
+EXEC sp_Login
+    @UserName = 'johndoe',
+    @Password = 'hash123',
+    @Notification = @Notification OUTPUT;
+
+SELECT @Notification AS Result;
+
+
+
+
+-- Create and set permissions for janedoe//// seller
+use master
+go 
+create login janedoe
+		With PassWord ='hash456',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user  janedoe
+	for login  janedoe
+	
+ALTER ROLE  RoleWithoutTableCartItems
+    ADD MEMBER janedoe;
+
+
+
+--Create and set permissions for bobjohnson   //buyer
+
+use master
+go 
+create login bobjohnson
+		With PassWord ='789',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user bobjohnson
+	for login bobjohnson
+
+go
+ALTER ROLE RoleWithoutTableProduct
+    ADD MEMBER bobjohnson;
+
+--Create and set permissions for sarahlee  //buyer
+
+use master
+go 
+create login sarahlee
+		With PassWord ='987',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user sarahlee
+	for login sarahlee
+ALTER ROLE RoleWithoutTableProduct
+    ADD MEMBER sarahlee;
+>>>>>>> 6c90f13 (Con loi cai Proc Dang nhap)
