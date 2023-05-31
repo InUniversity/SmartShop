@@ -859,8 +859,17 @@ CREATE PROCEDURE sp_AddOrder
     @OrderDate DATETIME
 AS
 BEGIN
-    INSERT INTO Orders (ID, UserID, StatusID, OrderDate)
-    VALUES (@OrderID, @UserID, @StatusID, @OrderDate)
+    BEGIN TRAN;
+    BEGIN TRY 
+        INSERT INTO Orders (ID, UserID, StatusID, OrderDate)
+        VALUES (@OrderID, @UserID, @StatusID, @OrderDate)
+        COMMIT TRAN;
+    END TRY
+    BEGIN CATCH 
+        ROLLBACK TRAN;
+        DECLARE @Message NVARCHAR(1000) = ERROR_MESSAGE();
+        THROW 1, @Message, 16;
+    END CATCH
 END
 GO
 --Stored Procedure: Update Order
@@ -890,6 +899,15 @@ BEGIN
     DELETE FROM Orders
     WHERE ID = @OrderID
 END
+GO
+CREATE TRIGGER tr_OrderItem_Deletion
+    ON Orders
+    AFTER DELETE
+    AS
+BEGIN
+    DELETE FROM OrderItems
+    WHERE OrderID IN (SELECT OrderID FROM deleted)
+END;
 GO
 --Stored Procedure: Search Order
 
@@ -953,4 +971,4 @@ BEGIN
 	   THROW;
     END CATCH
 END
-
+GO
