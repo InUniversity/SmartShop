@@ -19,6 +19,19 @@ namespace SmartShop.Queries
             };
             return query;
         }
+        
+        public QueryService Add(OrderItem item)
+        {
+            var query = new QueryService("sp_AddOrderItem", CommandType.StoredProcedure);
+            query.Paras = new[]
+            {
+                new SqlParameter("@OrderItemID", item.ID),
+                new SqlParameter("@OrderID", item.OrderID),
+                new SqlParameter("@ProductID", item.ProdID),
+                new SqlParameter("@Quantity", item.Quantity)
+            };
+            return query;
+        }
 
         public QueryService Delete(string id)
         {
