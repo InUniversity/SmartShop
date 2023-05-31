@@ -42,7 +42,7 @@ namespace SmartShop.ViewModels
         private void ExecuteLoginCommand(Window window)
         {
             var usr = loginRepos.Login(username, password, out var notification);
-            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
+            MessageBox.Show(notification, "", MessageBoxButton.OK);
             if (usr == null) return;
             CurrentDb.Ins.Usr = usr;
             ShowMainWindow(CurrentDb.serverName, CurrentDb.dbName, username, password);

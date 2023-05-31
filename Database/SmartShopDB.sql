@@ -4,125 +4,6 @@ go
 USE SmartShop
 GO
 
-------------
--- Create and set permissions for JohnDoe
-use master
-go 
-create login JohnDoe
-		With PassWord ='password123',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user JohnDoe
-	for login JohnDoe
-	
-USE SmartShop;
-GO
-ALTER ROLE db_owner ADD MEMBER [JohnDoe];
-
--- Create and set permissions for JaneSmith
-use master
-go 
-create login JaneSmith
-		With PassWord ='secret456',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user JaneSmith
-	for login JaneSmith
-	
-USE SmartShop;
-GO
-ALTER ROLE db_owner ADD MEMBER [JaneSmith];
-
---Create and set permissions for MikeJohnson
--- Cho Phep MikeJohnson doc du lieu
-use master
-go 
-create login MikeJohnson
-		With PassWord ='qwerty789',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user MikeJohnson
-	for login MikeJohnson
-
-ALTER ROLE db_datareader ADD MEMBER [MikeJohnson];
-
---Create and set permissions for EmilyDavis
--- Cho Phep EmilyDavis doc du lieu
-use master
-go 
-create login EmilyDavis
-		With PassWord ='abcxyz123',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user EmilyDavis
-	for login EmilyDavis
-ALTER ROLE db_datareader ADD MEMBER [EmilyDavis];
-
---Create and set permissions for DavidWilson
--- Cho Phep DavidWilson doc du lieu
-use master
-go 
-create login DavidWilson
-		With PassWord ='pass1234',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user DavidWilson
-	for login DavidWilson
-ALTER ROLE db_datareader ADD MEMBER [DavidWilson];
-
-CREATE TABLE UserAccount (
-    UserID INT PRIMARY KEY,
-    UserName VARCHAR(50) NOT NULL,
-    Password VARCHAR(50) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
-    Role NVARCHAR(50) NOT NULL
-);
-go
-
-INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
-VALUES (1, 'JohnDoe', 'password123', 'Seller', 'johndoe@example.com'); 
-
-INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
-VALUES (2, 'JaneSmith', 'secret456', 'Seller', 'janesmith@example.com');
-
-INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
-VALUES (3, 'MikeJohnson', 'qwerty789', 'Buyer', 'mikejohnson@example.com');
-
-INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
-VALUES (4, 'EmilyDavis', 'abcxyz123', 'Buyer', 'emilydavis@example.com');
-
-INSERT INTO UserAccount (UserID, UserName, Password, Role, Email)
-VALUES (5, 'DavidWilson', 'pass1234', 'Buyer', 'davidwilson@example.com');
-
-go
-CREATE PROCEDURE sp_GetAccountUser
-    @UserName VARCHAR(50),
-    @Password VARCHAR(50)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM UserAccount
-    WHERE UserName = @UserName AND Password = @Password;
-END
-
-
 -- Product
 go
 CREATE TABLE Categories (
@@ -1040,4 +921,155 @@ BEGIN
 	   THROW;
     END CATCH
 END
+<<<<<<< HEAD
 GO
+=======
+
+
+
+-- Create and set permissions for johndoe //seller
+use master
+go 
+create login johndoe
+		With PassWord ='hash123',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user johndoe
+	for login johndoe
+	
+go
+USE SmartShop;
+CREATE ROLE RoleWithoutTableCartItems;
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableCartItems;
+DENY INSERT, UPDATE, DELETE ON dbo.CartItems TO RoleWithoutTableCartItems;
+go
+ALTER ROLE RoleWithoutTableCartItems
+    ADD MEMBER johndoe;
+
+
+
+--Create and set permissions for michaeljordan //buyer
+
+use master
+go 
+create login michaeljordan
+		With PassWord ='654',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user michaeljordan
+	for login michaeljordan
+USE SmartShop;
+CREATE ROLE RoleWithoutTableProduct;
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableProduct;
+DENY INSERT, UPDATE, DELETE ON dbo.Products TO RoleWithoutTableProduct;
+
+
+go
+ALTER ROLE RoleWithoutTableProduct
+    ADD MEMBER michaeljordan;
+
+go
+
+drop proc sp_Login
+CREATE PROCEDURE sp_Login
+    @UserName VARCHAR(50),
+    @Password VARCHAR(50),
+    @Notification NVARCHAR(1000) OUTPUT
+AS
+BEGIN
+    BEGIN TRY
+        DECLARE @UserCount INT;
+        
+        SELECT @UserCount = COUNT(*)
+        FROM Users
+        WHERE Username = @UserName AND PasswordHash = @Password;
+        
+        IF @UserCount >= 1
+        BEGIN
+            SET @Notification = N'Đăng nhập thành công';
+        END
+        ELSE
+        BEGIN
+            SET @Notification = N'Đăng nhập thất bại ';
+        END
+
+        SELECT *
+        FROM Users
+        WHERE Username = @UserName AND PasswordHash = @Password;
+    END TRY
+    BEGIN CATCH
+        SET @Notification = ERROR_MESSAGE();
+        THROW;
+    END CATCH
+END
+
+DECLARE @Notification NVARCHAR(1000);
+
+EXEC sp_Login
+    @UserName = 'johndoe',
+    @Password = 'hash123',
+    @Notification = @Notification OUTPUT;
+
+SELECT @Notification AS Result;
+
+
+
+
+-- Create and set permissions for janedoe//// seller
+use master
+go 
+create login janedoe
+		With PassWord ='hash456',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user  janedoe
+	for login  janedoe
+	
+ALTER ROLE  RoleWithoutTableCartItems
+    ADD MEMBER janedoe;
+
+
+
+--Create and set permissions for bobjohnson   //buyer
+
+use master
+go 
+create login bobjohnson
+		With PassWord ='789',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user bobjohnson
+	for login bobjohnson
+
+go
+ALTER ROLE RoleWithoutTableProduct
+    ADD MEMBER bobjohnson;
+
+--Create and set permissions for sarahlee  //buyer
+
+use master
+go 
+create login sarahlee
+		With PassWord ='987',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user sarahlee
+	for login sarahlee
+ALTER ROLE RoleWithoutTableProduct
+    ADD MEMBER sarahlee;
+>>>>>>> 6c90f13 (Con loi cai Proc Dang nhap)
