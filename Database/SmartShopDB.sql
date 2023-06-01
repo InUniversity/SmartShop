@@ -1016,30 +1016,22 @@ GO
 
 
 
---------------------------------------------------------------------------------------------
--- Create and set permissions for johndoe //seller
+-------------------------------------------------------------------------------------------------
+-- Create and set permissions for johndoe // Addmin
 use master
 go 
 create login johndoe
 		With PassWord ='hash123',
 		Check_Expiration = off,
 		check_policy =off
-		
 use SmartShop
 go
 create user johndoe
 	for login johndoe
-	
 go
 USE SmartShop;
 go
-CREATE ROLE RoleWithoutTableCartItem;
-go
-GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableCartItem;
-DENY INSERT, UPDATE, DELETE ON dbo.CartItems TO RoleWithoutTableCartItem;
-go
-ALTER ROLE RoleWithoutTableCartItem
-    ADD MEMBER johndoe;
+ALTER ROLE db_owner ADD MEMBER johndoe;
 
 -- Create and set permissions for janedoe//// seller
 use master
@@ -1048,12 +1040,30 @@ create login janedoe
 		With PassWord ='hash456',
 		Check_Expiration = off,
 		check_policy =off
-		
+
 use SmartShop
 go
 create user  janedoe
 	for login  janedoe
-	
+
+
+
+go
+CREATE ROLE RoleWithoutTableCartItem;
+GO
+GRANT EXECUTE, SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableCartItem;
+DENY SELECT ,INSERT, UPDATE, DELETE ON dbo.CartItems TO RoleWithoutTableCartItem;
+
+
+DENY EXECUTE ON dbo.sp_AddCartItem TO RoleWithoutTableCartItem;
+DENY EXECUTE ON dbo.sp_DeleteCartItem TO RoleWithoutTableCartItem;
+DENY EXECUTE ON dbo.sp_UpdateCartItem TO RoleWithoutTableCartItem;
+DENY EXECUTE ON dbo.sp_Ser_CartItems_By_ID TO RoleWithoutTableCartItem;
+
+DENY EXECUTE ON dbo.fn_GenerateCartItemID TO RoleWithoutTableCartItem;
+
+
+GO
 ALTER ROLE  RoleWithoutTableCartItem
     ADD MEMBER janedoe;
 
@@ -1073,8 +1083,15 @@ create user michaeljordan
 	for login michaeljordan
 USE SmartShop;
 CREATE ROLE RoleWithoutTableProduct;
-GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableProduct;
-DENY INSERT, UPDATE, DELETE ON dbo.Products TO RoleWithoutTableProduct;
+go
+GRANT EXECUTE, SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableProduct;
+DENY SELECT ,INSERT, UPDATE, DELETE ON dbo.Products TO RoleWithoutTableProduct;
+DENY EXECUTE ON dbo.sp_AddProduct TO RoleWithoutTableProduct;
+DENY EXECUTE ON dbo.sp_UpdateProduct TO RoleWithoutTableProduct;
+DENY EXECUTE ON dbo.sp_DeleteProduct TO RoleWithoutTableProduct;
+DENY EXECUTE ON dbo.sp_Ser_Prod_By_ID TO RoleWithoutTableProduct;
+DENY EXECUTE ON dbo.fn_GenerateProdID TO RoleWithoutTableProduct;
+
 
 
 go
@@ -1082,7 +1099,6 @@ ALTER ROLE RoleWithoutTableProduct
     ADD MEMBER michaeljordan;
 
 go
-
 
 
 
@@ -1104,6 +1120,8 @@ go
 ALTER ROLE RoleWithoutTableProduct
     ADD MEMBER bobjohnson;
 
+go
+
 --Create and set permissions for sarahlee  //buyer
 
 use master
@@ -1117,9 +1135,12 @@ use SmartShop
 go
 create user sarahlee
 	for login sarahlee
+
+go
 ALTER ROLE RoleWithoutTableProduct
     ADD MEMBER sarahlee;
 
+go
 
 
 go
