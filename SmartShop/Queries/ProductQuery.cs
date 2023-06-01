@@ -73,7 +73,7 @@ namespace SmartShop.Queries
 
         public QueryService GetNewID()
         {
-            var query = new QueryService("SELECT * FROM dbo.fn_GenerateProdID()", CommandType.Text);
+            var query = new QueryService("SELECT dbo.fn_GenerateProdID()", CommandType.Text);
             return query;
         }
     }

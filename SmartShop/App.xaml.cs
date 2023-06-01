@@ -17,7 +17,9 @@ namespace SmartShop
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            InitLogin();
+            CurrentDb.Ins.Usr.ID = "USR0001";
+            // InitLogin();
+            InitMain();
             base.OnStartup(e);
         }
 
@@ -37,6 +39,14 @@ namespace SmartShop
         private string GetConnStrTemplate(string serverName, string databaseName)
         {
             return $"Data Source={serverName};Initial Catalog={databaseName};Integrated Security=True;";
+        }
+
+        private void InitMain()
+        {
+            var connectionString = GetConnStrTemplate(CurrentDb.serverName, CurrentDb.dbName);
+            var dbConn = new DbConnection(new SqlConnection(connectionString));
+            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn) };
+            mainWin.ShowDialog();
         }
     }
 }
