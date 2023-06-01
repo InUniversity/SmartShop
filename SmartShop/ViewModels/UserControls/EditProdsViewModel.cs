@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq.Expressions;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using SmartShop.Models;
@@ -52,7 +55,7 @@ namespace SmartShop.ViewModels.UserControls
             ChooseImgCommand = new RelayCommand<object>(ExecuteChooseImg);
             AddProdCommand = new RelayCommand<object>(ExecuteAddProd);
             UpdateProdCommand = new RelayCommand<object>(ExecuteUpdateProd);
-            DeleteProdCommand = new RelayCommand<string>(ExecuteDeleteProd);
+            DeleteProdCommand = new RelayCommand<object>(ExecuteDeleteProd);
             OnAddModeCommand = new RelayCommand<object>(_ => OnAddMode());
             OnUpdateModeCommand = new RelayCommand<object>(_ => OnUpdateMode());
         }
@@ -90,9 +93,18 @@ namespace SmartShop.ViewModels.UserControls
             LoadProducts();
         }
 
-        private void ExecuteDeleteProd(string prodID)
+        private void ExecuteDeleteProd(object prodID)
         {
-            prodRepos.Delete(prodID);
+            try
+            {
+                prodRepos.Delete(prodID as string);
+                
+            }
+            catch(SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
             LoadProducts();
         }
 

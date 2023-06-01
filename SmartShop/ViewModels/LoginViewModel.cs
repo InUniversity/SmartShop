@@ -42,7 +42,6 @@ namespace SmartShop.ViewModels
         {
             var notification = loginRepos.CheckLogin(username, password);
             var usr = loginRepos.Login(username, password);
-            //MessageBox.Show(notification, "", MessageBoxButton.OK);
             MessageBox.Show(""+ notification);
             if (usr == null) return;
             CurrentDb.Ins.Usr = usr;
@@ -60,7 +59,7 @@ namespace SmartShop.ViewModels
 
         private string GetConnStrTemplate(string serverName, string databaseName, string username, string password)
         {
-            return $"Data Source={serverName};Initial Catalog={databaseName};User ID={username};Password={password};";
+            return $"Data Source={serverName};Initial Catalog={databaseName};Persist Security Info=True;User ID={username};Password={password}";
         }
 
         private void RefreshAllText()

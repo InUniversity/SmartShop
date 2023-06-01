@@ -18,8 +18,8 @@ namespace SmartShop
         protected override void OnStartup(StartupEventArgs e)
         {
             CurrentDb.Ins.Usr.ID = "USR0001";
-            // InitLogin();
-            InitMain();
+            InitLogin();
+            //InitMain();
             base.OnStartup(e);
         }
 
