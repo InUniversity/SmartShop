@@ -30,6 +30,7 @@ namespace SmartShop.ViewModels.UserControls
         
         public ICommand PlusSelQtyProdCommand { get; private set; }
         public ICommand MinusSelQtyProdCommand { get; private set; }
+        public ICommand DeleteCartItemCommand { get; private set; }
         public ICommand PayCommand { get; private set; }
 
         private readonly CartItemRepository cartItemRepos;
@@ -64,6 +65,7 @@ namespace SmartShop.ViewModels.UserControls
         {
             PlusSelQtyProdCommand = new RelayCommand<CartItemView>(ExecutePlusSelQtyProd);
             MinusSelQtyProdCommand = new RelayCommand<CartItemView>(ExecuteMinusSelQtyProd);
+            DeleteCartItemCommand = new RelayCommand<object>(ExecuteDeleteCartItem);
             PayCommand = new RelayCommand<object>(ExecutePay);
         }
 
@@ -79,10 +81,19 @@ namespace SmartShop.ViewModels.UserControls
             Update(item);
         }
 
+        private void ExecuteDeleteCartItem(object itemID)
+        {
+            cartItemRepos.Delete(itemID as string, out var notification);
+            if (!string.IsNullOrEmpty(notification))
+                MessageBox.Show(notification);
+            Load();
+        }
+
         private void Update(CartItem item)
         {
-            cartItemRepos.AddOrUpdate(item, out var notification);
-            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
+            cartItemRepos.Update(item, out var notification);
+            if (!string.IsNullOrEmpty(notification))
+                MessageBox.Show(notification, "", MessageBoxButton.OK);
             Load();
         }
 
@@ -94,8 +105,8 @@ namespace SmartShop.ViewModels.UserControls
 
         public void Receive(CartItemView itemView)
         {
-            cartItemRepos.AddOrUpdate(itemView, out var notification);
-            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
+            cartItemRepos.Add(itemView, out var notification);
+            MessageBox.Show(notification, "", MessageBoxButton.OK);
             Load();
         }
     }

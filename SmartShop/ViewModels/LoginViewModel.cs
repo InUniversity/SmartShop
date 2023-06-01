@@ -4,7 +4,6 @@ using SmartShop.ViewModels.Base;
 using System.Data.SqlClient;
 using SmartShop.Repositories;
 using SmartShop.Database;
-using SmartShop.Models;
 using SmartShop.Views;
 
 namespace SmartShop.ViewModels
