@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Queries;
@@ -13,24 +12,6 @@ namespace SmartShop.Repositories
         public OrderRepository(DbConnection dbConn, DbConverter dbConv, OrderQuery query) : base(dbConn, dbConv)
         {
             this.query = query;
-        }
-
-        public bool Add(Order order)
-        {
-            var qry = query.Add(order);
-            return dbConn.ExecuteNonQuery(qry);
-        }
-
-        public bool Delete(string id)
-        {
-            var qry = query.Delete(id);
-            return dbConn.ExecuteNonQuery(qry);
-        }
-
-        public bool Update(Order order)
-        {
-            var qry = query.Update(order);
-            return dbConn.ExecuteNonQuery(qry);
         }
 
         public Order SearchByID(string id)
@@ -63,7 +44,9 @@ namespace SmartShop.Repositories
 
         public List<OrderItem> GetOrderItems(string orderID)
         {
-            throw new System.NotImplementedException();
+            var qry = query.GetOrderItems(orderID);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToList<OrderItem>(reader);
         }
     }
 }

@@ -363,6 +363,15 @@ END;
 GO
 ----------------------------------------------------------
 
+CREATE FUNCTION fn_SerOrderItemsByOrderID(@OrderID varchar(20))
+    RETURNS TABLE
+AS
+RETURN (
+    SELECT *
+    FROM OrderItems
+    WHERE OrderID = @OrderID
+)
+GO
 
 --Stored Procedure: get order date
 CREATE PROCEDURE sp_GetOrdersByDateRange
@@ -902,8 +911,6 @@ AS
 BEGIN
 	BEGIN TRAN
 	BEGIN TRY
-		DELETE FROM OrderItems
-		WHERE OrderID = @OrderID
 		DELETE FROM Orders
 		WHERE ID = @OrderID
 		COMMIT TRAN;

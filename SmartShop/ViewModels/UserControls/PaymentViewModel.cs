@@ -1,16 +1,17 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using SmartShop.Database;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
 
 namespace SmartShop.ViewModels.UserControls
 {
-    public interface IReceiveOrder
+    public interface ICreateOrder
     {
-        void Receive(string orderID);
+        void Create();
     }
     
-    public class PaymentViewModel : BaseViewModel, IReceiveOrder
+    public class PaymentViewModel : BaseViewModel, ICreateOrder
     {
         public ICommand PayCommand { get; private set; }
 
@@ -19,7 +20,7 @@ namespace SmartShop.ViewModels.UserControls
 
         private readonly OrderRepository orderRepos;
 
-        public string CurOrderID { get; set; }
+        private string curOrderID;
 
         public PaymentViewModel(UserAddressViewModel userAddressVM, OrderViewModel orderItemsVM, OrderRepository orderRepos)
         {
@@ -36,15 +37,17 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePay(object obj)
         {
-            orderRepos.Pay(CurOrderID, out var notification);
+            orderRepos.Pay(curOrderID, out var notification);
             if (string.IsNullOrEmpty(notification))
                 MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
         }
 
-        public void Receive(string orderID)
+        public void Create()
         {
-            var order = orderRepos.SearchByID(orderID);
-            var orderItems = orderRepos.GetOrderItems(order.ID);
+            curOrderID = orderRepos.GetNewOrder(CurrentDb.Ins.Usr?.ID);
+            var order = orderRepos.SearchByID(curOrderID);
+            
+            var orderItems = orderRepos.GetOrderItems(order?.ID);
             OrderItemsVM.Receive(orderItems);
         }
     }

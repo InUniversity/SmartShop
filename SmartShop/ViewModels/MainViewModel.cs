@@ -62,7 +62,7 @@ namespace SmartShop.ViewModels
             var orderItemsVM = new OrderViewModel(orderRepos);
             var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos);
 
-            var cartVM = new CartViewModel(cartItemRepos, orderRepos,this, paymentVM);
+            var cartVM = new CartViewModel(cartItemRepos,this, paymentVM);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
