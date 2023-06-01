@@ -26,15 +26,16 @@
                 </Grid.ColumnDefinitions>
                 <Ellipse />
                 <Button
-                    Style="{StaticResource MaterialDesignIconButton}">
-                    <materialDesign:PackIcon Kind="Magnify" />
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    Command="{Binding ElementName=prodsUC, Path=DataContext.RefreshCommand}">
+                    <materialDesign:PackIcon Kind="Reload" />
                 </Button>
-                <TextBox Grid.Column="1"
+                <TextBox Grid.Column="1" 
                          FontSize="12"
                          Background="White"
                          Foreground="Black"
-                         materialDesign:HintAssist.Hint="Tên sản phẩm cần tìm"
-                         Text="{Binding ElementName=projectInputUC, Path=DataContext.TextToSearch, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Nhập tên sản phẩm cần tìm"
+                         Text="{Binding ElementName=prodsUC, Path=DataContext.TextToSearch, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" />
             </Grid>
             <materialDesign:Card Grid.Row="1" Height="530">
