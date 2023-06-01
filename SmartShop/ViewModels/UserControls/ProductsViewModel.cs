@@ -1,7 +1,6 @@
 ﻿using SmartShop.ViewModels.Base;
 using System.Collections.Generic;
 using System.Windows.Input;
-using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Repositories;
 
@@ -14,7 +13,11 @@ namespace SmartShop.ViewModels.UserControls
 
         private ProductView selectedProduct;
         public ProductView SelectedProduct { get => selectedProduct; set { selectedProduct = value; OnPropertyChanged(); } }
+        
+        private string textToSearch;
+        public string TextToSearch { get => textToSearch; set { textToSearch = value; SearchByName(); OnPropertyChanged(); } }
 
+        public ICommand RefreshCommand { get; private set; }
         public ICommand MoveProdDetailCommand { get; private set; }
 
         private readonly ProductRepository prodRepos;
@@ -32,6 +35,7 @@ namespace SmartShop.ViewModels.UserControls
 
         private void SetCommands()
         {
+            RefreshCommand = new RelayCommand<object>(_ => Load());
             MoveProdDetailCommand = new RelayCommand<object>(MoveProdDetail);
         }
 
@@ -40,6 +44,11 @@ namespace SmartShop.ViewModels.UserControls
             if (SelectedProduct == null) return;
             prodDetailVM.Receive(SelectedProduct);
             navView.MoveToProdDetailView();
+        }
+        
+        private void SearchByName()
+        {
+            Prods = prodRepos.SearchByName(TextToSearch);
         }
 
         private void LoadProducts()
