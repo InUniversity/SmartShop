@@ -7,62 +7,9 @@ namespace SmartShop.Queries
 {
     public class OrderQuery
     {
-        public QueryService Add(Order order)
-        {
-            var query = new QueryService("sp_AddOrder", CommandType.StoredProcedure);
-            query.Paras = new[]
-            {
-                new SqlParameter("@OrderID", order.ID),
-                new SqlParameter("@UserID", order.UserID),
-                new SqlParameter("@StatusID", order.StatusID),
-                new SqlParameter("@OrderDate", order.Date)
-            };
-            return query;
-        }
-        
-        public QueryService Add(OrderItem item)
-        {
-            var query = new QueryService("sp_AddOrderItem", CommandType.StoredProcedure);
-            query.Paras = new[]
-            {
-                new SqlParameter("@OrderItemID", item.ID),
-                new SqlParameter("@OrderID", item.OrderID),
-                new SqlParameter("@ProductID", item.ProdID),
-                new SqlParameter("@Quantity", item.Quantity)
-            };
-            return query;
-        }
-
-        public QueryService Delete(string id)
-        {
-            var query = new QueryService("sp_DeleteOrder", CommandType.StoredProcedure);
-            query.Paras = new[]
-            {
-                new SqlParameter("@OrderID", id),
-            };
-            return query;
-        }
-
-        public QueryService Update(Order order)
-        {
-            var query = new QueryService("sp_UpdateOrder", CommandType.StoredProcedure);
-            query.Paras = new[]
-            {
-                new SqlParameter("@OrderID", order.ID),
-                new SqlParameter("@NewUserID", order.UserID),
-                new SqlParameter("@NewStatusID", order.StatusID),
-                new SqlParameter("@NewOrderDate", order.Date)
-            };
-            return query;
-        }
-
         public QueryService SearchByID(string id)
         {
-            var query = new QueryService("sp_Ser_Order_By_ID", CommandType.StoredProcedure);
-            query.Paras = new[]
-            {
-                new SqlParameter("@ID", id)
-            };
+            var query = new QueryService($"EXEC sp_Ser_Order_By_ID '{id}'", CommandType.Text);
             return query;
         }
 
@@ -74,7 +21,7 @@ namespace SmartShop.Queries
 
         public QueryService GetNewOrder(string userID)
         {
-            var query = new QueryService($"SELECT dbo.fn_GenerateOrderID('{userID}')", CommandType.Text);
+            var query = new QueryService($"SELECT dbo.fn_GenerateNewOrder('{userID}')", CommandType.Text);
             return query;
         }
 
@@ -82,12 +29,18 @@ namespace SmartShop.Queries
         {
             notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
             notificationParameter.Direction = ParameterDirection.Output;
-            var query = new QueryService("sp_AddOrder", CommandType.StoredProcedure);
+            var query = new QueryService("sp_Pay", CommandType.StoredProcedure);
             query.Paras = new[]
             {
                 new SqlParameter("@OrderID", orderID),
                 notificationParameter
             };
+            return query;
+        }
+
+        public QueryService GetOrderItems(string orderID)
+        {
+            var query = new QueryService($"SELECT * FROM dbo.fn_SerOrderItemsByOrderID('{orderID}')", CommandType.Text);
             return query;
         }
     }

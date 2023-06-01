@@ -15,7 +15,6 @@ namespace SmartShop.ConvertToModel
                 {
                     ID = (string)reader[ordID],
                     UserID = (string)reader[orduID],
-                    StatusID = (string)reader[ordSttusID],
                     Date = (DateTime)reader[ordDate]
                 };
             }

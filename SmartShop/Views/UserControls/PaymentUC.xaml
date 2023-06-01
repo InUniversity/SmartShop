@@ -10,9 +10,9 @@
     <ScrollViewer>
         <StackPanel>
             <uc:UserAddressUC DataContext="{Binding ElementName=paymentUC, Path=DataContext.UserAddressVM}"
-                              Margin="0,0,0,5" />
+                              Margin="10,0,0,10" />
             <uc:OrderItemsUC DataContext="{Binding ElementName=paymentUC, Path=DataContext.OrderItemsVM}" 
-                             Margin="0,0,0,10"/>
+                             Margin="10,0,0,10" Height="400"/>
             <Button Height="40" Width="300" Content="Thanh toán" Command="{Binding ElementName=paymentUC, Path=DataContext.PayCommand}"
                     Style="{StaticResource MaterialDesignFlatMidBgButton}" />
         </StackPanel>

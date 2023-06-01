@@ -1,5 +1,4 @@
 ﻿using SmartShop.ViewModels.Base;
-using System.Linq;
 using System.Windows.Input;
 using SmartShop.Models;
 using SmartShop.Repositories;
@@ -34,16 +33,16 @@ namespace SmartShop.ViewModels.UserControls
         public ICommand PayCommand { get; private set; }
 
         private readonly CartItemRepository cartItemRepos;
-        private IReceiveCartItems paymentIns;
         private INavigateView navView;
+        private ICreateOrder payIns;
 
         private User user = CurrentDb.Ins.Usr;
 
-        public CartViewModel(CartItemRepository cartItemRepos, IReceiveCartItems paymentIns, INavigateView navView)
+        public CartViewModel(CartItemRepository cartItemRepos, INavigateView navView, ICreateOrder payIns)
         {
             this.cartItemRepos = cartItemRepos;
-            this.paymentIns = paymentIns;
             this.navView = navView;
+            this.payIns = payIns;
             Load();
             SetCommands();
         }
@@ -99,7 +98,7 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePay(object obj)
         {
-            paymentIns.Receive( items.ToList() );
+            payIns.Create();
             navView.MoveToPaymentView();
         }
 

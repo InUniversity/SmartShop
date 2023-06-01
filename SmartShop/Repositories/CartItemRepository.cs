@@ -2,7 +2,6 @@
 using SmartShop.Database;
 using SmartShop.Queries;
 using System.Collections.Generic;
-using System.Windows.Media.Animation;
 
 namespace SmartShop.Repositories
 {

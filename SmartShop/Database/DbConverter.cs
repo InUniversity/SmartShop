@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using SmartShop.ConvertToModel;
+using SmartShop.Models;
 
 namespace SmartShop.Database
 {

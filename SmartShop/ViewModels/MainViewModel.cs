@@ -3,7 +3,6 @@ using System.Windows.Input;
 using SmartShop.Adapters;
 using SmartShop.ConvertToModel;
 using SmartShop.Database;
-using SmartShop.Models;
 using SmartShop.Queries;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
@@ -60,11 +59,10 @@ namespace SmartShop.ViewModels
             var ctgRepos = new CategoryRepository(dbConn, dbConv, ctgQuery);
 
             var userAddressVM = new UserAddressViewModel(addressRepos);
-            var orderItemsVM = new OrderItemsItemsViewModel(orderRepos);
+            var orderItemsVM = new OrderViewModel(orderRepos);
             var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos);
 
-            var cartItemsReceiver = new CartItemsReceiverAdapter(paymentVM, orderRepos);
-            var cartVM = new CartViewModel(cartItemRepos, cartItemsReceiver, this);
+            var cartVM = new CartViewModel(cartItemRepos,this, paymentVM);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             var prodDetailVM = new ProdDetailViewModel(productReceiver, this);

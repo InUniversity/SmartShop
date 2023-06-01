@@ -18,8 +18,7 @@ namespace SmartShop.Queries
                 new SqlParameter("@PasswordHash", user.Pass),
                 new SqlParameter("@Email", user.Email),
                 new SqlParameter("@Phone", user.Phone),
-                new SqlParameter("@WalletBalance", user.WalletBalance),
-                new SqlParameter("@RoleID", user.RoleID)
+                new SqlParameter("@WalletBalance", user.WalletBalance)
             };
             return query;
         }
@@ -45,8 +44,7 @@ namespace SmartShop.Queries
                 new SqlParameter("@NewPasswordHash", user.Pass),
                 new SqlParameter("@NewEmail", user.Email),
                 new SqlParameter("@NewPhone", user.Phone),
-                new SqlParameter("@NewWalletBalance", user.WalletBalance),
-                new SqlParameter("@NewRoleID", user.RoleID)
+                new SqlParameter("@NewWalletBalance", user.WalletBalance)
             };
             return query;
         }

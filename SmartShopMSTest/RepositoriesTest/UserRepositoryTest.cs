@@ -36,8 +36,7 @@ namespace SmartShopMSTest.RepositoriesTest
                 Pass = "1234567",
                 Email = "letan@gmail.com",
                 Phone = "0776506179",
-                WalletBalance = (decimal)101230.12,
-                RoleID = "ROLE0001"
+                WalletBalance = (decimal)101230.12
             };
             bool isAddSuccess = myRepo.Add(addTarget);
             var addResult = myRepo.SearchByID(addTarget.ID);
@@ -51,8 +50,7 @@ namespace SmartShopMSTest.RepositoriesTest
                 Pass = "123",
                 Email = "antran@gmail.com",
                 Phone = "0776506179",
-                WalletBalance = (decimal)101230.12,
-                RoleID = "ROLE0001"
+                WalletBalance = (decimal)101230.12
             };
             bool isUpdateSuccess = myRepo.Update(updateTarget);
             var updateResult = myRepo.SearchByID(addTarget.ID);
@@ -83,7 +81,6 @@ namespace SmartShopMSTest.RepositoriesTest
             Assert.AreEqual(expected.Email, actual.Email);
             Assert.AreEqual(expected.Phone, actual.Phone);
             Assert.AreEqual(expected.WalletBalance, actual.WalletBalance);
-            Assert.AreEqual(expected.RoleID, actual.RoleID);
         }
     }
 }
