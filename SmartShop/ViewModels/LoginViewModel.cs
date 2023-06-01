@@ -41,8 +41,10 @@ namespace SmartShop.ViewModels
 
         private void ExecuteLoginCommand(Window window)
         {
-            var usr = loginRepos.Login(username, password, out var notification);
-            MessageBox.Show(notification, "", MessageBoxButton.OK);
+            var notification = loginRepos.CheckLogin(username, password);
+            var usr = loginRepos.Login(username, password);
+            //MessageBox.Show(notification, "", MessageBoxButton.OK);
+            MessageBox.Show(""+ notification);
             if (usr == null) return;
             CurrentDb.Ins.Usr = usr;
             ShowMainWindow(CurrentDb.serverName, CurrentDb.dbName, username, password);
