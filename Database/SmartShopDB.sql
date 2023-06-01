@@ -406,7 +406,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -451,7 +451,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -470,7 +470,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -496,7 +496,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -527,7 +527,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -547,7 +547,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -566,7 +566,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -587,7 +587,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -627,7 +627,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -647,7 +647,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -708,7 +708,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -730,7 +730,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -750,7 +750,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -772,7 +772,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -795,7 +795,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -834,7 +834,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -842,7 +842,7 @@ GO
 ----------------------------------------------------------
 
 --Stored Procedure: Add CartItem
-CREATE PROCEDURE sp_AddOrUpdateCartItem
+CREATE PROCEDURE sp_AddCartItem
     @CartItemID VARCHAR(20),
     @UserID VARCHAR(20),
     @ProductID VARCHAR(20),
@@ -902,40 +902,59 @@ CREATE PROCEDURE sp_UpdateCartItem
     @CartItemID VARCHAR(20),
     @NewUserID VARCHAR(20),
     @NewProductID VARCHAR(20),
-    @NewQuantity INT
+    @NewQuantity INT,
+    @Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
-	BEGIN TRAN
-	BEGIN TRY
-		UPDATE CartItems
-		SET UserID = @NewUserID,
-			ProductID = @NewProductID,
-			Quantity = @NewQuantity
-		WHERE ID = @CartItemID
-		COMMIT TRAN;
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
-	END CATCH
+    BEGIN TRAN
+    BEGIN TRY
+        DECLARE @MaxQty INT;
+        if (@NewQuantity < 1)
+        begin
+            SET @Notification = N'Số lượng sản phẩm phải lớn hơn 0';
+            ROLLBACK TRAN;
+            RETURN;
+        end
+
+        SELECT @MaxQty = RemainQuantity FROM Products WHERE ID = @NewProductID;
+        if (@NewQuantity > @MaxQty)
+        BEGIN
+          SET @Notification = N'Số lượng hàng trong giỏ phải nhỏ hơn số sản phẩm hiện có';
+          ROLLBACK TRAN;
+          RETURN;
+        END
+
+        UPDATE CartItems
+        SET UserID = @NewUserID,
+        ProductID = @NewProductID,
+        Quantity = @NewQuantity
+        WHERE ID = @CartItemID
+        COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRAN
+        SET @Notification=ERROR_MESSAGE();
+        THROW;
+    END CATCH
 END
 GO
 
 --Stored Procedure: Delete CartItem
 CREATE PROCEDURE sp_DeleteCartItem
-    @CartItemID VARCHAR(20)
+    @CartItemID VARCHAR(20),
+    @Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
 	BEGIN TRAN
 	BEGIN TRY
 		DELETE FROM CartItems
 		WHERE ID = @CartItemID
+		SET @Notification = N'Xóa thành công';
 		COMMIT TRAN;
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+		SET @Notification=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -955,7 +974,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -976,7 +995,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -997,7 +1016,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -1016,7 +1035,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -1036,7 +1055,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -1084,7 +1103,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -1105,7 +1124,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -1134,7 +1153,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -1157,7 +1176,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
+			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -1343,6 +1362,8 @@ RETURN
 
 --view users
 go
+
+
 CREATE VIEW dbo.vw_Users
 AS
 SELECT P.*, C.UserID, C.AddressDetails
