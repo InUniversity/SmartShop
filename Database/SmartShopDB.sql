@@ -1199,12 +1199,10 @@ BEGIN
 	   THROW;
     END CATCH
 END
-<<<<<<< HEAD
-GO
-=======
 
 
 
+--------------------------------------------------------------------------------------------
 -- Create and set permissions for johndoe //seller
 use master
 go 
@@ -1220,13 +1218,30 @@ create user johndoe
 	
 go
 USE SmartShop;
-CREATE ROLE RoleWithoutTableCartItems;
-GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableCartItems;
-DENY INSERT, UPDATE, DELETE ON dbo.CartItems TO RoleWithoutTableCartItems;
 go
-ALTER ROLE RoleWithoutTableCartItems
+CREATE ROLE RoleWithoutTableCartItem;
+go
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::dbo TO RoleWithoutTableCartItem;
+DENY INSERT, UPDATE, DELETE ON dbo.CartItems TO RoleWithoutTableCartItem;
+go
+ALTER ROLE RoleWithoutTableCartItem
     ADD MEMBER johndoe;
 
+-- Create and set permissions for janedoe//// seller
+use master
+go 
+create login janedoe
+		With PassWord ='hash456',
+		Check_Expiration = off,
+		check_policy =off
+		
+use SmartShop
+go
+create user  janedoe
+	for login  janedoe
+	
+ALTER ROLE  RoleWithoutTableCartItem
+    ADD MEMBER janedoe;
 
 
 --Create and set permissions for michaeljordan //buyer
@@ -1254,66 +1269,6 @@ ALTER ROLE RoleWithoutTableProduct
 
 go
 
-drop proc sp_Login
-CREATE PROCEDURE sp_Login
-    @UserName VARCHAR(50),
-    @Password VARCHAR(50),
-    @Notification NVARCHAR(1000) OUTPUT
-AS
-BEGIN
-    BEGIN TRY
-        DECLARE @UserCount INT;
-        
-        SELECT @UserCount = COUNT(*)
-        FROM Users
-        WHERE Username = @UserName AND PasswordHash = @Password;
-        
-        IF @UserCount >= 1
-        BEGIN
-            SET @Notification = N'Đăng nhập thành công';
-        END
-        ELSE
-        BEGIN
-            SET @Notification = N'Đăng nhập thất bại ';
-        END
-
-        SELECT *
-        FROM Users
-        WHERE Username = @UserName AND PasswordHash = @Password;
-    END TRY
-    BEGIN CATCH
-        SET @Notification = ERROR_MESSAGE();
-        THROW;
-    END CATCH
-END
-
-DECLARE @Notification NVARCHAR(1000);
-
-EXEC sp_Login
-    @UserName = 'johndoe',
-    @Password = 'hash123',
-    @Notification = @Notification OUTPUT;
-
-SELECT @Notification AS Result;
-
-
-
-
--- Create and set permissions for janedoe//// seller
-use master
-go 
-create login janedoe
-		With PassWord ='hash456',
-		Check_Expiration = off,
-		check_policy =off
-		
-use SmartShop
-go
-create user  janedoe
-	for login  janedoe
-	
-ALTER ROLE  RoleWithoutTableCartItems
-    ADD MEMBER janedoe;
 
 
 
@@ -1350,4 +1305,48 @@ create user sarahlee
 	for login sarahlee
 ALTER ROLE RoleWithoutTableProduct
     ADD MEMBER sarahlee;
->>>>>>> 6c90f13 (Con loi cai Proc Dang nhap)
+
+
+
+go
+CREATE FUNCTION fn_CheckLogin(@UserName VARCHAR(50), @Password VARCHAR(50))
+RETURNS NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @UserCount INT;
+    DECLARE @LoginStatus NVARCHAR(100);
+
+    SELECT @UserCount = COUNT(*)
+    FROM Users
+    WHERE Username = @UserName AND PasswordHash = @Password;
+
+    IF @UserCount >= 1
+        SET @LoginStatus = N'Đăng nhập thành công';
+    ELSE
+        SET @LoginStatus = N'Đăng nhập thất bại';
+
+    RETURN @LoginStatus;
+END
+
+
+go
+CREATE FUNCTION fn_LoginValid(@UserName VARCHAR(50), @Password VARCHAR(50))
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT *
+    FROM Users
+    WHERE Username = @UserName AND PasswordHash = @Password
+);
+
+
+--view users
+go
+CREATE VIEW dbo.vw_Users
+AS
+SELECT P.*, C.UserID, C.AddressDetails
+FROM Users P JOIN UserAddress C on C.ID = P.ID
+GO
+
+
