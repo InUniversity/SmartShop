@@ -73,7 +73,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Adapters\CartItemsReceiverAdapter.cs" />
     <Compile Include="Adapters\ProductReceiverAdapter.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -87,11 +86,9 @@
     <Compile Include="ConvertToModel\ToCategory.cs" />
     <Compile Include="ConvertToModel\ToOrder.cs" />
     <Compile Include="ConvertToModel\ToOrderItem.cs" />
-    <Compile Include="ConvertToModel\ToOrderStatus.cs" />
     <Compile Include="ConvertToModel\ToProduct.cs" />
     <Compile Include="ConvertToModel\ToProductView.cs" />
     <Compile Include="ConvertToModel\ToUser.cs" />
-    <Compile Include="ConvertToModel\ToUserView.cs" />
     <Compile Include="ConvertToModel\ToUserAddress.cs" />
     <Compile Include="ConvertToModel\ToUserRole.cs" />
     <Compile Include="Database\CurrentDb.cs" />
@@ -103,18 +100,15 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
-    <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductView.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserView.cs" />
     <Compile Include="Models\UserAddress.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Queries\CartItemQuery.cs" />
     <Compile Include="Queries\CategoryQuery.cs" />
     <Compile Include="Queries\LoginQuery.cs" />
     <Compile Include="Queries\OrderQuery.cs" />
-    <Compile Include="Queries\OrderStatusQuery.cs" />
     <Compile Include="Queries\ProductQuery.cs" />
     <Compile Include="Queries\UserAddressQuery.cs" />
     <Compile Include="Queries\UserQuery.cs" />
@@ -124,7 +118,6 @@
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\LoginRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
-    <Compile Include="Repositories\OrderStatusRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\UserAddressRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />

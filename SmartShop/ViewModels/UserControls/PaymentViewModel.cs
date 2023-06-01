@@ -1,35 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using SmartShop.Database;
-using SmartShop.Models;
 using SmartShop.Repositories;
 using SmartShop.ViewModels.Base;
 
 namespace SmartShop.ViewModels.UserControls
 {
-    public interface IReceiveCartItems
+    public interface IReceiveOrder
     {
-        void Receive(List<CartItemView> itemsView);
+        void Receive(string orderID);
     }
     
-    public interface IReceiveOrderItems
-    {
-        void Receive(List<OrderItem> orderItems);
-    }
-    
-    public class PaymentViewModel : BaseViewModel, IReceiveOrderItems
+    public class PaymentViewModel : BaseViewModel, IReceiveOrder
     {
         public ICommand PayCommand { get; private set; }
 
         public UserAddressViewModel UserAddressVM { get; }
-        public OrderItemsItemsViewModel OrderItemsVM { get; }
+        public OrderViewModel OrderItemsVM { get; }
 
         private readonly OrderRepository orderRepos;
 
-        private string curOrderID;
+        public string CurOrderID { get; set; }
 
-        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderItemsItemsViewModel orderItemsVM, OrderRepository orderRepos)
+        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderViewModel orderItemsVM, OrderRepository orderRepos)
         {
             UserAddressVM = userAddressVM;
             OrderItemsVM = orderItemsVM;
@@ -44,15 +36,15 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePay(object obj)
         {
-            orderRepos.Pay(curOrderID, out var notification);
-            MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
+            orderRepos.Pay(CurOrderID, out var notification);
+            if (string.IsNullOrEmpty(notification))
+                MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
         }
 
-        public void Receive(List<OrderItem> orderItems)
+        public void Receive(string orderID)
         {
-            var order = orderRepos.GetNewOrder(CurrentDb.Ins.Usr.ID);
-            curOrderID = order.ID;
-            orderItems.ForEach(ordItem => ordItem.OrderID = curOrderID);
+            var order = orderRepos.SearchByID(orderID);
+            var orderItems = orderRepos.GetOrderItems(order.ID);
             OrderItemsVM.Receive(orderItems);
         }
     }

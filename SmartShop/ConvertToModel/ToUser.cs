@@ -19,8 +19,7 @@ namespace SmartShop.ConvertToModel
                     Pass = (string)reader[pass],
                     Email = (string)reader[useremail],
                     Phone = (string)reader[userphone],
-                    WalletBalance = reader.GetDecimal(reader.GetOrdinal(userwBalance)),
-                    RoleID = (string)reader[userrID]
+                    WalletBalance = reader.GetDecimal(reader.GetOrdinal(userwBalance))
                 };
             }
             catch (Exception e)

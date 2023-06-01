@@ -14,7 +14,6 @@ namespace SmartShop.Queries
             {
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@UserID", order.UserID),
-                new SqlParameter("@StatusID", order.StatusID),
                 new SqlParameter("@OrderDate", order.Date)
             };
             return query;
@@ -50,7 +49,6 @@ namespace SmartShop.Queries
             {
                 new SqlParameter("@OrderID", order.ID),
                 new SqlParameter("@NewUserID", order.UserID),
-                new SqlParameter("@NewStatusID", order.StatusID),
                 new SqlParameter("@NewOrderDate", order.Date)
             };
             return query;
@@ -74,7 +72,7 @@ namespace SmartShop.Queries
 
         public QueryService GetNewOrder(string userID)
         {
-            var query = new QueryService($"SELECT dbo.fn_GenerateOrderID('{userID}')", CommandType.Text);
+            var query = new QueryService($"SELECT dbo.fn_GenerateNewOrder('{userID}')", CommandType.Text);
             return query;
         }
 

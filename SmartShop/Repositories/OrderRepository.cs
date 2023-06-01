@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Data;
 using SmartShop.Database;
 using SmartShop.Models;
 using SmartShop.Queries;
@@ -44,11 +46,11 @@ namespace SmartShop.Repositories
             return dbConn.ExecuteScalar<decimal>(qry);
         }
 
-        public Order GetNewOrder(string userID)
+        public string GetNewOrder(string userID)
         {
             var qry = query.GetNewOrder(userID);
-            using var reader = dbConn.ExecuteReader(qry);
-            return dbConv.ToSingleObject<Order>(reader);
+            var result = dbConn.ExecuteScalar<string>(qry);
+            return result;
         }
 
         public bool Pay(string orderID, out string notification)
@@ -57,6 +59,11 @@ namespace SmartShop.Repositories
             var result = dbConn.ExecuteNonQuery(qry);
             notification = notificationParameter?.Value?.ToString();
             return result;
+        }
+
+        public List<OrderItem> GetOrderItems(string orderID)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
