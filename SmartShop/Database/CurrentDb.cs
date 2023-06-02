@@ -30,7 +30,7 @@ namespace SmartShop.Database
             set => user = value;
         }
         
-        public string ServerName = "192.168.173.138";
+        public string ServerName = "(localdb)\\mssqllocaldb";
         public string DbName = "SmartShop";
 
         public string GetConnStr(string username, string pass)

@@ -40,6 +40,7 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top">
                         <TextBlock Text="Đăng Nhập"
@@ -52,6 +53,17 @@
                         <TextBox
                             Height="50"
                             VerticalAlignment="Top"
+                            Text="{Binding ServerName, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Server name"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            MaxLength="40"
+                            Style="{StaticResource MaterialDesignFilledTextBox}"
+                            TextWrapping="Wrap" />
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <TextBox
+                            Height="50"
+                            VerticalAlignment="Top"
                             Text="{Binding Username}"
                             materialDesign:HintAssist.Hint="Tên Đăng Nhập"
                             materialDesign:TextFieldAssist.HasClearButton="True"
@@ -59,7 +71,7 @@
                             Style="{StaticResource MaterialDesignFilledTextBox}"
                             TextWrapping="Wrap" />
                     </Grid>
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="3">
                         <PasswordBox
                             Height="50"
                             materialDesign:HintAssist.HelperText="ít nhất 8 ký tự"
@@ -69,7 +81,7 @@
                             helper:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFilledRevealPasswordBox}" />
                     </Grid>
-                    <Grid Grid.Row="3">
+                    <Grid Grid.Row="4">
                         <Grid Width="auto">
                             <Button
                                 IsDefault="True"
@@ -81,7 +93,7 @@
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="4">
+                    <Grid Grid.Row="5">
                         <Button
                             Width="250"
                             Command="{Binding ExitCommand}"
