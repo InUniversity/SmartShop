@@ -4,9 +4,6 @@ namespace SmartShop.Database
 {
     public class CurrentDb
     {
-        public const string serverName = "(localdb)\\mssqllocaldb";
-        public const string dbName = "SmartShop";
-        
         private static CurrentDb ins;
         private User user = new User();
 
@@ -31,6 +28,14 @@ namespace SmartShop.Database
         {
             get => user;
             set => user = value;
+        }
+        
+        public string ServerName = "192.168.173.138";
+        public string DbName = "SmartShop";
+
+        public string GetConnStr(string username, string pass)
+        {
+            return $"Data Source={ServerName};Initial Catalog={DbName};Persist Security Info=True;User ID={username};Password={pass}";
         }
     }
 }

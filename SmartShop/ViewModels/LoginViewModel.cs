@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 using SmartShop.Repositories;
 using SmartShop.Database;
 using SmartShop.Views;
+using SmartShop.Queries;
+using SmartShop.ConvertToModel;
 
 namespace SmartShop.ViewModels
 {
@@ -19,11 +21,10 @@ namespace SmartShop.ViewModels
         public ICommand LoginCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
 
-        private readonly LoginRepository loginRepos;
+        private LoginRepository loginRepos;
 
-        public LoginViewModel(LoginRepository loginRepos)
+        public LoginViewModel()
         {
-            this.loginRepos = loginRepos;
             SetCommands();
         }
 
@@ -40,26 +41,20 @@ namespace SmartShop.ViewModels
 
         private void ExecuteLoginCommand(Window window)
         {
+            // login
+            var connectionString = CurrentDb.Ins.GetConnStr(username, password);
+            var dbConn = new DbConnection(new SqlConnection(connectionString));
+            var loginRepos = new LoginRepository(dbConn, new DbConverter(new ConvModelFactory()), new LoginQuery());
             var notification = loginRepos.CheckLogin(username, password);
+            
             var usr = loginRepos.Login(username, password);
-            MessageBox.Show(""+ notification);
+            MessageBox.Show("" + notification);
             if (usr == null) return;
             CurrentDb.Ins.Usr = usr;
-            ShowMainWindow(CurrentDb.serverName, CurrentDb.dbName, username, password);
-            RefreshAllText();
-        }
-
-        private void ShowMainWindow(string serverName, string databaseName, string username, string password)
-        {
-            var connectionString = GetConnStrTemplate(serverName, databaseName, username, password);
-            var dbConn = new DbConnection(new SqlConnection(connectionString));
+            
             var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn) };
             mainWin.ShowDialog();
-        }
-
-        private string GetConnStrTemplate(string serverName, string databaseName, string username, string password)
-        {
-            return $"Data Source={serverName};Initial Catalog={databaseName};Persist Security Info=True;User ID={username};Password={password}";
+            RefreshAllText();
         }
 
         private void RefreshAllText()
