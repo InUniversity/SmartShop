@@ -18,10 +18,10 @@ namespace SmartShop.ViewModels
         private string password;
         public string Password { get => password; set { password = value; OnPropertyChanged(); } }
 
+        public string ServerName { get => CurrentDb.Ins.ServerName; set { CurrentDb.Ins.ServerName = value; OnPropertyChanged(); } }
+
         public ICommand LoginCommand { get; private set; }
         public ICommand ExitCommand { get; private set; }
-
-        private LoginRepository loginRepos;
 
         public LoginViewModel()
         {
