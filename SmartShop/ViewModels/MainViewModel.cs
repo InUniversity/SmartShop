@@ -31,6 +31,7 @@ namespace SmartShop.ViewModels
         private CartUC cartView;
         private PaymentUC paymentView;
         private EditProdsUC editProdsUC;
+        private OrdersUC ordersView;
 
         public MainViewModel(DbConnection dbConn)
         {
@@ -70,8 +71,10 @@ namespace SmartShop.ViewModels
             var prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);
             
             var editProdVM = new EditProdsViewModel(prodRepos, ctgRepos);
+
+            var ordersVM = new OrdersViewModel(orderRepos, this, paymentVM);
             
-            InitViewComponents(paymentVM, cartVM, prodVM, prodDetailVM, editProdVM);
+            InitViewComponents(paymentVM, cartVM, prodVM, prodDetailVM, editProdVM, ordersVM);
         }
 
         private void InitViewComponents(
@@ -79,13 +82,15 @@ namespace SmartShop.ViewModels
             CartViewModel cartVM, 
             ProductsViewModel prodVM, 
             ProdDetailViewModel prodDetailVM,
-            EditProdsViewModel editProdVM)
+            EditProdsViewModel editProdVM,
+            OrdersViewModel ordersVM)
         {
             paymentView = new PaymentUC { DataContext = paymentVM };
             cartView = new CartUC { DataContext = cartVM };
             prodsView = new ProductsUC { DataContext = prodVM };
             prodDetailView = new ProdDetailUC { DataContext = prodDetailVM };
             editProdsUC = new EditProdsUC { DataContext = editProdVM };
+            ordersView = new OrdersUC { DataContext = ordersVM };
         }
 
         private void SetCommands()
@@ -120,20 +125,14 @@ namespace SmartShop.ViewModels
             CurrentChildView = editProdsUC;
         }
 
-        public void Load()
+        public void MoveToOrderView()
         {
-            
-            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentDb.Ins.Usr.ID); 
+            CurrentChildView = ordersView;
         }
 
-        private void Refresh(
-            CartViewModel cartVM, 
-            ProductsViewModel prodVM, 
-            EditProdsViewModel editProdVM)
+        public void Load()
         {
-            cartVM.Load();
-            prodVM.Load();
-            editProdVM.Load();
+            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentDb.Ins.Usr.ID); 
         }
     }
 }

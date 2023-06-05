@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SmartShop.Database;
 using SmartShop.Models;
@@ -21,6 +22,13 @@ namespace SmartShop.Repositories
             return dbConv.ToSingleObject<Order>(reader);
         }
 
+        public List<Order> SearchOrdersByUserID(string userID) 
+        { 
+            var qry = query.SearchOrdersByUserID(userID);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToList<Order>(reader);
+        }
+
         public decimal GetTotalPrice(string orderID)
         {
             var qry = query.GetTotalPrice(orderID);
@@ -34,10 +42,10 @@ namespace SmartShop.Repositories
             return result;
         }
 
-        public bool Pay(string orderID, out string notification)
+        public string Pay(string orderID, out string notification)
         {
             var qry = query.Pay(orderID, out var notificationParameter);
-            var result = dbConn.ExecuteNonQuery(qry);
+            var result = dbConn.ExecuteScalar<string>(qry);
             notification = notificationParameter?.Value?.ToString();
             return result;
         }
@@ -47,6 +55,13 @@ namespace SmartShop.Repositories
             var qry = query.GetOrderItems(orderID);
             using var reader = dbConn.ExecuteReader(qry);
             return dbConv.ToList<OrderItem>(reader);
+        }
+
+        public List<Order> SearchByDateRange(DateTime start, DateTime end)
+        {
+            var qry = query.SearchByDateRange(start, end);
+            using var reader = dbConn.ExecuteReader(qry);
+            return dbConv.ToList<Order>(reader);
         }
     }
 }

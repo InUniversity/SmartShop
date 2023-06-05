@@ -10,8 +10,13 @@ namespace SmartShop.ViewModels.UserControls
     {
         void Create();
     }
+
+    public interface IReceiveOrder
+    {
+        void Receive(string orderID);
+    }
     
-    public class PaymentViewModel : BaseViewModel, ICreateOrder
+    public class PaymentViewModel : BaseViewModel, IReceiveOrder
     {
         public ICommand PayCommand { get; private set; }
 
@@ -20,34 +25,16 @@ namespace SmartShop.ViewModels.UserControls
 
         private readonly OrderRepository orderRepos;
 
-        private string curOrderID;
-
         public PaymentViewModel(UserAddressViewModel userAddressVM, OrderViewModel orderItemsVM, OrderRepository orderRepos)
         {
             UserAddressVM = userAddressVM;
             OrderItemsVM = orderItemsVM;
             this.orderRepos = orderRepos;
-            SetCommands();
         }
 
-        private void SetCommands()
+        public void Receive(string orderID)
         {
-            PayCommand = new RelayCommand<object>(ExecutePay);
-        }
-
-        private void ExecutePay(object obj)
-        {
-            orderRepos.Pay(curOrderID, out var notification);
-            if (string.IsNullOrEmpty(notification))
-                MessageBox.Show(notification, "Đã hoàn tác", MessageBoxButton.OK);
-        }
-
-        public void Create()
-        {
-            curOrderID = orderRepos.GetNewOrder(CurrentDb.Ins.Usr?.ID);
-            var order = orderRepos.SearchByID(curOrderID);
-            
-            var orderItems = orderRepos.GetOrderItems(order?.ID);
+            var orderItems = orderRepos.GetOrderItems(orderID);
             OrderItemsVM.Receive(orderItems);
         }
     }

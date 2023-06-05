@@ -373,6 +373,20 @@ RETURN (
     WHERE OrderID = @OrderID
 )
 GO
+----------------------------------------------------------
+
+
+CREATE FUNCTION fn_SerOrdersByUserID(@UserID varchar(20))
+    RETURNS TABLE
+AS
+RETURN (
+    SELECT *
+    FROM Orders
+    WHERE UserID = @UserID
+)
+GO
+----------------------------------------------------------
+
 
 --Stored Procedure: get order date
 CREATE PROCEDURE sp_GetOrdersByDateRange
@@ -391,7 +405,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
+		  DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END

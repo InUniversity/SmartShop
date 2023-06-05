@@ -41,7 +41,6 @@ namespace SmartShop.ViewModels
 
         private void ExecuteLoginCommand(Window window)
         {
-            // login
             var connectionString = CurrentDb.Ins.GetConnStr(username, password);
             var dbConn = new DbConnection(new SqlConnection(connectionString));
             var loginRepos = new LoginRepository(dbConn, new DbConverter(new ConvModelFactory()), new LoginQuery());
@@ -54,13 +53,6 @@ namespace SmartShop.ViewModels
             
             var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn) };
             mainWin.ShowDialog();
-            RefreshAllText();
-        }
-
-        private void RefreshAllText()
-        {
-            Username = "";
-            Password = "";
         }
     }
 }
