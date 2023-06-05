@@ -2,6 +2,7 @@
 using SmartShop.Models;
 using System.Collections.Generic;
 using SmartShop.Queries;
+using System.Runtime.InteropServices;
 
 namespace SmartShop.Repositories
 {
@@ -14,22 +15,28 @@ namespace SmartShop.Repositories
             this.query = query;
         }
 
-        public bool Add(Product prod)
+        public bool Add(Product prod, out string notification)
         {
-            var qry = query.Add(prod);
-            return dbConn.ExecuteNonQuery(qry);
+            var qry = query.Add(prod, out var notificationParameter);
+            var result = dbConn.ExecuteNonQuery(qry);
+            notification = notificationParameter?.Value?.ToString();
+            return result;
         }
 
-        public bool Delete(string id)
+        public bool Delete(string id, out string notification)
         {
-            var qry = query.Delete(id);
-            return dbConn.ExecuteNonQuery(qry);
+            var qry = query.Delete(id, out var notificationParameter);
+            var result = dbConn.ExecuteNonQuery(qry);
+            notification = notificationParameter?.Value?.ToString();
+            return result;
         }
 
-        public bool Update(Product prod)
+        public bool Update(Product prod, out string notification)
         {
-            var qry = query.Update(prod);
-            return dbConn.ExecuteNonQuery(qry);
+            var qry = query.Update(prod, out var notificationParameter);
+            var result = dbConn.ExecuteNonQuery(qry);
+            notification = notificationParameter?.Value?.ToString();
+            return result;
         }
 
         public ProductView SearchByID(string id)

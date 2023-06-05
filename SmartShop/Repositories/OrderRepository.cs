@@ -48,9 +48,9 @@ namespace SmartShop.Repositories
             return result;
         }
 
-        public string Pay(string orderID, out string notification)
+        public string Pay(string userID, out string notification)
         {
-            var qry = query.Pay(orderID, out var notificationParameter);
+            var qry = query.Pay(userID, out var notificationParameter);
             var result = dbConn.ExecuteScalar<string>(qry);
             notification = notificationParameter?.Value?.ToString();
             return result;
@@ -63,9 +63,9 @@ namespace SmartShop.Repositories
             return dbConv.ToList<OrderItemView>(reader);
         }
 
-        public List<Order> SearchByDateRange(DateTime start, DateTime end)
+        public List<Order> SearchByDateRange(string userID, DateTime start, DateTime end)
         {
-            var qry = query.SearchByDateRange(start, end);
+            var qry = query.SearchByDateRange(userID, start, end);
             using var reader = dbConn.ExecuteReader(qry);
             return dbConv.ToList<Order>(reader);
         }

@@ -36,7 +36,11 @@ namespace SmartShop.ViewModels
 
         private void ExecuteExitCommand(Window window)
         {
-            window.Close();
+            try
+            {
+                window.Close();
+            }
+            catch { }
         }
 
         private void ExecuteLoginCommand(Window window)

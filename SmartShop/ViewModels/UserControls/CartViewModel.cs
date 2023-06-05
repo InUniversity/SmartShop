@@ -36,15 +36,21 @@ namespace SmartShop.ViewModels.UserControls
         private readonly OrderRepository orderRepos;
         private readonly INavigateView navView;
         private readonly IReceiveOrder ordDetailsIns;
+        private readonly ILoadView orderIns;
 
         private User user = CurrentDb.Ins.Usr;
 
-        public CartViewModel(CartItemRepository cartItemRepos, OrderRepository orderRepos, INavigateView navView, IReceiveOrder ordDetailsIns)
+        public CartViewModel(CartItemRepository cartItemRepos, 
+            OrderRepository orderRepos, 
+            INavigateView navView, 
+            IReceiveOrder ordDetailsIns, 
+            ILoadView orderIns)
         {
             this.cartItemRepos = cartItemRepos;
             this.orderRepos = orderRepos;
             this.navView = navView;
             this.ordDetailsIns = ordDetailsIns;
+            this.orderIns = orderIns;
             Load();
             SetCommands();
         }
@@ -105,6 +111,7 @@ namespace SmartShop.ViewModels.UserControls
                 MessageBox.Show(notification);
             ordDetailsIns.Receive(orderID);
             navView.MoveToPaymentView();
+            orderIns.Load();
         }
 
         public void Receive(CartItemView itemView)

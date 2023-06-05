@@ -83,28 +83,32 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecuteAddProd(object obj)
         {
-            prodRepos.Add(SelProd);
+            prodRepos.Add(SelProd, out var notification);
+            if (!string.IsNullOrEmpty(notification))
+                MessageBox.Show(notification);
             LoadProducts();
         }
 
         private void ExecuteUpdateProd(object obj)
         {
-            prodRepos.Update(SelProd);
+            prodRepos.Update(SelProd, out var notification);
+            if (!string.IsNullOrEmpty(notification))
+                MessageBox.Show(notification);
             LoadProducts();
         }
 
         private void ExecuteDeleteProd(object prodID)
         {
+            string id = string.Empty;
             try
             {
-                prodRepos.Delete(prodID as string);
-                
+                id = prodID as string;
             }
-            catch(SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            
+            catch { }
+
+            prodRepos.Delete(id, out var notification);
+            if (!string.IsNullOrEmpty(notification))
+                MessageBox.Show(notification);
             LoadProducts();
         }
 
