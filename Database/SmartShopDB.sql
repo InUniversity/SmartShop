@@ -583,6 +583,8 @@ AS
 BEGIN
 	BEGIN TRAN
 	BEGIN TRY
+		DELETE FROM CartItems
+		WHERE ProductID = @ProductID
 		DELETE FROM Products
 		WHERE ID = @ProductID
 		COMMIT TRAN;
