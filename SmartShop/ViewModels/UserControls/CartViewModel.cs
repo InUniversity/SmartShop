@@ -33,16 +33,18 @@ namespace SmartShop.ViewModels.UserControls
         public ICommand PayCommand { get; private set; }
 
         private readonly CartItemRepository cartItemRepos;
-        private INavigateView navView;
-        private ICreateOrder payIns;
+        private readonly OrderRepository orderRepos;
+        private readonly INavigateView navView;
+        private readonly IReceiveOrder ordDetailsIns;
 
         private User user = CurrentDb.Ins.Usr;
 
-        public CartViewModel(CartItemRepository cartItemRepos, INavigateView navView, ICreateOrder payIns)
+        public CartViewModel(CartItemRepository cartItemRepos, OrderRepository orderRepos, INavigateView navView, IReceiveOrder ordDetailsIns)
         {
             this.cartItemRepos = cartItemRepos;
+            this.orderRepos = orderRepos;
             this.navView = navView;
-            this.payIns = payIns;
+            this.ordDetailsIns = ordDetailsIns;
             Load();
             SetCommands();
         }
@@ -98,7 +100,10 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecutePay(object obj)
         {
-            payIns.Create();
+            var orderID = orderRepos.Pay(user.ID, out var notification);
+            if (!string.IsNullOrEmpty(notification))
+                MessageBox.Show(notification);
+            ordDetailsIns.Receive(orderID);
             navView.MoveToPaymentView();
         }
 

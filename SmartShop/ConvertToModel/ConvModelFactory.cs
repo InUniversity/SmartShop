@@ -10,15 +10,14 @@ namespace SmartShop.ConvertToModel
             return type.Name switch
             {
                 nameof(CartItem) => new ToCartItem(),
+                nameof(CartItemView) => new ToCartItemView(),
                 nameof(Category) => new ToCategory(),
                 nameof(Order) => new ToOrder(),
                 nameof(OrderItem) => new ToOrderItem(),
+                nameof(OrderItemView) => new ToOrderItemView(),
                 nameof(Product) => new ToProduct(),
                 nameof(User) => new ToUser(),
-                nameof(UserAddress) => new ToUserAddress(),
-                nameof(UserRole) => new ToUserRole(),
                 nameof(ProductView) => new ToProductView(),
-                nameof(CartItemView) => new ToCartItemView(),
                 _ => throw new NotSupportedException("ConvModelFactory: Can't implement type")
             };
         }

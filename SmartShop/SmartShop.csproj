@@ -86,11 +86,10 @@
     <Compile Include="ConvertToModel\ToCategory.cs" />
     <Compile Include="ConvertToModel\ToOrder.cs" />
     <Compile Include="ConvertToModel\ToOrderItem.cs" />
+    <Compile Include="ConvertToModel\ToOrderItemView.cs" />
     <Compile Include="ConvertToModel\ToProduct.cs" />
     <Compile Include="ConvertToModel\ToProductView.cs" />
     <Compile Include="ConvertToModel\ToUser.cs" />
-    <Compile Include="ConvertToModel\ToUserAddress.cs" />
-    <Compile Include="ConvertToModel\ToUserRole.cs" />
     <Compile Include="Database\CurrentDb.cs" />
     <Compile Include="Database\DbConnection.cs" />
     <Compile Include="Database\DbConverter.cs" />
@@ -100,28 +99,23 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
+    <Compile Include="Models\OrderItemView.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductView.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserAddress.cs" />
-    <Compile Include="Models\UserRole.cs" />
     <Compile Include="Queries\CartItemQuery.cs" />
     <Compile Include="Queries\CategoryQuery.cs" />
     <Compile Include="Queries\LoginQuery.cs" />
     <Compile Include="Queries\OrderQuery.cs" />
     <Compile Include="Queries\ProductQuery.cs" />
-    <Compile Include="Queries\UserAddressQuery.cs" />
     <Compile Include="Queries\UserQuery.cs" />
-    <Compile Include="Queries\UserRoleQuery.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CartItemRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\LoginRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
-    <Compile Include="Repositories\UserAddressRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
-    <Compile Include="Repositories\UserRoleRepository.cs" />
     <Compile Include="Services\QueryService.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\ILoadView.cs" />
@@ -130,10 +124,10 @@
     <Compile Include="ViewModels\UserControls\CartViewModel.cs" />
     <Compile Include="ViewModels\UserControls\EditProdsViewModel.cs" />
     <Compile Include="ViewModels\UserControls\OrderItemsViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\PaymentViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\OrdersViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\OrderDetailsViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ProdDetailViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ProductsViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\UserAddressViewModel.cs" />
     <Compile Include="ViewModels\INavigateView.cs" />
     <Compile Include="Views\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
@@ -150,8 +144,11 @@
     <Compile Include="Views\UserControls\OrderItemsUC.xaml.cs">
       <DependentUpon>OrderItemsUC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\PaymentUC.xaml.cs">
-      <DependentUpon>PaymentUC.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\OrdersUC.xaml.cs">
+      <DependentUpon>OrdersUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\OrderDetailsUC.xaml.cs">
+      <DependentUpon>OrderDetailsUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ProdDetailUC.xaml.cs">
       <DependentUpon>ProdDetailUC.xaml</DependentUpon>
@@ -211,7 +208,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\PaymentUC.xaml">
+    <Page Include="Views\UserControls\OrdersUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\OrderDetailsUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

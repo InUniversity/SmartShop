@@ -3,11 +3,11 @@
 namespace SmartShop.Views.UserControls
 {
     /// <summary>
-    ///     Interaction logic for PaymentUC.xaml
+    ///     Interaction logic for OrderDetailsUC.xaml
     /// </summary>
-    public partial class PaymentUC : UserControl
+    public partial class OrderDetailsUC : UserControl
     {
-        public PaymentUC()
+        public OrderDetailsUC()
         {
             InitializeComponent();
         }

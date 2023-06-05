@@ -12,10 +12,10 @@ namespace SmartShop.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private string username;
+        private string username = "johndoe";
         public string Username { get => username; set { username = value; OnPropertyChanged(); } }
 
-        private string password;
+        private string password = "hash123";
         public string Password { get => password; set { password = value; OnPropertyChanged(); } }
 
         public string ServerName { get => CurrentDb.Ins.ServerName; set { CurrentDb.Ins.ServerName = value; OnPropertyChanged(); } }
@@ -41,10 +41,10 @@ namespace SmartShop.ViewModels
 
         private void ExecuteLoginCommand(Window window)
         {
-            // login
             var connectionString = CurrentDb.Ins.GetConnStr(username, password);
             var dbConn = new DbConnection(new SqlConnection(connectionString));
-            var loginRepos = new LoginRepository(dbConn, new DbConverter(new ConvModelFactory()), new LoginQuery());
+            var dbConv = new DbConverter(new ConvModelFactory());
+            var loginRepos = new LoginRepository(dbConn, dbConv, new LoginQuery());
             var notification = loginRepos.CheckLogin(username, password);
             
             var usr = loginRepos.Login(username, password);
@@ -52,15 +52,8 @@ namespace SmartShop.ViewModels
             if (usr == null) return;
             CurrentDb.Ins.Usr = usr;
             
-            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn) };
+            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn, dbConv) };
             mainWin.ShowDialog();
-            RefreshAllText();
-        }
-
-        private void RefreshAllText()
-        {
-            Username = "";
-            Password = "";
         }
     }
 }

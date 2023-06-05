@@ -54,9 +54,7 @@
     <Compile Include="RepositoriesTest\OrderRepositoryTest.cs" />
     <Compile Include="RepositoriesTest\ProductRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoriesTest\UserAddressRepositoryTest.cs" />
     <Compile Include="RepositoriesTest\UserRepositoryTest.cs" />
-    <Compile Include="RepositoriesTest\UserRoleRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -21,20 +21,24 @@ namespace SmartShop.ViewModels
         
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }
+        public ICommand MoveToOrdersViewCommand { get; private set; }
         public ICommand MoveToEditProdsViewCommand { get; private set; }
 
         private readonly DbConnection dbConn;
+        private readonly DbConverter dbConv;
         private CartItemRepository cartItemRepos;
 
         private ProductsUC prodsView;
         private ProdDetailUC prodDetailView;
         private CartUC cartView;
-        private PaymentUC paymentView;
-        private EditProdsUC editProdsUC;
+        private OrderDetailsUC ordDetailsView;
+        private EditProdsUC editProdsView;
+        private OrdersUC ordersView;
 
-        public MainViewModel(DbConnection dbConn)
+        public MainViewModel(DbConnection dbConn, DbConverter dbConv)
         {
             this.dbConn = dbConn;
+            this.dbConv = dbConv;
             ConfigDependencies();
             Load();
             MoveToProductsView();
@@ -43,26 +47,20 @@ namespace SmartShop.ViewModels
 
         private void ConfigDependencies()
         {
-            var convModelFactory = new ConvModelFactory();
-            var dbConv = new DbConverter(convModelFactory);
-
             var prodQuery = new ProductQuery();
             var orderQuery = new OrderQuery();
-            var addressQuery = new UserAddressQuery();
             var cartItemQuery = new CartItemQuery();
             var ctgQuery = new CategoryQuery();
             
             var prodRepos = new ProductRepository(dbConn, dbConv, prodQuery);
             var orderRepos = new OrderRepository(dbConn, dbConv, orderQuery);
-            var addressRepos = new UserAddressRepository(dbConn, dbConv, addressQuery);
             cartItemRepos = new CartItemRepository(dbConn, dbConv, cartItemQuery);
             var ctgRepos = new CategoryRepository(dbConn, dbConv, ctgQuery);
 
-            var userAddressVM = new UserAddressViewModel(addressRepos);
             var orderItemsVM = new OrderViewModel(orderRepos);
-            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos);
+            var ordDetailsVM = new OrderDetailsViewModel(orderItemsVM, orderRepos, this);
 
-            var cartVM = new CartViewModel(cartItemRepos,this, paymentVM);
+            var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
@@ -70,28 +68,33 @@ namespace SmartShop.ViewModels
             var prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);
             
             var editProdVM = new EditProdsViewModel(prodRepos, ctgRepos);
+
+            var ordersVM = new OrdersViewModel(orderRepos, this, ordDetailsVM);
             
-            InitViewComponents(paymentVM, cartVM, prodVM, prodDetailVM, editProdVM);
+            InitViewComponents(ordDetailsVM, cartVM, prodVM, prodDetailVM, editProdVM, ordersVM);
         }
 
         private void InitViewComponents(
-            PaymentViewModel paymentVM, 
+            OrderDetailsViewModel paymentVM, 
             CartViewModel cartVM, 
             ProductsViewModel prodVM, 
             ProdDetailViewModel prodDetailVM,
-            EditProdsViewModel editProdVM)
+            EditProdsViewModel editProdVM,
+            OrdersViewModel ordersVM)
         {
-            paymentView = new PaymentUC { DataContext = paymentVM };
+            ordDetailsView = new OrderDetailsUC { DataContext = paymentVM };
             cartView = new CartUC { DataContext = cartVM };
             prodsView = new ProductsUC { DataContext = prodVM };
             prodDetailView = new ProdDetailUC { DataContext = prodDetailVM };
-            editProdsUC = new EditProdsUC { DataContext = editProdVM };
+            editProdsView = new EditProdsUC { DataContext = editProdVM };
+            ordersView = new OrdersUC { DataContext = ordersVM };
         }
 
         private void SetCommands()
         {
             MoveToProductsViewCommand = new RelayCommand<object>(_ => MoveToProductsView());
             MoveToCartViewCommand = new RelayCommand<object>(_ => MoveToCartView());
+            MoveToOrdersViewCommand = new RelayCommand<object>(_ => MoveToOrderView());
             MoveToEditProdsViewCommand = new RelayCommand<object>(_ => MoveToEditProdsView());
         }
 
@@ -107,7 +110,7 @@ namespace SmartShop.ViewModels
 
         public void MoveToPaymentView()
         {
-            CurrentChildView = paymentView;
+            CurrentChildView = ordDetailsView;
         }
 
         public void MoveToProdDetailView()
@@ -117,23 +120,17 @@ namespace SmartShop.ViewModels
         
         public void MoveToEditProdsView()
         {
-            CurrentChildView = editProdsUC;
+            CurrentChildView = editProdsView;
+        }
+
+        public void MoveToOrderView()
+        {
+            CurrentChildView = ordersView;
         }
 
         public void Load()
         {
-            
             CartQuantity = cartItemRepos.GetTotalQuantity(CurrentDb.Ins.Usr.ID); 
-        }
-
-        private void Refresh(
-            CartViewModel cartVM, 
-            ProductsViewModel prodVM, 
-            EditProdsViewModel editProdVM)
-        {
-            cartVM.Load();
-            prodVM.Load();
-            editProdVM.Load();
         }
     }
 }

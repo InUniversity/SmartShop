@@ -1,5 +1,3 @@
-using SmartShop.Models;
-
 namespace SmartShop
 {
     public class OrderItem
@@ -8,7 +6,5 @@ namespace SmartShop
         public string OrderID { get; set; }
         public string ProdID { get; set; }
         public int Quantity { get; set; }
-        
-        public Product Prod { get; set; } = new Product();
     }
 }
