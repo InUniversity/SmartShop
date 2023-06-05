@@ -393,7 +393,7 @@ CREATE FUNCTION fn_SerOrderItemsByOrderID(@OrderID varchar(20))
 AS
 RETURN (
     SELECT *
-    FROM OrderItems
+    FROM vw_OrderItems
     WHERE OrderID = @OrderID
 )
 GO

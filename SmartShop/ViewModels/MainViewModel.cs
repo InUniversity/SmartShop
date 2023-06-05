@@ -31,8 +31,8 @@ namespace SmartShop.ViewModels
         private ProductsUC prodsView;
         private ProdDetailUC prodDetailView;
         private CartUC cartView;
-        private PaymentUC paymentView;
-        private EditProdsUC editProdsUC;
+        private OrderDetailsUC ordDetailsView;
+        private EditProdsUC editProdsView;
         private OrdersUC ordersView;
 
         public MainViewModel(DbConnection dbConn, DbConverter dbConv)
@@ -61,9 +61,9 @@ namespace SmartShop.ViewModels
 
             var userAddressVM = new UserAddressViewModel(addressRepos);
             var orderItemsVM = new OrderViewModel(orderRepos);
-            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos, this);
+            var ordDetailsVM = new OrderDetailsViewModel(userAddressVM, orderItemsVM, orderRepos, this);
 
-            var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, paymentVM);
+            var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
@@ -72,24 +72,24 @@ namespace SmartShop.ViewModels
             
             var editProdVM = new EditProdsViewModel(prodRepos, ctgRepos);
 
-            var ordersVM = new OrdersViewModel(orderRepos, this, paymentVM);
+            var ordersVM = new OrdersViewModel(orderRepos, this, ordDetailsVM);
             
-            InitViewComponents(paymentVM, cartVM, prodVM, prodDetailVM, editProdVM, ordersVM);
+            InitViewComponents(ordDetailsVM, cartVM, prodVM, prodDetailVM, editProdVM, ordersVM);
         }
 
         private void InitViewComponents(
-            PaymentViewModel paymentVM, 
+            OrderDetailsViewModel paymentVM, 
             CartViewModel cartVM, 
             ProductsViewModel prodVM, 
             ProdDetailViewModel prodDetailVM,
             EditProdsViewModel editProdVM,
             OrdersViewModel ordersVM)
         {
-            paymentView = new PaymentUC { DataContext = paymentVM };
+            ordDetailsView = new OrderDetailsUC { DataContext = paymentVM };
             cartView = new CartUC { DataContext = cartVM };
             prodsView = new ProductsUC { DataContext = prodVM };
             prodDetailView = new ProdDetailUC { DataContext = prodDetailVM };
-            editProdsUC = new EditProdsUC { DataContext = editProdVM };
+            editProdsView = new EditProdsUC { DataContext = editProdVM };
             ordersView = new OrdersUC { DataContext = ordersVM };
         }
 
@@ -113,7 +113,7 @@ namespace SmartShop.ViewModels
 
         public void MoveToPaymentView()
         {
-            CurrentChildView = paymentView;
+            CurrentChildView = ordDetailsView;
         }
 
         public void MoveToProdDetailView()
@@ -123,7 +123,7 @@ namespace SmartShop.ViewModels
         
         public void MoveToEditProdsView()
         {
-            CurrentChildView = editProdsUC;
+            CurrentChildView = editProdsView;
         }
 
         public void MoveToOrderView()

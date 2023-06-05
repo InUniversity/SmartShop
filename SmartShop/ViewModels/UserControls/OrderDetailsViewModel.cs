@@ -16,7 +16,7 @@ namespace SmartShop.ViewModels.UserControls
         void Receive(string orderID);
     }
     
-    public class PaymentViewModel : BaseViewModel, IReceiveOrder
+    public class OrderDetailsViewModel : BaseViewModel, IReceiveOrder
     {
         public ICommand PayCommand { get; private set; }
 
@@ -27,7 +27,7 @@ namespace SmartShop.ViewModels.UserControls
 
         private readonly OrderRepository orderRepos;
 
-        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderViewModel orderItemsVM, OrderRepository orderRepos, INavigateView mainIns)
+        public OrderDetailsViewModel(UserAddressViewModel userAddressVM, OrderViewModel orderItemsVM, OrderRepository orderRepos, INavigateView mainIns)
         {
             UserAddressVM = userAddressVM;
             OrderItemsVM = orderItemsVM;

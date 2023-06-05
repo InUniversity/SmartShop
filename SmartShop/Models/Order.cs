@@ -12,6 +12,6 @@ namespace SmartShop.Models
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
 
-        public List<OrderItem> Items { get; set; }
+        public List<OrderItemView> Items { get; set; }
     }
 }

@@ -56,11 +56,11 @@ namespace SmartShop.Repositories
             return result;
         }
 
-        public List<OrderItem> GetOrderItems(string orderID)
+        public List<OrderItemView> GetOrderItems(string orderID)
         {
             var qry = query.GetOrderItems(orderID);
             using var reader = dbConn.ExecuteReader(qry);
-            return dbConv.ToList<OrderItem>(reader);
+            return dbConv.ToList<OrderItemView>(reader);
         }
 
         public List<Order> SearchByDateRange(DateTime start, DateTime end)

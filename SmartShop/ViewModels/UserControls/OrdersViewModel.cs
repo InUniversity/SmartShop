@@ -25,13 +25,13 @@ namespace SmartShop.ViewModels.UserControls
 
         private readonly OrderRepository orderRepos;
         private readonly INavigateView mainIns;
-        private readonly IReceiveOrder paymentIns;
+        private readonly IReceiveOrder ordDetailsIns;
 
-        public OrdersViewModel(OrderRepository orderRepos, INavigateView mainIns, IReceiveOrder paymentIns)
+        public OrdersViewModel(OrderRepository orderRepos, INavigateView mainIns, IReceiveOrder ordDetailsIns)
         {
             this.orderRepos = orderRepos;
             this.mainIns = mainIns;
-            this.paymentIns = paymentIns;
+            this.ordDetailsIns = ordDetailsIns;
             Load();
             SetCommands();
         }
@@ -43,7 +43,7 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecuteShowDetailsOrder(object obj)
         {
-            paymentIns.Receive(obj as string);
+            ordDetailsIns.Receive(SelOrder.ID);
             mainIns.MoveToPaymentView();
         }
 
