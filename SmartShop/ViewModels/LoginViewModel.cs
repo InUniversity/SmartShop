@@ -12,10 +12,10 @@ namespace SmartShop.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private string username;
+        private string username = "johndoe";
         public string Username { get => username; set { username = value; OnPropertyChanged(); } }
 
-        private string password;
+        private string password = "hash123";
         public string Password { get => password; set { password = value; OnPropertyChanged(); } }
 
         public string ServerName { get => CurrentDb.Ins.ServerName; set { CurrentDb.Ins.ServerName = value; OnPropertyChanged(); } }
