@@ -9,7 +9,7 @@ namespace SmartShop.Repositories
     public class OrderRepository : BaseRepository
     {
         private readonly OrderQuery query;
-        
+
         public OrderRepository(DbConnection dbConn, DbConverter dbConv, OrderQuery query) : base(dbConn, dbConv)
         {
             this.query = query;
@@ -22,11 +22,17 @@ namespace SmartShop.Repositories
             return dbConv.ToSingleObject<Order>(reader);
         }
 
-        public List<Order> SearchOrdersByUserID(string userID) 
-        { 
+        public List<Order> SearchOrdersByUserID(string userID)
+        {
             var qry = query.SearchOrdersByUserID(userID);
             using var reader = dbConn.ExecuteReader(qry);
             return dbConv.ToList<Order>(reader);
+        }
+
+        public int GetTotalQuantity(string orderID)
+        {
+            var qry = query.GetTotalQuantity(orderID);
+            return dbConn.ExecuteScalar<int>(qry);
         }
 
         public decimal GetTotalPrice(string orderID)

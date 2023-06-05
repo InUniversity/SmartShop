@@ -43,7 +43,8 @@ namespace SmartShop.ViewModels
         {
             var connectionString = CurrentDb.Ins.GetConnStr(username, password);
             var dbConn = new DbConnection(new SqlConnection(connectionString));
-            var loginRepos = new LoginRepository(dbConn, new DbConverter(new ConvModelFactory()), new LoginQuery());
+            var dbConv = new DbConverter(new ConvModelFactory());
+            var loginRepos = new LoginRepository(dbConn, dbConv, new LoginQuery());
             var notification = loginRepos.CheckLogin(username, password);
             
             var usr = loginRepos.Login(username, password);
@@ -51,7 +52,7 @@ namespace SmartShop.ViewModels
             if (usr == null) return;
             CurrentDb.Ins.Usr = usr;
             
-            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn) };
+            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn, dbConv) };
             mainWin.ShowDialog();
         }
     }

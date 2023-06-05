@@ -9,7 +9,7 @@ namespace SmartShop.Models
         public string UserID { get; set; }
         public DateTime Date { get; set; }
 
-        public decimal TotalQuantity { get; set; }
+        public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
 
         public List<OrderItem> Items { get; set; }

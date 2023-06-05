@@ -23,13 +23,16 @@ namespace SmartShop.ViewModels.UserControls
         public UserAddressViewModel UserAddressVM { get; }
         public OrderViewModel OrderItemsVM { get; }
 
+        public ICommand BackToOrderViewCommand { get; private set; }
+
         private readonly OrderRepository orderRepos;
 
-        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderViewModel orderItemsVM, OrderRepository orderRepos)
+        public PaymentViewModel(UserAddressViewModel userAddressVM, OrderViewModel orderItemsVM, OrderRepository orderRepos, INavigateView mainIns)
         {
             UserAddressVM = userAddressVM;
             OrderItemsVM = orderItemsVM;
             this.orderRepos = orderRepos;
+            BackToOrderViewCommand = new RelayCommand<object>(_ => mainIns.MoveToOrderView());
         }
 
         public void Receive(string orderID)

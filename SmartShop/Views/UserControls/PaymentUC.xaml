@@ -3,18 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:uc="clr-namespace:SmartShop.Views.UserControls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              Name="paymentUC"
              d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer>
-        <StackPanel>
-            <uc:UserAddressUC DataContext="{Binding ElementName=paymentUC, Path=DataContext.UserAddressVM}"
-                              Margin="10,0,0,10" />
-            <uc:OrderItemsUC DataContext="{Binding ElementName=paymentUC, Path=DataContext.OrderItemsVM}" 
-                             Margin="10,0,0,10" Height="400"/>
-            <Button Height="40" Width="300" Content="Thanh toán" Command="{Binding ElementName=paymentUC, Path=DataContext.PayCommand}"
-                    Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-        </StackPanel>
-    </ScrollViewer>
+    <StackPanel>
+        <materialDesign:Card Margin="10,0,10,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70"/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="10 0"  
+                        Grid.Column="0"
+                        Command="{Binding ElementName=paymentUC, Path=DataContext.BackToOrderViewCommand}"
+                        Style="{StaticResource MaterialDesignIconButton}">
+                    <materialDesign:PackIcon Kind="KeyboardBackspace" />
+                </Button>
+                <TextBlock Grid.Column="1" 
+                           Text=" Đơn hàng đã mua" 
+                           Style="{StaticResource TitleTxtStyle}" HorizontalAlignment="Center"/>
+            </Grid>
+        </materialDesign:Card>
+        <uc:UserAddressUC DataContext="{Binding ElementName=paymentUC, Path=DataContext.UserAddressVM}"
+                          Margin="10,0,0,10" />
+        <uc:OrderItemsUC DataContext="{Binding ElementName=paymentUC, Path=DataContext.OrderItemsVM}" 
+                         Margin="10,0,0,10" Height="420"/>
+    </StackPanel>
 </UserControl>

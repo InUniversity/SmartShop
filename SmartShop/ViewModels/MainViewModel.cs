@@ -21,9 +21,11 @@ namespace SmartShop.ViewModels
         
         public ICommand MoveToProductsViewCommand { get; private set; }
         public ICommand MoveToCartViewCommand { get; private set; }
+        public ICommand MoveToOrdersViewCommand { get; private set; }
         public ICommand MoveToEditProdsViewCommand { get; private set; }
 
         private readonly DbConnection dbConn;
+        private readonly DbConverter dbConv;
         private CartItemRepository cartItemRepos;
 
         private ProductsUC prodsView;
@@ -33,9 +35,10 @@ namespace SmartShop.ViewModels
         private EditProdsUC editProdsUC;
         private OrdersUC ordersView;
 
-        public MainViewModel(DbConnection dbConn)
+        public MainViewModel(DbConnection dbConn, DbConverter dbConv)
         {
             this.dbConn = dbConn;
+            this.dbConv = dbConv;
             ConfigDependencies();
             Load();
             MoveToProductsView();
@@ -44,9 +47,6 @@ namespace SmartShop.ViewModels
 
         private void ConfigDependencies()
         {
-            var convModelFactory = new ConvModelFactory();
-            var dbConv = new DbConverter(convModelFactory);
-
             var prodQuery = new ProductQuery();
             var orderQuery = new OrderQuery();
             var addressQuery = new UserAddressQuery();
@@ -61,9 +61,9 @@ namespace SmartShop.ViewModels
 
             var userAddressVM = new UserAddressViewModel(addressRepos);
             var orderItemsVM = new OrderViewModel(orderRepos);
-            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos);
+            var paymentVM = new PaymentViewModel(userAddressVM, orderItemsVM, orderRepos, this);
 
-            var cartVM = new CartViewModel(cartItemRepos,this, paymentVM);
+            var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, paymentVM);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
@@ -97,6 +97,7 @@ namespace SmartShop.ViewModels
         {
             MoveToProductsViewCommand = new RelayCommand<object>(_ => MoveToProductsView());
             MoveToCartViewCommand = new RelayCommand<object>(_ => MoveToCartView());
+            MoveToOrdersViewCommand = new RelayCommand<object>(_ => MoveToOrderView());
             MoveToEditProdsViewCommand = new RelayCommand<object>(_ => MoveToEditProdsView());
         }
 

@@ -154,7 +154,22 @@ JOIN Categories on Products.CategoryID = Categories.ID
 GO
 ------------------------------------------------------
 
---function: calculate total each order item
+
+--function:
+CREATE OR ALTER FUNCTION fn_CalculateTotalQuantityOrder(@OrderID VARCHAR(20))
+    RETURNS INT
+BEGIN
+    DECLARE @QtyItem INT = 0;
+
+    SELECT @QtyItem = SUM(Quantity)
+    FROM OrderItems
+    WHERE OrderID = @OrderID
+
+    RETURN @QtyItem
+END;
+GO
+------------------------------------------------------
+
 CREATE OR ALTER FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
@@ -170,7 +185,7 @@ BEGIN
     FROM Products
     WHERE ID = @ProdID
 
-    SELECT @ItemPrice = @ItemPrice + Quantity
+    SELECT @ItemPrice = @ItemPrice * Quantity
     FROM OrderItems
     WHERE OrderID = @OrdItemID
 

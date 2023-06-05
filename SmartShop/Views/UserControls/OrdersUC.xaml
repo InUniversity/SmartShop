@@ -58,7 +58,7 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <materialDesign:Card Width="680" Height="110" Margin="5">
+                            <materialDesign:Card Width="1100" Height="100" Margin="5">
                                 <Grid Margin="5,0,20,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
@@ -67,7 +67,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{Binding TotalQuantity, StringFormat={}{0:#,#}đ}"
+                                    <TextBlock Text="{Binding TotalQuantity, StringFormat={}Số lượng: {0}}"
                                                Grid.Column="0"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
@@ -79,7 +79,7 @@
                                                VerticalAlignment="Center"
                                                Style="{StaticResource NormalTxtStyle}" />
 
-                                    <TextBlock Text="{Binding Date, StringFormat=dd/MM/yyyy}"
+                                    <TextBlock Text="{Binding Date, StringFormat={}Ngày đặt hàng: {0:dd/MM/yyyy}}"
                                                Grid.Column="2"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"

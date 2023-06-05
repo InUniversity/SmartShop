@@ -52,7 +52,10 @@ namespace SmartShop.ViewModels.UserControls
             Orders = orderRepos.SearchOrdersByUserID(CurrentDb.Ins.Usr.ID);
             foreach (var order in Orders)
             {
-                order.Items = orderRepos.GetOrderItems(order.ID);
+                string id = order?.ID;
+                order.TotalQuantity = orderRepos.GetTotalQuantity(id);
+                order.TotalPrice = orderRepos.GetTotalPrice(id);
+                order.Items = orderRepos.GetOrderItems(id);
             }
         }
 
