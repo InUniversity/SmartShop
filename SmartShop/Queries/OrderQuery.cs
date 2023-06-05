@@ -56,11 +56,12 @@ namespace SmartShop.Queries
             return query;
         }
 
-        public QueryService SearchByDateRange(DateTime start, DateTime end)
+        public QueryService SearchByDateRange(string userID, DateTime start, DateTime end)
         {
             var query = new QueryService("sp_GetOrdersByDateRange", CommandType.StoredProcedure);
             query.Paras = new SqlParameter[]
             {
+                new SqlParameter("@userID", userID),
                 new SqlParameter("@startDate", start) { SqlDbType = SqlDbType.DateTime },
                 new SqlParameter("@endDate", end) { SqlDbType = SqlDbType.DateTime }
             };

@@ -379,7 +379,8 @@ GO
 
 
 --Stored Procedure: get order date
-CREATE PROCEDURE sp_GetOrdersByDateRange
+CREATE OR ALTER PROCEDURE sp_GetOrdersByDateRange
+	@userID VARCHAR(20),
     @startDate DATETIME,
     @endDate DATETIME
 AS
@@ -388,78 +389,15 @@ BEGIN
 	BEGIN TRY
 		SELECT *
 		FROM Orders
-		WHERE OrderDate BETWEEN @startDate AND @endDate 
+		WHERE UserID = @userID AND OrderDate BETWEEN @startDate AND @endDate 
 			OR OrderDate = @startDate 
 			OR OrderDate = @endDate
+			
 		COMMIT TRAN;
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-		  DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
-	END CATCH
-END
-GO
---EXEC sp_GetOrdersByDateRange '2023-01-25', '2023-04-27'
---DROP PROCEDURE sp_GetOrdersByDateRange
-
------------------------------
---Stored Procedure: Add Catagory
-
-CREATE PROCEDURE sp_AddCategory
-    @CategoryID VARCHAR(20),
-    @CategoryName NVARCHAR(50)
-AS
-BEGIN
-	BEGIN TRAN
-	BEGIN TRY
-		INSERT INTO Categories (ID, CategoryName)
-		VALUES (@CategoryID, @CategoryName)
-		COMMIT TRAN;
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
-	END CATCH
-END
-GO
---Stored Procedure: Update Catagory
-
-CREATE PROCEDURE sp_UpdateCategory
-    @CategoryID VARCHAR(20),
-    @NewCategoryName NVARCHAR(50)
-AS
-BEGIN
-	BEGIN TRAN
-	BEGIN TRY
-		UPDATE Categories
-		SET CategoryName = @NewCategoryName
-		WHERE ID = @CategoryID
-		COMMIT TRAN;
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
-	END CATCH
-END
-GO
---Stored Procedure: Delete Catagory
-
-CREATE PROCEDURE sp_DeleteCategory
-    @CategoryID VARCHAR(20)
-AS
-BEGIN
-	BEGIN TRAN
-	BEGIN TRY
-		DELETE FROM Categories
-		WHERE ID = @CategoryID
-		COMMIT TRAN;
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
+		DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -467,7 +405,7 @@ GO
 ---------------------------------------------------------
 --Stored Procedure: Add Product
 
-CREATE PROCEDURE sp_AddProduct
+CREATE OR ALTER PROCEDURE sp_AddProduct
     @ProductID VARCHAR(20),
     @CategoryID VARCHAR(20),
     @ImageUrl VARCHAR(MAX),
@@ -480,7 +418,12 @@ AS
 BEGIN
 	BEGIN TRAN 
 	BEGIN TRY
-		if (@Price < 0)
+		if (@Price < 1)
+		BEGIN
+			SET @Notification = N'Thất bại. Giá sản phẩm phải lớp hơn 0';
+			RETURN;
+		END
+		if (@Quantity < 1)
 		BEGIN
 			SET @Notification = N'Thất bại. Số lượng sản phẩm phải lớp hơn 0';
 			RETURN;
@@ -514,9 +457,14 @@ AS
 BEGIN
 	BEGIN TRAN
 	BEGIN TRY
-		if (@NewPrice < 0)
+		if (@NewPrice < 1)
 		BEGIN
 			SET @Notification = N'Thất bại. Giá sản phẩm phải lớp hơn 0';
+			RETURN;
+		END
+		if (@NewQuantity < 1)
+		BEGIN
+			SET @Notification = N'Thất bại. Số lượng sản phẩm phải lớp hơn 0';
 			RETURN;
 		END
 
@@ -583,33 +531,6 @@ BEGIN
 	END CATCH
 END
 GO
-----------------------------------------------------------
---Stored Procedure: Add User
-
-CREATE PROCEDURE sp_AddUser
-    @UserID VARCHAR(20),
-    @FullName NVARCHAR(50),
-    @Username VARCHAR(50),
-    @PasswordHash VARCHAR(50),
-    @Email VARCHAR(100),
-    @Phone VARCHAR(10),
-    @WalletBalance DECIMAL(18, 2)
-AS
-BEGIN
-	BEGIN TRAN
-	BEGIN TRY
-		INSERT INTO Users (ID, FullName, Username, PasswordHash, Email, Phone, WalletBalance)
-		VALUES (@UserID, @FullName, @Username, @PasswordHash, @Email, @Phone, @WalletBalance)
-		COMMIT TRAN;
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRAN
-			DECLARE @Notification VARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
-	END CATCH
-END
-GO
-
 --Stored Procedure: Update User
 
 CREATE PROCEDURE sp_UpdateUser
@@ -619,7 +540,9 @@ CREATE PROCEDURE sp_UpdateUser
     @NewPasswordHash VARCHAR(50),
     @NewEmail VARCHAR(100),
     @NewPhone VARCHAR(10),
-    @NewWalletBalance DECIMAL(18, 2)
+    @NewWalletBalance DECIMAL(18, 2),
+	@NewUsrAddress VARCHAR(200),
+	@Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
 	BEGIN TRAN
@@ -630,34 +553,17 @@ BEGIN
 			PasswordHash = @NewPasswordHash,
 			Email = @NewEmail,
 			Phone = @NewPhone,
-			WalletBalance = @NewWalletBalance
+			WalletBalance = @NewWalletBalance,
+			UsrAddress = @NewUsrAddress
 		WHERE ID = @UserID
+
+		SET @Notification = N'Cập nhật thông tin người dùng thành công'
 		COMMIT TRAN;
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-		  DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
-	END CATCH
-END
-GO
-
---Stored Procedure: Delete User
-
-CREATE PROCEDURE sp_DeleteUser
-    @UserID VARCHAR(20)
-AS
-BEGIN
-	BEGIN TRAN 
-	BEGIN TRY
-		DELETE FROM Users
-		WHERE ID = @UserID
-		COMMIT TRAN;
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
+		SET @Notification=ERROR_MESSAGE();
+		THROW;
 	END CATCH
 END
 GO
@@ -822,29 +728,7 @@ BEGIN
     END CATCH
 END
 GO
---Stored Procedure: Update Order
 
-CREATE PROCEDURE sp_UpdateOrder
-    @OrderID VARCHAR(20),
-    @NewUserID VARCHAR(20),
-    @NewOrderDate DATETIME
-AS
-BEGIN
-	BEGIN TRAN
-	BEGIN TRY
-		UPDATE Orders
-		SET UserID = @NewUserID,
-			OrderDate = @NewOrderDate
-		WHERE ID = @OrderID
-		COMMIT TRAN;
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
-	END CATCH
-END
-GO
 --Stored Procedure: Delete Order
 
 CREATE PROCEDURE sp_DeleteOrder
@@ -873,8 +757,8 @@ BEGIN
     WHERE OrderID IN (SELECT OrderID FROM deleted)
 END;
 GO
---Stored Procedure: Search Order
 
+--Stored Procedure: Search Order
 CREATE PROCEDURE sp_Ser_Order_By_ID
     @ID varchar(20)
 AS
@@ -888,7 +772,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
+		DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END
@@ -911,7 +795,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
+		DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
 		THROW 1,@Notification,16;
 	END CATCH
 END

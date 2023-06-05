@@ -15,11 +15,11 @@ namespace SmartShop.ViewModels.UserControls
 
         public Order SelOrder { get; set; }
 
-        private DateTime startDate = DateTime.Now;
-        public DateTime StartDate { get => startDate; set { startDate = value; SearchByDateRange(); OnPropertyChanged(); } } 
+        private DateTime startDate = new DateTime(2000, 1, 1);
+        public DateTime StartDate { get => startDate; set { startDate = value; Load(); OnPropertyChanged(); } } 
 
         private DateTime endDate = DateTime.Now;
-        public DateTime EndDate { get => endDate; set { endDate = value; SearchByDateRange(); OnPropertyChanged(); } }
+        public DateTime EndDate { get => endDate; set { endDate = value; Load(); OnPropertyChanged(); } }
 
         public ICommand ShowDetailsOrderCommand { get; private set; }
 
@@ -43,13 +43,13 @@ namespace SmartShop.ViewModels.UserControls
 
         private void ExecuteShowDetailsOrder(object obj)
         {
-            ordDetailsIns.Receive(SelOrder.ID);
+            ordDetailsIns.Receive(SelOrder?.ID);
             mainIns.MoveToPaymentView();
         }
 
         public void Load()
         {
-            Orders = orderRepos.SearchOrdersByUserID(CurrentDb.Ins.Usr.ID);
+            Orders = orderRepos.SearchByDateRange(CurrentDb.Ins.Usr.ID, StartDate, EndDate);
             foreach (var order in Orders)
             {
                 string id = order?.ID;
@@ -57,11 +57,6 @@ namespace SmartShop.ViewModels.UserControls
                 order.TotalPrice = orderRepos.GetTotalPrice(id);
                 order.Items = orderRepos.GetOrderItems(id);
             }
-        }
-
-        private void SearchByDateRange()
-        {
-            Orders = orderRepos.SearchByDateRange(StartDate, EndDate);
         }
     }
 }
