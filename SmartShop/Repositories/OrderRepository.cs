@@ -48,9 +48,9 @@ namespace SmartShop.Repositories
             return result;
         }
 
-        public string Pay(string orderID, out string notification)
+        public string Pay(string userID, out string notification)
         {
-            var qry = query.Pay(orderID, out var notificationParameter);
+            var qry = query.Pay(userID, out var notificationParameter);
             var result = dbConn.ExecuteScalar<string>(qry);
             notification = notificationParameter?.Value?.ToString();
             return result;
