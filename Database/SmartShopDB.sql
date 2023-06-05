@@ -154,6 +154,15 @@ JOIN Categories on Products.CategoryID = Categories.ID
 GO
 ------------------------------------------------------
 
+CREATE VIEW vw_OrderItems
+AS
+SELECT OrderItems.*, ImageUrl, ProductName, Price, Products.RemainQuantity, ProductDescription, CategoryName
+FROM OrderItems
+JOIN Products on Products.ID = OrderItems.ProductID
+JOIN Categories on Products.CategoryID = Categories.ID
+GO
+------------------------------------------------------
+
 
 --function:
 CREATE OR ALTER FUNCTION fn_CalculateTotalQuantityOrder(@OrderID VARCHAR(20))
