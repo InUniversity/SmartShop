@@ -60,7 +60,9 @@ namespace SmartShop.ViewModels
             var orderItemsVM = new OrderViewModel(orderRepos);
             var ordDetailsVM = new OrderDetailsViewModel(orderItemsVM, orderRepos, this);
 
-            var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM);
+            var ordersVM = new OrdersViewModel(orderRepos, this, ordDetailsVM);
+
+            var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM, ordersVM);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
@@ -69,7 +71,6 @@ namespace SmartShop.ViewModels
             
             var editProdVM = new EditProdsViewModel(prodRepos, ctgRepos);
 
-            var ordersVM = new OrdersViewModel(orderRepos, this, ordDetailsVM);
             
             InitViewComponents(ordDetailsVM, cartVM, prodVM, prodDetailVM, editProdVM, ordersVM);
         }

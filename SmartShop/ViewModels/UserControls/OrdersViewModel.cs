@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace SmartShop.ViewModels.UserControls
 {
-    public class OrdersViewModel : BaseViewModel
+    public class OrdersViewModel : BaseViewModel, ILoadView
     {
         private List<Order> orders;
         public List<Order> Orders { get { return orders; } set { orders = value; OnPropertyChanged(); } }
