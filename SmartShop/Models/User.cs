@@ -11,7 +11,6 @@ namespace SmartShop.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public decimal WalletBalance { get; set; }
-
-        public ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
+        public string Address { get; set; }
     }
 }

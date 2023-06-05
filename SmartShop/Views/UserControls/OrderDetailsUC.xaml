@@ -27,8 +27,27 @@
                            Style="{StaticResource TitleTxtStyle}" HorizontalAlignment="Center"/>
             </Grid>
         </materialDesign:Card>
-        <uc:UserAddressUC DataContext="{Binding ElementName=orderDetailsUC, Path=DataContext.UserAddressVM}"
-                          Margin="10,0,0,10" />
+
+        <materialDesign:Card Margin="10,0,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock 
+                    Grid.Row="0"
+                    Text="Địa chỉ người mua" 
+                    Style="{StaticResource TitleTxtStyle}" HorizontalAlignment="Left" FontSize="16"/>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <TextBlock Text="{Binding CurUser.FullName, StringFormat={}Tên: {0}}" Style="{StaticResource NormalTxtStyle}" />
+                    <TextBlock Text="{Binding CurUser.Phone, StringFormat={}SĐT: {0}}" Style="{StaticResource NormalTxtStyle}" />
+                    <TextBlock Text="{Binding CurUser.Address, StringFormat={}Địa chỉ : {0}}" Style="{StaticResource NormalTxtStyle}" />
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+
         <uc:OrderItemsUC DataContext="{Binding ElementName=orderDetailsUC, Path=DataContext.OrderItemsVM}" 
                          Margin="10,0,0,10" Height="790" />
     </StackPanel>

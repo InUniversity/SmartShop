@@ -4,6 +4,7 @@ namespace SmartShop.ConvertToModel
 {
     public abstract class BaseConvModel
     {
+        //product
         protected const string prodTbl = "Products";
         protected const string prodID = "ID";
         protected const string prodCtgID = "CategoryID";
@@ -34,10 +35,6 @@ namespace SmartShop.ConvertToModel
         protected const string ordItemOrdID = "OrderID";
         protected const string ordItemProdID = "ProductID";
         protected const string ordItemQty = "Quantity";
-        //orderStatus
-        protected const string ordStaTbl = "OrderStatus";
-        protected const string ordStaID = "ID";
-        protected const string ordStaName = "StatusName";
         //user
         protected const string userTbl = "Users";
         protected const string userID = "ID";
@@ -47,16 +44,7 @@ namespace SmartShop.ConvertToModel
         protected const string useremail = "Email";
         protected const string userphone = "Phone";
         protected const string userwBalance = "WalletBalance";
-        protected const string userrID = "RoleID";
-        //userrole
-        protected const string uroleTbl = "UserRole";
-        protected const string uroleID = "ID";
-        protected const string uroleName = "RoleName";
-        //useraddress
-        protected const string uadresTbl = "UserAddress";
-        protected const string uadresID = "ID";
-        protected const string uadresUsID = "UserID";
-        protected const string uadDetail = "AddressDetails";
+        protected const string userAddress = "UsrAddress";
         //userAccount
         protected const string UserAccTbl = "UserAccount";
         protected const string urAcID = "UserID";

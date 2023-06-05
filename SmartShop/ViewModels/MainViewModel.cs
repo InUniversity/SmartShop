@@ -49,19 +49,16 @@ namespace SmartShop.ViewModels
         {
             var prodQuery = new ProductQuery();
             var orderQuery = new OrderQuery();
-            var addressQuery = new UserAddressQuery();
             var cartItemQuery = new CartItemQuery();
             var ctgQuery = new CategoryQuery();
             
             var prodRepos = new ProductRepository(dbConn, dbConv, prodQuery);
             var orderRepos = new OrderRepository(dbConn, dbConv, orderQuery);
-            var addressRepos = new UserAddressRepository(dbConn, dbConv, addressQuery);
             cartItemRepos = new CartItemRepository(dbConn, dbConv, cartItemQuery);
             var ctgRepos = new CategoryRepository(dbConn, dbConv, ctgQuery);
 
-            var userAddressVM = new UserAddressViewModel(addressRepos);
             var orderItemsVM = new OrderViewModel(orderRepos);
-            var ordDetailsVM = new OrderDetailsViewModel(userAddressVM, orderItemsVM, orderRepos, this);
+            var ordDetailsVM = new OrderDetailsViewModel(orderItemsVM, orderRepos, this);
 
             var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM);
 
