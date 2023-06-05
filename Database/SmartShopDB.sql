@@ -474,36 +474,52 @@ CREATE PROCEDURE sp_AddProduct
     @ProductName NVARCHAR(50),
     @Price DECIMAL(18, 2),
     @Quantity INT,
-    @ProductDescription NVARCHAR(256)
+    @ProductDescription NVARCHAR(256),
+	@Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
 	BEGIN TRAN 
 	BEGIN TRY
+		if (@Price < 0)
+		BEGIN
+			SET @Notification = N'Thất bại. Số lượng sản phẩm phải lớp hơn 0';
+			RETURN;
+		END
+
 		INSERT INTO Products (ID, CategoryID, ImageUrl, ProductName, Price, RemainQuantity, ProductDescription)
 		VALUES (@ProductID, @CategoryID, @ImageUrl, @ProductName, @Price, @Quantity, @ProductDescription)
+
+		SET @Notification = N'Thêm sản phẩm thành công';
 		COMMIT TRAN;
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
+		SET @Notification=ERROR_MESSAGE();
+		THROW;
 	END CATCH
 END
 GO
 --Stored Procedure: Update Product
 
-CREATE PROCEDURE sp_UpdateProduct
+CREATE OR ALTER PROCEDURE sp_UpdateProduct
     @ProductID VARCHAR(20),
     @NewCategoryID VARCHAR(20),
     @NewImageUrl VARCHAR(MAX),
     @NewProductName NVARCHAR(50),
     @NewPrice DECIMAL(18, 2),
     @NewQuantity INT,
-    @NewProductDescription NVARCHAR(256)
+    @NewProductDescription NVARCHAR(256),
+	@Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
 	BEGIN TRAN
 	BEGIN TRY
+		if (@NewPrice < 0)
+		BEGIN
+			SET @Notification = N'Thất bại. Giá sản phẩm phải lớp hơn 0';
+			RETURN;
+		END
+
 		UPDATE Products
 		SET CategoryID = @NewCategoryID,
 			ImageUrl = @NewImageUrl,
@@ -512,12 +528,14 @@ BEGIN
 		    RemainQuantity = @NewQuantity,
 			ProductDescription = @NewProductDescription
 		WHERE ID = @ProductID
+
+		SET @Notification = N'Cập nhật thành công';
 		COMMIT TRAN;
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
+		SET @Notification=ERROR_MESSAGE();
+		THROW;
 	END CATCH
 END
 GO
@@ -543,8 +561,9 @@ END
 GO
 --Stored Procedure: Delete Product
 
-CREATE PROCEDURE sp_DeleteProduct
-    @ProductID VARCHAR(20)
+CREATE OR ALTER PROCEDURE [dbo].[sp_DeleteProduct]
+    @ProductID VARCHAR(20),
+	@Notification NVARCHAR(1000) OUTPUT
 AS
 BEGIN
 	BEGIN TRAN
@@ -553,12 +572,14 @@ BEGIN
 		WHERE ProductID = @ProductID
 		DELETE FROM Products
 		WHERE ID = @ProductID
+
+		SET @Notification = N'Xóa sản phẩm thành công';
 		COMMIT TRAN;
 	END TRY
 	BEGIN CATCH
 		ROLLBACK TRAN
-			DECLARE @Notification NVARCHAR(20)=ERROR_MESSAGE();
-		THROW 1,@Notification,16;
+		SET @Notification = ERROR_MESSAGE();
+		THROW;
 	END CATCH
 END
 GO

@@ -7,8 +7,10 @@ namespace SmartShop.Queries
 {
     public class ProductQuery
     {
-        public QueryService Add(Product prod)
+        public QueryService Add(Product prod, out SqlParameter notificationParameter)
         {
+            notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
+            notificationParameter.Direction = ParameterDirection.Output;
             var query = new QueryService("sp_AddProduct", CommandType.StoredProcedure);
             query.Paras = new[]
             {
@@ -18,23 +20,29 @@ namespace SmartShop.Queries
                 new SqlParameter("@ProductName", prod.Name),
                 new SqlParameter("@Price", prod.Price),
                 new SqlParameter("@Quantity", prod.RemainQuantity),
-                new SqlParameter("@ProductDescription", prod.Desc)
+                new SqlParameter("@ProductDescription", prod.Desc),
+                notificationParameter
             };
             return query;
         }
 
-        public QueryService Delete(string id)
+        public QueryService Delete(string id, out SqlParameter notificationParameter)
         {
+            notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
+            notificationParameter.Direction = ParameterDirection.Output;
             var query = new QueryService("sp_DeleteProduct", CommandType.StoredProcedure);
             query.Paras = new[]
             {
                 new SqlParameter("@ProductID", id),
+                notificationParameter
             };
             return query;
         }
 
-        public QueryService Update(Product prod)
+        public QueryService Update(Product prod, out SqlParameter notificationParameter)
         {
+            notificationParameter = new SqlParameter("@Notification", SqlDbType.NVarChar, 1000);
+            notificationParameter.Direction = ParameterDirection.Output;
             var query = new QueryService("sp_UpdateProduct", CommandType.StoredProcedure);
             query.Paras = new[]
             {
@@ -44,7 +52,8 @@ namespace SmartShop.Queries
                 new SqlParameter("@NewProductName", prod.Name),
                 new SqlParameter("@NewPrice", prod.Price),
                 new SqlParameter("@NewQuantity", prod.RemainQuantity),
-                new SqlParameter("@NewProductDescription", prod.Desc)
+                new SqlParameter("@NewProductDescription", prod.Desc),
+                notificationParameter
             };
             return query;
         }
