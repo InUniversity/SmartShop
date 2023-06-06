@@ -13,12 +13,6 @@ namespace SmartShop.Queries
             return query;
         }
 
-        public QueryService SearchOrdersByUserID(string userID)
-        {
-            var query = new QueryService($"SELECT * FROM fn_SerOrdersByUserID('{userID}')", CommandType.Text);
-            return query;
-        }
-
         public QueryService GetTotalQuantity(string orderID)
         {
             var query = new QueryService($"SELECT dbo.fn_CalculateTotalQuantityOrder('{orderID}')", CommandType.Text);
@@ -28,12 +22,6 @@ namespace SmartShop.Queries
         public QueryService GetTotalPrice(string orderID)
         {
             var query = new QueryService($"SELECT dbo.fn_CalculateTotalOrder('{orderID}')", CommandType.Text);
-            return query;
-        }
-
-        public QueryService GetNewOrder(string userID)
-        {
-            var query = new QueryService($"SELECT dbo.fn_GenerateNewOrder('{userID}')", CommandType.Text);
             return query;
         }
 

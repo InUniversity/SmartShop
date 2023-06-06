@@ -28,6 +28,14 @@ namespace SmartShop.ViewModels
         private readonly DbConverter dbConv;
         private CartItemRepository cartItemRepos;
 
+        private OrderViewModel orderItemsVM;
+        private OrderDetailsViewModel ordDetailsVM;
+        private OrdersViewModel ordersVM;
+        private CartViewModel cartVM;
+        private ProdDetailViewModel prodDetailVM;
+        private ProductsViewModel prodVM;
+        private EditProdsViewModel editProdVM;
+
         private ProductsUC prodsView;
         private ProdDetailUC prodDetailView;
         private CartUC cartView;
@@ -57,19 +65,19 @@ namespace SmartShop.ViewModels
             cartItemRepos = new CartItemRepository(dbConn, dbConv, cartItemQuery);
             var ctgRepos = new CategoryRepository(dbConn, dbConv, ctgQuery);
 
-            var orderItemsVM = new OrderViewModel(orderRepos);
-            var ordDetailsVM = new OrderDetailsViewModel(orderItemsVM, orderRepos, this);
+            orderItemsVM = new OrderViewModel(orderRepos);
+            ordDetailsVM = new OrderDetailsViewModel(orderItemsVM, orderRepos, this);
 
-            var ordersVM = new OrdersViewModel(orderRepos, this, ordDetailsVM);
+            ordersVM = new OrdersViewModel(orderRepos, this, ordDetailsVM);
 
-            var cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM, ordersVM);
+            cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM, this);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
-            var prodDetailVM = new ProdDetailViewModel(productReceiver, this);
+            prodDetailVM = new ProdDetailViewModel(productReceiver, this);
             
-            var prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);
+            prodVM = new ProductsViewModel(prodRepos, prodDetailVM, this);
             
-            var editProdVM = new EditProdsViewModel(prodRepos, ctgRepos);
+            editProdVM = new EditProdsViewModel(prodRepos, ctgRepos);
 
             
             InitViewComponents(ordDetailsVM, cartVM, prodVM, prodDetailVM, editProdVM, ordersVM);
@@ -131,7 +139,11 @@ namespace SmartShop.ViewModels
 
         public void Load()
         {
-            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentDb.Ins.Usr.ID); 
+            CartQuantity = cartItemRepos.GetTotalQuantity(CurrentDb.Ins.Usr.ID);
+            ordersVM?.Load();
+            cartVM?.Load();
+            prodVM?.Load();
+            editProdVM?.Load();
         }
     }
 }
