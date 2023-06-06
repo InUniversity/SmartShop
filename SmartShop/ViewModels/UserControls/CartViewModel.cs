@@ -107,10 +107,13 @@ namespace SmartShop.ViewModels.UserControls
         private void ExecutePay(object obj)
         {
             var orderID = orderRepos.Pay(user.ID, out var notification);
+            if (!string.IsNullOrEmpty(orderID))
+            {
+                ordDetailsIns.Receive(orderID);
+                navView.MoveToPaymentView();
+            }
             if (!string.IsNullOrEmpty(notification))
                 MessageBox.Show(notification);
-            ordDetailsIns.Receive(orderID);
-            navView.MoveToPaymentView();
             orderIns.Load();
         }
 

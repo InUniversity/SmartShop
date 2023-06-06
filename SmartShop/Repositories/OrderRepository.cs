@@ -22,13 +22,6 @@ namespace SmartShop.Repositories
             return dbConv.ToSingleObject<Order>(reader);
         }
 
-        public List<Order> SearchOrdersByUserID(string userID)
-        {
-            var qry = query.SearchOrdersByUserID(userID);
-            using var reader = dbConn.ExecuteReader(qry);
-            return dbConv.ToList<Order>(reader);
-        }
-
         public int GetTotalQuantity(string orderID)
         {
             var qry = query.GetTotalQuantity(orderID);
@@ -39,13 +32,6 @@ namespace SmartShop.Repositories
         {
             var qry = query.GetTotalPrice(orderID);
             return dbConn.ExecuteScalar<decimal>(qry);
-        }
-
-        public string GetNewOrder(string userID)
-        {
-            var qry = query.GetNewOrder(userID);
-            var result = dbConn.ExecuteScalar<string>(qry);
-            return result;
         }
 
         public string Pay(string userID, out string notification)

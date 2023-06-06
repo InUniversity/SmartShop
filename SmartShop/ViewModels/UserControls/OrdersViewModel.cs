@@ -57,6 +57,7 @@ namespace SmartShop.ViewModels.UserControls
                 order.TotalPrice = orderRepos.GetTotalPrice(id);
                 order.Items = orderRepos.GetOrderItems(id);
             }
+            OnPropertyChanged(nameof(Order));
         }
     }
 }

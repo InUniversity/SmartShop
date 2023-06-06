@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Name="mainWindow"
         WindowStartupLocation="CenterScreen"
-        Title="BuyerWindow" Height="700" Width="1200">
+        Title="Main window" Height="700" Width="1200">
     <Grid>
         <materialDesign:DrawerHost>
             <materialDesign:DrawerHost.LeftDrawerContent>
