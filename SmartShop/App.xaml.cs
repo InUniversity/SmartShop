@@ -1,10 +1,4 @@
-﻿using System.Data.SqlClient;
-using System.Windows;
-using SmartShop.ConvertToModel;
-using SmartShop.Database;
-using SmartShop.Models;
-using SmartShop.Queries;
-using SmartShop.Repositories;
+﻿using System.Windows;
 using SmartShop.ViewModels;
 using SmartShop.Views;
 
@@ -24,7 +18,7 @@ namespace SmartShop
         private void InitLogin()
         {
             var viewModel = new LoginViewModel();
-            var window = new Login { DataContext = viewModel };
+            var window = new LoginWindow { DataContext = viewModel };
             window.Show();
         }
     }

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace SmartShop.Views
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class Login : Window
+    public partial class LoginWindow : Window
     {
-        public Login()
+        public LoginWindow()
         {
             InitializeComponent();
         }
