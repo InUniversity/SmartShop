@@ -790,20 +790,15 @@ CREATE PROCEDURE sp_GenerateNewOrder
 AS
 BEGIN
     SET @NewOrderID = dbo.fn_GenerateOrderID();
-    --DECLARE @ID VARCHAR(20);
-    --SET @ID = dbo.fn_GenerateOrderItemID();
-    --Declare a table variable to hold the converted order items
     DECLARE @OrderItems TABLE (
                                   ID VARCHAR(20),
                                   OrderID VARCHAR(20) NOT NULL,
                                   ProductID VARCHAR(20) NOT NULL,
                                   Quantity INT NOT NULL
                               );
-    -- Insert the order record into the Orders table
     INSERT INTO Orders (ID, UserID, OrderDate)
     VALUES (@NewOrderID, @UserID, GETDATE());
 
-    -- Insert the converted order items into the table variable
     DECLARE @Counter INT =1;
     DECLARE @count INT;
     SELECT @count = COUNT(*) FROM CartItems;
@@ -844,6 +839,12 @@ BEGIN
     INSERT INTO OrderItems (ID, OrderID, ProductID, Quantity)
     SELECT ID, OrderID, ProductID, Quantity
     FROM @OrderItems;
+
+	UPDATE Products
+	SET RemainQuantity = RemainQuantity - OI.Quantity
+	FROM Products P
+	INNER JOIN @OrderItems OI ON P.ID = OI.ProductID
+	WHERE OI.OrderID = @NewOrderID;
 END;
 GO
 ----------------------------------------------------------
