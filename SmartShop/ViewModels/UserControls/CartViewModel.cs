@@ -34,6 +34,7 @@ namespace SmartShop.ViewModels.UserControls
 
         private readonly CartItemRepository cartItemRepos;
         private readonly OrderRepository orderRepos;
+        private readonly LoginRepository loginRepos;
         private readonly INavigateView navView;
         private readonly IReceiveOrder ordDetailsIns;
         private readonly ILoadView orderIns;
@@ -42,12 +43,14 @@ namespace SmartShop.ViewModels.UserControls
 
         public CartViewModel(CartItemRepository cartItemRepos, 
             OrderRepository orderRepos, 
+            LoginRepository loginRepos,
             INavigateView navView, 
             IReceiveOrder ordDetailsIns, 
             ILoadView orderIns)
         {
             this.cartItemRepos = cartItemRepos;
             this.orderRepos = orderRepos;
+            this.loginRepos = loginRepos;
             this.navView = navView;
             this.ordDetailsIns = ordDetailsIns;
             this.orderIns = orderIns;
@@ -57,14 +60,9 @@ namespace SmartShop.ViewModels.UserControls
 
         public void Load()
         {
-            LoadCartItems();
-        }
-
-        private void LoadCartItems()
-        {
             Items = cartItemRepos.SearchByUserID(user.ID);
             TotalQuantity = cartItemRepos.GetTotalQuantity(user.ID);
-            CurWalletBalance = user.WalletBalance;
+            CurWalletBalance = loginRepos.Login(user.Username, user.Pass).WalletBalance;
             TotalPrice = cartItemRepos.GetTotalPrice(user.ID);
         }
 
@@ -114,6 +112,7 @@ namespace SmartShop.ViewModels.UserControls
             }
             if (!string.IsNullOrEmpty(notification))
                 MessageBox.Show(notification);
+            Load();
             orderIns.Load();
         }
 

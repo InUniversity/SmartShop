@@ -43,10 +43,13 @@ namespace SmartShop.ViewModels
         private EditProdsUC editProdsView;
         private OrdersUC ordersView;
 
-        public MainViewModel(DbConnection dbConn, DbConverter dbConv)
+        private readonly LoginRepository loginRepos;
+
+        public MainViewModel(DbConnection dbConn, DbConverter dbConv, LoginRepository loginRepos)
         {
             this.dbConn = dbConn;
             this.dbConv = dbConv;
+            this.loginRepos = loginRepos;
             ConfigDependencies();
             Load();
             MoveToProductsView();
@@ -70,7 +73,7 @@ namespace SmartShop.ViewModels
 
             ordersVM = new OrdersViewModel(orderRepos, this, ordDetailsVM);
 
-            cartVM = new CartViewModel(cartItemRepos, orderRepos, this, ordDetailsVM, this);
+            cartVM = new CartViewModel(cartItemRepos, orderRepos, loginRepos, this, ordDetailsVM, this);
 
             var productReceiver = new ProductReceiverAdapter(cartVM, cartItemRepos);
             prodDetailVM = new ProdDetailViewModel(productReceiver, this);
