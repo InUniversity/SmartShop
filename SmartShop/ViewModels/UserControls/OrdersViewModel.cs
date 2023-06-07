@@ -49,8 +49,8 @@ namespace SmartShop.ViewModels.UserControls
 
         public void Load()
         {
-            EndDate.AddDays(1);
-            Orders = orderRepos.SearchByDateRange(CurrentDb.Ins.Usr.ID, StartDate, EndDate);
+            var nextEndDate = EndDate.AddDays(1);
+            Orders = orderRepos.SearchByDateRange(CurrentDb.Ins.Usr.ID, StartDate, nextEndDate);
             foreach (var order in Orders)
             {
                 string id = order?.ID;

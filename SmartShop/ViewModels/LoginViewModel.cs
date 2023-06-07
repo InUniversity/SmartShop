@@ -56,7 +56,7 @@ namespace SmartShop.ViewModels
             if (usr == null) return;
             CurrentDb.Ins.Usr = usr;
             
-            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn, dbConv) };
+            var mainWin = new MainWindow { DataContext = new MainViewModel(dbConn, dbConv, loginRepos) };
             mainWin.ShowDialog();
         }
     }

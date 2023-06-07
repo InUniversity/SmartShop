@@ -170,39 +170,16 @@ END;
 GO
 ------------------------------------------------------
 
-CREATE OR ALTER FUNCTION fn_CalculateTotalOrderItem(@OrdItemID VARCHAR(20))
-    RETURNS DECIMAL(18, 2)
-BEGIN
-    DECLARE @ItemPrice DECIMAL(18, 2) = 0
-    DECLARE @ProdID VARCHAR(20)
-
-    -- get product of item
-    SELECT @ProdID = ProductID
-    FROM OrderItems
-    WHERE ID = @OrdItemID
-
-    SELECT @ItemPrice = Price
-    FROM Products
-    WHERE ID = @ProdID
-
-    SELECT @ItemPrice = @ItemPrice * Quantity
-    FROM OrderItems
-    WHERE OrderID = @OrdItemID
-
-    RETURN @ItemPrice
-END;
-GO
-----------------------------------------------------------
-
 --function: Calculate total price of order
 CREATE OR ALTER FUNCTION fn_CalculateTotalOrder(@OrderID varchar(20))
     RETURNS DECIMAL(18, 2)
 BEGIN
     DECLARE @Total DECIMAL(18, 2) = 0;
 
-    SELECT @Total = SUM(dbo.fn_CalculateTotalOrderItem(ID) * Quantity)
-    FROM OrderItems
-    WHERE OrderID = @OrderID;
+    SELECT @Total = SUM(P.Price * OI.Quantity)
+    FROM OrderItems OI
+    JOIN Products P ON P.ID = OI.ProductID
+    WHERE OI.OrderID = @OrderID;
 
     RETURN @Total;
 END;
@@ -887,7 +864,7 @@ BEGIN
 
 		SELECT @WalletBalance = WalletBalance FROM Users WHERE ID = @UserID;
 		SELECT @ID = ID FROM Orders WHERE UserID = @UserID;
-		EXEC @TotalPrice = dbo.fn_CalculateTotalOrder @ID;
+		EXEC @TotalPrice = dbo.fn_GetPriceQuantityProdInCart @UserID;
 		SELECT @WalletBalance = WalletBalance FROM Users WHERE ID = @UserID;
 	   
 		IF (@TotalPrice > @WalletBalance)
@@ -896,7 +873,7 @@ BEGIN
 			ROLLBACK TRAN;
 			RETURN;
 		END 
-												
+
 		UPDATE Users
 		SET WalletBalance = @WalletBalance - @TotalPrice
 		WHERE ID = @UserID;

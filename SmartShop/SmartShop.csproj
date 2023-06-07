@@ -108,14 +108,12 @@
     <Compile Include="Queries\LoginQuery.cs" />
     <Compile Include="Queries\OrderQuery.cs" />
     <Compile Include="Queries\ProductQuery.cs" />
-    <Compile Include="Queries\UserQuery.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CartItemRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\LoginRepository.cs" />
     <Compile Include="Repositories\OrderRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\QueryService.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\ILoadView.cs" />
